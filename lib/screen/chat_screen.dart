@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:learnflutter/model/userModel.dart';
-
+import 'package:learnflutter/model/message_model.dart';
+import 'package:learnflutter/widgets/ChatList.dart';
 class ChatScreen extends StatefulWidget {
   final User user;
 
@@ -11,6 +12,14 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  _buildMessageComposer(){
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 8.0),
+      height: 70.0,
+      color: Colors.white,
+
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,17 +37,20 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ],
       ),
-      body: Container(
-        margin: EdgeInsets.only(top: 20),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(topLeft: Radius.circular(30.0),topRight: Radius.circular(30.0))
-        ),
-        child: Column(
-          children: <Widget>[
-
-          ],
-        ),
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            child: Container(
+              margin: EdgeInsets.only(top: 20),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(30.0),topRight: Radius.circular(30.0))
+              ),
+              child: ChatList() ,
+            ),
+          ),
+          _buildMessageComposer()
+        ],
       ),
     );
   }

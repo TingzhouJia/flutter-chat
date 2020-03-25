@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:learnflutter/screen/chat_screen.dart';
+import 'package:learnflutter/screen/loading_screen.dart';
 import 'screen/home_screen.dart';
 void main() => runApp(MyApp());
+
+
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -19,13 +23,114 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        primaryColor: Colors.red,
-        accentColor: Color(0xfffcf8e8)
+        primaryColor: Color(0xffa6e3e9),//Colors.red,
+        accentColor:Color(0xfffcf8e8) //Color(0xfffcf8e8)
+
       ),
-      home:HomeScreen()
+      home:LoadingScreen(),
+
+
+      routes: {
+
+        '/app': (BuildContext context)=> HomeScreen(),
+        '/signup':(BuildContext context)=>SignUpPage(),
+        '/chat':(BuildContext context)=>ChatScreen()
+
+      },
     );
   }
 }
+
+class CollectPersonalInfoPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTextStyle(
+      style: Theme.of(context).textTheme.display1,
+      child: GestureDetector(
+        onTap: () {
+          // This moves from the personal info page to the credentials page,
+          // replacing this page with that one.
+          Navigator.of(context)
+              .pushReplacementNamed('signup/choose_credentials');
+        },
+        child: Container(
+          color: Colors.lightBlue,
+          alignment: Alignment.center,
+          child: Text('Collect Personal Info Page'),
+        ),
+      ),
+    );
+  }
+}
+
+class ChooseCredentialsPage extends StatelessWidget {
+  const ChooseCredentialsPage({
+    this.onSignupComplete,
+  });
+
+  final VoidCallback onSignupComplete;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onSignupComplete,
+      child: DefaultTextStyle(
+        style: Theme.of(context).textTheme.display1,
+        child: Container(
+          color: Colors.pinkAccent,
+          alignment: Alignment.center,
+          child: Text('Choose Credentials Page'),
+        ),
+      ),
+    );
+  }
+}
+class SignUpPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // SignUpPage builds its own Navigator which ends up being a nested
+    // Navigator in our app.
+    return Column(
+      children: <Widget>[
+        Text('aaa'),
+        Container(
+          height: 100.0,
+          child:  Navigator(
+            initialRoute: 'signup/personal_info',
+            onGenerateRoute: (RouteSettings settings) {
+              WidgetBuilder builder;
+              switch (settings.name) {
+                case 'signup/personal_info':
+                // Assume CollectPersonalInfoPage collects personal info and then
+                // navigates to 'signup/choose_credentials'.
+                  builder = (BuildContext _) => CollectPersonalInfoPage();
+                  break;
+                case 'signup/choose_credentials':
+                // Assume ChooseCredentialsPage collects new credentials and then
+                // invokes 'onSignupComplete()'.
+                  builder = (BuildContext _) => ChooseCredentialsPage(
+                    onSignupComplete: () {
+                      // Referencing Navigator.of(context) from here refers to the
+                      // top level Navigator because SignUpPage is above the
+                      // nested Navigator that it created. Therefore, this pop()
+                      // will pop the entire "sign up" journey and return to the
+                      // "/" route, AKA HomePage.
+                      Navigator.of(context).pop();
+                    },
+                  );
+                  break;
+                default:
+                  throw Exception('Invalid route: ${settings.name}');
+              }
+              return MaterialPageRoute(builder: builder, settings: settings);
+            },
+          ),
+        )
+      ],
+    );
+  }
+}
+
 
 
 
