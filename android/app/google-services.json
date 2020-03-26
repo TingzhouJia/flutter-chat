@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "444194098505",
+    "firebase_url": "https://lightchat-f595e.firebaseio.com",
+    "project_id": "lightchat-f595e",
+    "storage_bucket": "lightchat-f595e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:444194098505:android:ed1d730489f2f6b2635e98",
+        "android_client_info": {
+          "package_name": "com.jtz.learnflutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "444194098505-h4nqrufsrnmrrtis1mt7cjsmekjbi5lo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhu2VCE_uuasRZv3ykfhXY-cS9bOOG08g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "444194098505-h4nqrufsrnmrrtis1mt7cjsmekjbi5lo.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "444194098505-jio6rcbh9vk6jflpch6bli1p2q8ilmcs.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.jtz.learnflutter"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

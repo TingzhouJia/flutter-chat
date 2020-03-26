@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/screenutil.dart';
 
 import 'RequestFriends.dart';
 class SearchBarDelegate extends SearchDelegate<String> {
@@ -62,11 +63,27 @@ class SearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child:  IconButton(
-        icon: Icon(Icons.search),
-        onPressed: (){
-          showSearch(context: context, delegate: SearchBarDelegate());
-        },
+
+      child:  GestureDetector(
+          behavior: HitTestBehavior.opaque,
+        onTap: ()=> showSearch(context: context, delegate: SearchBarDelegate()),
+        child: Container(
+          width: 500.0,
+          child: Row(
+
+            children: <Widget>[
+              SizedBox(width: 10,),
+              IconButton(
+                icon: Icon(Icons.search),
+
+                onPressed: (){
+                  showSearch(context: context, delegate: SearchBarDelegate());
+                },
+              ),
+              Text('Search'),
+            ],
+          ),
+        ),
       ),
     );
   }

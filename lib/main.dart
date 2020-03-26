@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:learnflutter/screen/chat_screen.dart';
 import 'package:learnflutter/screen/loading_screen.dart';
+import 'package:learnflutter/screen/sign_screen.dart';
 import 'screen/home_screen.dart';
 void main() => runApp(MyApp());
 
@@ -27,14 +28,15 @@ class MyApp extends StatelessWidget {
         accentColor:Color(0xfffcf8e8) //Color(0xfffcf8e8)
 
       ),
-      home:LoadingScreen(),
+      home:SignIn(),
 
 
       routes: {
 
         '/app': (BuildContext context)=> HomeScreen(),
-        '/signup':(BuildContext context)=>SignUpPage(),
-        '/chat':(BuildContext context)=>ChatScreen()
+        '/sign':(BuildContext context)=>SignIn(),
+        '/chat':(BuildContext context)=>ChatScreen(),
+        '/login':(BuildContext context)=>LoginIn(),
 
       },
     );
