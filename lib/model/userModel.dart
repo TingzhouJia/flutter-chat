@@ -1,10 +1,15 @@
 class User {
-  final int id;
+  final int uid;
   final String name;
   final String imgUrl;
   final DateTime lastOnline;
+  final String description;
+  final int gender;
+  final String address;
+  final String UserId;
 
-  User(this.id, this.name, this.imgUrl,this.lastOnline);
+  User(this.uid, this.name, this.imgUrl, this.lastOnline, this.description,
+      this.gender, this.address, this.UserId);
 
 
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:learnflutter/screen/my_screen.dart';
+import 'package:learnflutter/service/loginService.dart';
 import 'package:learnflutter/widgets/OnlineList.dart';
 import 'package:learnflutter/widgets/RecentChats.dart';
 import 'package:learnflutter/widgets/RequestFriends.dart';
@@ -7,6 +9,12 @@ import 'package:learnflutter/widgets/SearchBar.dart';
 import 'package:learnflutter/widgets/favoriteContact.dart';
 
 class HomeScreen extends StatefulWidget {
+  HomeScreen({Key key, this.auth, this.userId, this.logoutCallback})
+      : super(key: key);
+
+  final BaseAuth auth;
+  final VoidCallback logoutCallback;
+  final String userId;
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -75,7 +83,7 @@ List<TabTitle> tabList = [
   new TabTitle('Requests', 3)
 ];
 
-class _HomeScreenState extends State<StatefulWidget>
+class _HomeScreenState extends State<HomeScreen>
     with TickerProviderStateMixin {
   TabController mTabController;
   PageController mPageController = PageController(initialPage: 0);
@@ -97,7 +105,16 @@ class _HomeScreenState extends State<StatefulWidget>
     super.dispose();
     mTabController.dispose();
   }
+  signOut() async {
+    try {
 
+      await widget.auth.signOut();
+
+      widget.logoutCallback();
+    } catch (e) {
+      print(e);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -108,11 +125,39 @@ class _HomeScreenState extends State<StatefulWidget>
 
           child: AppBar(
 
-            leading: IconButton(
-              icon: Icon(Icons.menu),
-              iconSize: 30.0,
-              color: Colors.white,
-              onPressed: () => {},
+            leading: GestureDetector(
+              onTap: (){
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    transitionDuration: Duration(milliseconds: 500), //动画时间为500毫秒
+                    pageBuilder: (BuildContext context, Animation animation,
+                        Animation secondaryAnimation)=>MyProfile(), //路由B
+                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                    var begin = Offset(0.0, 1.0);
+                    var end = Offset.zero;
+                    var curve = Curves.ease;
+
+                    var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+                    return SlideTransition(
+                      position: animation.drive(tween),
+                      child: child,
+                    );
+                  },
+                  ),
+                );
+              },
+              child: Padding(
+
+                padding: EdgeInsets.only(left: 10),
+                child: CircleAvatar(
+
+                  radius: 50,
+                  backgroundColor: Colors.white70,
+                  backgroundImage: AssetImage('assets/male1.jpg'),
+                ),
+              ),
             ),
             title: Text(
               'Chats',
@@ -122,10 +167,10 @@ class _HomeScreenState extends State<StatefulWidget>
             elevation: 0.0,
             actions: <Widget>[
               IconButton(
-                icon: Icon(Icons.search),
+                icon: Icon(Icons.menu),
                 iconSize: 30.0,
                 color: Colors.white,
-                onPressed: () => {},
+                onPressed: (){signOut();} ,
               ),
             ],
 

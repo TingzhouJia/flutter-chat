@@ -11,12 +11,12 @@ class Message {
 
 
 }
-final User currentUser= User(0, "Current", 'assets/female1.jpg',DateTime.now());
-final User james= User(1, "james", 'assets/female2.jpg',DateTime.now());
-final User kevin= User(2, "kevin", 'assets/male1.jpg',DateTime.now());
-final User nacho= User(3, "nacho", 'assets/male2.jpg',DateTime.now());
-final User mila= User(4, "mila", 'assets/male3.jpg',DateTime.now());
-final User henry= User(5, "henry", 'assets/male4.jpg',DateTime.now());
+final User currentUser= User(0, "Current", 'assets/female1.jpg',DateTime.now(),'goof',1,"aaa","aaa");
+final User james= User(1, "james", 'assets/female2.jpg',DateTime.now(),'goof',1,"aaa","aaa");
+final User kevin= User(2, "kevin", 'assets/male1.jpg',DateTime.now(),'goof',1,"aaa","aaa");
+final User nacho= User(3, "nacho", 'assets/male2.jpg',DateTime.now(),'goof',1,"aaa","aaa");
+final User mila= User(4, "mila", 'assets/male3.jpg',DateTime.now(),'goof',1,"aaa","aaa");
+final User henry= User(5, "henry", 'assets/male4.jpg',DateTime.now(),'goof',1,"aaa","aaa");
 
 List<User> favoriteList=[james,kevin,nacho,mila,henry,currentUser];
 

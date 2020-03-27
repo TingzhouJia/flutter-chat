@@ -66,7 +66,7 @@ class ChatList extends StatelessWidget {
           itemCount: messageList.length,
           itemBuilder: (BuildContext context, int index) {
             final Message message = messageListDemo[index];
-            final bool isMe = message.sender.id == currentUser.id;
+            final bool isMe = message.sender.uid == currentUser.uid;
 
             return _buildMessage(message, isMe,context);
           }),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:learnflutter/screen/root_screen.dart';
+import 'package:learnflutter/service/loginService.dart';
 class LoadingScreen extends StatefulWidget {
   @override
   _LoadingScreenState createState() => _LoadingScreenState();
@@ -12,7 +14,12 @@ class _LoadingScreenState extends State<LoadingScreen> {
     //在加载页面停顿3秒
     new Future.delayed(Duration(seconds: 3),(){
       print("Flutter即时通讯APP界面实现...");
-      Navigator.of(context).pushReplacementNamed("/app");
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (_) => RootPage(
+                auth: new Auth(),
+              )));
     });
   }
 

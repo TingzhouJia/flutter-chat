@@ -1,99 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:learnflutter/service/loginService.dart';
 class LoginIn extends StatefulWidget {
+  LoginIn({this.auth, this.loginCallback});
+
+   final BaseAuth auth;
+   final VoidCallback loginCallback;
+
   @override
   _LoginInState createState() => _LoginInState();
 }
 
-class SignIn extends StatelessWidget {
 
-  @override
-  Widget build(BuildContext context) {
-     return new Scaffold(
-      body: Stack(
-        alignment: const Alignment(0.0, 0.6),
-        fit: StackFit.expand,
-        children: <Widget>[
-          Image.asset("assets/signup.jpeg",fit:BoxFit.cover,),
-          //_showForm()
-          Opacity(
-            opacity: 0.7,
-            child: new Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.only(bottom: 100),
-                    child:  Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text("Light Chat ",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 55.0,color: Colors.white),),
-                        Text("Leads Lovely Life",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 20.0,color: Colors.white),),
-                      ],
-                    ),
-                  ),
-
-                  Column(
-
-                    children: <Widget>[
-
-                      GestureDetector(
-                        onTap:
-                            (){Navigator.of(context).pushNamed('/login');}
-                        ,
-                        child:
-                        Container(
-
-                          decoration: new BoxDecoration(
-
-                              color: Colors.white70.withOpacity(0.9),
-                              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                              boxShadow: [BoxShadow(
-                                  color: Colors.grey,blurRadius: 5.0,offset: Offset(3.0,3.0)
-                              )]
-                          ),
-                          height: 50,
-                          width: MediaQuery.of(context).size.width*0.7,
-                          alignment: Alignment.center,
-                          child: Text("LOGIN",style: TextStyle(color:Colors.blueGrey,fontSize: 24,fontWeight: FontWeight.w700 ),),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      GestureDetector(
-                        onTap: ()=>{
-                          Navigator.of(context).pushReplacementNamed('/signup')
-                        },
-                        child: Container(
-
-                          decoration: new BoxDecoration(
-                              color: Color(0xffebe6e6),
-                              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                              boxShadow: [BoxShadow(
-                                  color: Colors.grey,blurRadius: 5.0,offset: Offset(3.0,3.0)
-                              )]
-                          ),
-                          height: 50,
-                          width: MediaQuery.of(context).size.width*0.7,
-                          alignment: Alignment.center,
-                          child: Text("REGISTER HERE",style: TextStyle(color:Colors.blueGrey,fontSize: 24,fontWeight: FontWeight.w700 ),),
-
-                        ),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-          )
-        ],
-      ),
-    );;
-  }
-}
 
 class _LoginInState extends State<LoginIn> {
   final _formKey = new GlobalKey<FormState>();
@@ -120,15 +39,30 @@ class _LoginInState extends State<LoginIn> {
       width: 0.0,
     );
   }
+  bool validateAndSave() {
+    final form = _formKey.currentState;
+    if (form.validate()) {
+      form.save();
+      return true;
+    }
+    return false;
+  }
   Widget showEmailInput() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 100.0, 0.0, 0.0),
       child: new TextFormField(
-
+        style: TextStyle(color: Colors.white),
         maxLines: 1,
         keyboardType: TextInputType.emailAddress,
         autofocus: false,
         decoration: new InputDecoration(
+
+          focusedBorder: UnderlineInputBorder(
+           borderSide: BorderSide(
+               color:Colors.white
+           )
+          ),
+          fillColor: Colors.white,
             hintStyle: TextStyle(color: Colors.white),
             hintText: 'Email',
             icon: new Icon(
@@ -145,12 +79,18 @@ class _LoginInState extends State<LoginIn> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
       child: new TextFormField(
-
+        style: TextStyle(color: Colors.white),
         maxLines: 1,
         obscureText: true,
         autofocus: false,
         decoration: new InputDecoration(
           fillColor: Colors.white,
+            focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                    color:Colors.white
+                )
+            ),
+            focusColor: Colors.white,
             hintStyle: TextStyle(color: Colors.white),
             hintText: 'Password',
             icon: new Icon(
@@ -201,6 +141,7 @@ class _LoginInState extends State<LoginIn> {
         });
 
         if (userId.length > 0 && userId != null && _isLoginForm) {
+          //Navigator.of(context).pushReplacementNamed('/app');
           widget.loginCallback();
         }
       } catch (e) {
@@ -225,7 +166,7 @@ class _LoginInState extends State<LoginIn> {
                 //shrinkWrap: true,
                 children: <Widget>[
                   Center(
-                    child:  Text("SIGN IN",style: TextStyle(color: Colors.white,fontSize: 45.0,fontWeight: FontWeight.bold)),
+                    child:  Text(_isLoginForm ? 'SIGN IN' : 'REGISTER HERE',style: TextStyle(color: Colors.white,fontSize: 45.0,fontWeight: FontWeight.bold)),
                   ),
                   showEmailInput(),
                   showPasswordInput(),
@@ -252,7 +193,7 @@ class _LoginInState extends State<LoginIn> {
 
             child: new Text(_isLoginForm ? 'Login' : 'Create account',
                 style: new TextStyle(fontSize: 20.0, color: Colors.white)),
-           // onPressed: validateAndSubmit,
+            onPressed: validateAndSubmit,
           ),
         ));
   }
