@@ -17,7 +17,49 @@ class _ChatScreenState extends State<ChatScreen> {
       padding: EdgeInsets.symmetric(horizontal: 8.0),
       height: 70.0,
       color: Colors.white,
+      child: Row(
+        children: <Widget>[
+          IconButton(
+            icon: Icon(Icons.photo_library),
+            iconSize: 30.0,
+            color: Colors.red,
 
+          ),
+          IconButton(
+            icon: Icon(Icons.photo_camera),
+            iconSize: 30.0,
+            color: Colors.red,
+
+          ),
+          IconButton(
+            icon: Icon(Icons.mic),
+            iconSize: 30.0,
+            color: Colors.red,
+
+          ),
+          IconButton(
+            icon: Icon(Icons.arrow_forward_ios),
+            iconSize: 30.0,
+            color: Colors.red,
+
+          ),
+          Expanded(
+            child: TextField(
+              textCapitalization: TextCapitalization.sentences,
+              decoration: InputDecoration.collapsed(
+                hintText: "Aa",
+                hintStyle: TextStyle(color: Colors.grey)
+              ),
+            ),
+          ),
+          IconButton(
+            icon: Icon(Icons.send),
+            iconSize: 30.0,
+            color: Colors.red,
+
+          ),
+        ],
+      ),
     );
   }
   @override
