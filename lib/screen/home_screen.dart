@@ -1,6 +1,9 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:learnflutter/screen/my_screen.dart';
 import 'package:learnflutter/service/loginService.dart';
+import 'package:learnflutter/service/userInfoService.dart';
 import 'package:learnflutter/widgets/OnlineList.dart';
 import 'package:learnflutter/widgets/RecentChats.dart';
 import 'package:learnflutter/widgets/RequestFriends.dart';
@@ -13,6 +16,7 @@ class HomeScreen extends StatefulWidget {
       : super(key: key);
 
   final BaseAuth auth;
+
   final VoidCallback logoutCallback;
   final String userId;
   @override
@@ -90,13 +94,27 @@ class _HomeScreenState extends State<HomeScreen>
 
   var currentPage = 0;
   var isPageCanChanged = true;
-
+  var info;
+  UserInfo userInfo;
   @override
-  void initState() {
+  void initState()  {
     super.initState();
     mTabController=TabController(length: tabList.length,vsync: this);
+    userInfo=new UserInfo(widget.userId);
+    fetchUser();
 
 
+
+  }
+
+  fetchUser() async{
+    await userInfo.getUserInfo().then((val)=>
+        setState((){
+          info=val;
+        })
+    );
+
+    print(info);
   }
 
 
@@ -115,8 +133,36 @@ class _HomeScreenState extends State<HomeScreen>
       print(e);
     }
   }
+
+jumpToProfile(){
+  return Navigator.push(
+    context,
+
+    PageRouteBuilder(
+
+      transitionDuration: Duration(milliseconds: 500), //动画时间为500毫秒
+      pageBuilder: (BuildContext context, Animation animation,
+          Animation secondaryAnimation)=>MyProfile(info), //路由B
+
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        var begin = Offset(0.0, 1.0);
+        var end = Offset.zero;
+        var curve = Curves.ease;
+
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
+    ),
+  );
+}
+
   @override
   Widget build(BuildContext context) {
+
     return DefaultTabController(
       length: tabList.length,
       child:  Scaffold(
@@ -127,26 +173,7 @@ class _HomeScreenState extends State<HomeScreen>
 
             leading: GestureDetector(
               onTap: (){
-                Navigator.push(
-                  context,
-                  PageRouteBuilder(
-                    transitionDuration: Duration(milliseconds: 500), //动画时间为500毫秒
-                    pageBuilder: (BuildContext context, Animation animation,
-                        Animation secondaryAnimation)=>MyProfile(), //路由B
-                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                    var begin = Offset(0.0, 1.0);
-                    var end = Offset.zero;
-                    var curve = Curves.ease;
-
-                    var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
-                    return SlideTransition(
-                      position: animation.drive(tween),
-                      child: child,
-                    );
-                  },
-                  ),
-                );
+                jumpToProfile();
               },
               child: Padding(
 
@@ -155,7 +182,7 @@ class _HomeScreenState extends State<HomeScreen>
 
                   radius: 50,
                   backgroundColor: Colors.white70,
-                  backgroundImage: AssetImage('assets/male1.jpg'),
+                  backgroundImage: info==null?AssetImage('assets/male1.jpg'):NetworkImage(info['imgUrl']),
                 ),
               ),
             ),

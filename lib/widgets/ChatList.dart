@@ -59,9 +59,11 @@ class ChatList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
+
       borderRadius: BorderRadius.only(
           topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0)),
       child: ListView.builder(
+        reverse: true,
           padding: EdgeInsets.only(top: 15.0),
           itemCount: messageList.length,
           itemBuilder: (BuildContext context, int index) {

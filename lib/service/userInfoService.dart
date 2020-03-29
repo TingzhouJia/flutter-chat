@@ -1,9 +1,10 @@
 import 'dart:async';
+import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:learnflutter/model/userModel.dart';
 
 abstract class BaseUserInfo {
-  Future<User> getUserInfo();
+  Future<LinkedHashMap<String,dynamic>> getUserInfo();
 
   Future<String> setUserAddress(String uid, String address);
   Future<String> setUserDescription(String uid, String description);
@@ -19,14 +20,16 @@ class UserInfo implements BaseUserInfo{
   UserInfo(this.userId);
 
   final String userId;
-  @override
-  Future<User> getUserInfo() {
 
-    databaseReference.collection("user").where('uid',isEqualTo: userId).snapshots().forEach((ele){
-     print(ele);
-    });
-    
-    return null;
+  @override
+  Future<LinkedHashMap<String,dynamic>> getUserInfo() async {
+    LinkedHashMap<String,dynamic> user=new LinkedHashMap();
+   await databaseReference.collection("user").where('uid',isEqualTo: userId).getDocuments().then((val){
+     val.documents.forEach((f)=>user.addAll(f.data));
+   });
+
+
+    return user;
   }
 
   @override

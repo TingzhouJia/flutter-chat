@@ -82,6 +82,7 @@ class _RootPageState extends State<RootPage> {
           return new HomeScreen(
             userId: _userId,
             auth: widget.auth,
+            
             logoutCallback: logoutCallback,
           );
         } else
