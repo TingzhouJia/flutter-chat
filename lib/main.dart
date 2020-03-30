@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart' hide Action;
+import 'package:learnflutter/screen/a.dart';
 import 'package:learnflutter/screen/chat_screen.dart';
 import 'package:learnflutter/screen/loading_screen.dart';
 import 'package:learnflutter/screen/root_screen.dart';
@@ -37,7 +38,7 @@ class MyApp extends StatelessWidget {
         '/root':(BuildContext contex)=>RootPage(),
         '/app': (BuildContext context)=> HomeScreen(),
 
-        '/chat':(BuildContext context)=>ChatScreen(),
+
         '/login':(BuildContext context)=>LoginIn(),
 
       },

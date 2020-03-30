@@ -158,6 +158,21 @@ PODS:
     - abseil/base/base_internal
     - abseil/base/config
     - abseil/meta/type_traits
+  - AFNetworking (3.2.1):
+    - AFNetworking/NSURLSession (= 3.2.1)
+    - AFNetworking/Reachability (= 3.2.1)
+    - AFNetworking/Security (= 3.2.1)
+    - AFNetworking/Serialization (= 3.2.1)
+    - AFNetworking/UIKit (= 3.2.1)
+  - AFNetworking/NSURLSession (3.2.1):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (3.2.1)
+  - AFNetworking/Security (3.2.1)
+  - AFNetworking/Serialization (3.2.1)
+  - AFNetworking/UIKit (3.2.1):
+    - AFNetworking/NSURLSession
   - BoringSSL-GRPC (0.0.3):
     - BoringSSL-GRPC/Implementation (= 0.0.3)
     - BoringSSL-GRPC/Interface (= 0.0.3)
@@ -329,6 +344,10 @@ PODS:
   - GTMSessionFetcher/Core (1.3.1)
   - image_picker (0.0.1):
     - Flutter
+  - image_pickers (0.0.1):
+    - AFNetworking
+    - Flutter
+    - ZLPhotoBrowser
   - leveldb-library (1.22)
   - nanopb (0.3.9011):
     - nanopb/decode (= 0.3.9011)
@@ -337,6 +356,11 @@ PODS:
   - nanopb/encode (0.3.9011)
   - PromisesObjC (1.2.8)
   - Protobuf (3.11.4)
+  - SDWebImage (5.6.1):
+    - SDWebImage/Core (= 5.6.1)
+  - SDWebImage/Core (5.6.1)
+  - ZLPhotoBrowser (3.1.3):
+    - SDWebImage
 
 DEPENDENCIES:
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
@@ -351,10 +375,12 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_plugin_android_lifecycle (from `.symlinks/plugins/flutter_plugin_android_lifecycle/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
+  - image_pickers (from `.symlinks/plugins/image_pickers/ios`)
 
 SPEC REPOS:
   trunk:
     - abseil
+    - AFNetworking
     - BoringSSL-GRPC
     - Firebase
     - FirebaseAnalytics
@@ -381,6 +407,8 @@ SPEC REPOS:
     - nanopb
     - PromisesObjC
     - Protobuf
+    - SDWebImage
+    - ZLPhotoBrowser
 
 EXTERNAL SOURCES:
   cloud_firestore:
@@ -407,9 +435,12 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_plugin_android_lifecycle/ios"
   image_picker:
     :path: ".symlinks/plugins/image_picker/ios"
+  image_pickers:
+    :path: ".symlinks/plugins/image_pickers/ios"
 
 SPEC CHECKSUMS:
   abseil: 18063d773f5366ff8736a050fe035a28f635fd27
+  AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
   BoringSSL-GRPC: db8764df3204ccea016e1c8dd15d9a9ad63ff318
   cloud_firestore: 31454d48df21f3e1a900015e36143c0d46a304b7
   cloud_firestore_web: 9ec3dc7f5f98de5129339802d491c1204462bfec
@@ -420,7 +451,7 @@ SPEC CHECKSUMS:
   firebase_core_web: d501d8b946b60c8af265428ce483b0fff5ad52d1
   firebase_database: 8724d18445b3f77073e71237ca2048261e9d588f
   firebase_messaging: cffb57ce40958c6204f03fb0c81713e4cd1e240c
-  firebase_storage: 1a07bf32f792e2b804803e68fc7b61a81c4b122d
+  firebase_storage: 5e931af5cdef32331676c659bdd1ebcaba9dc78a
   FirebaseAnalytics: a1a0b3327ceb5cd5b4bacffdb293f6c909aa087d
   FirebaseAnalyticsInterop: 3f86269c38ae41f47afeb43ebf32a001f58fcdae
   FirebaseAuth: a6da11d78dfd956b7f7af3222a0f0b1c93ef8fc9
@@ -444,10 +475,13 @@ SPEC CHECKSUMS:
   gRPC-Core: c9aef9a261a1247e881b18059b84d597293c9947
   GTMSessionFetcher: cea130bbfe5a7edc8d06d3f0d17288c32ffe9925
   image_picker: e3eacd46b94694dde7cf2705955cece853aa1a8f
+  image_pickers: 7b9d9fd430b5eb2ed48fb14fd8b9d77034a0a8a8
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
   PromisesObjC: c119f3cd559f50b7ae681fa59dc1acd19173b7e6
   Protobuf: 176220c526ad8bd09ab1fb40a978eac3fef665f7
+  SDWebImage: 7edb9c3ea661e77a66661f7f044de8c1b55d1120
+  ZLPhotoBrowser: e6c1dc3a35a89efd1e88545225c6de66384597d0
 
 PODFILE CHECKSUM: 1b66dae606f75376c5f2135a8290850eeb09ae83
 

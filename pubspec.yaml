@@ -34,6 +34,8 @@ dependencies:
   firebase_messaging: ^6.0.13
   firebase_database: ^3.0.7
   cloud_firestore: ^0.13.4+2
+  json_serializable: ^3.3.0
+  image_pickers: ^1.0.7+1
 dev_dependencies:
   flutter_test:
     sdk: flutter

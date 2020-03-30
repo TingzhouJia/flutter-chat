@@ -142,7 +142,7 @@ jumpToProfile(){
 
       transitionDuration: Duration(milliseconds: 500), //动画时间为500毫秒
       pageBuilder: (BuildContext context, Animation animation,
-          Animation secondaryAnimation)=>MyProfile(info), //路由B
+          Animation secondaryAnimation)=>MyProfile(info,userInfo), //路由B
 
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         var begin = Offset(0.0, 1.0);
