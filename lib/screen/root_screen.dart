@@ -52,7 +52,9 @@ class _RootPageState extends State<RootPage> {
     setState(() {
       authStatus = AuthStatus.NOT_LOGGED_IN;
       _userId = "";
-     // Navigator.of(context).pushNamed('/root');
+      Navigator.of(context).pushNamedAndRemoveUntil('/root', ModalRoute.withName("/root"));
+//      Navigator.of(context).pushNamedAndRemoveUntil(
+////          "/login", ModalRoute.withName("/login"));
     });
   }
 

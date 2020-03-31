@@ -8,9 +8,9 @@ abstract class BaseUserInfo {
   Future<LinkedHashMap<String,dynamic>> getUserInfo();
 
   Future<void> setUserAddress( String address);
-  Future<String> setUserDescription( String description);
-  Future<String> setUserGender( int gender);
-  Future<String> setUserAvatar( File imgUrl);
+  Future<void> setUserDescription( String description);
+  Future<void> setUserGender( int gender);
+  Future<void> setUserAvatar( File imgUrl);
 
 
 }
@@ -50,6 +50,8 @@ class UserInfo implements BaseUserInfo{
     print('finished');
     storageReference.getDownloadURL().then((fileURL) async{
       await databaseReference.collection('user').document(userId).updateData({'imgUrl':fileURL,'lastOnline':new DateTime.now()});
+    }).then((_) async{
+      await getUserInfo();
     });
     // databaseReference.collection('user').document(userId).updateData();
     // TODO: implement setUserAvatar
@@ -57,9 +59,12 @@ class UserInfo implements BaseUserInfo{
   }
 
   @override
-  Future<String> setUserDescription( String description) {
+  Future<void> setUserDescription( String description) async {
     // TODO: implement setUserDescription
-    return null;
+    await databaseReference.collection('user').document(userId).updateData({'description':description,'lastOnline':new DateTime.now()}).then((_) async{
+      await getUserInfo();
+    });
+    print('finished');
   }
 
   @override

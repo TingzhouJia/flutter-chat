@@ -8,6 +8,7 @@ import 'package:image_pickers/image_pickers.dart';
 import 'package:image_pickers/CropConfig.dart';
 import 'package:image_pickers/Media.dart';
 import 'package:image_pickers/UIConfig.dart';
+import 'package:learnflutter/screen/my_screen.dart';
 import 'package:learnflutter/service/userInfoService.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -204,7 +205,12 @@ class _MyHomePageState extends State<MyHomePage> {
             GestureDetector(
               onTap: () async{
               await widget.userInfo.setUserAvatar(_imageFile);
-              Navigator.of(context).pop();
+
+             // Navigator.of(context).pop([widget.userInfo]);
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (_) => MyProfile.origin(
+                      widget.userInfo,
+                    )));
               },
               child: Container(
 

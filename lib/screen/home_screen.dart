@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:learnflutter/screen/my_screen.dart';
 import 'package:learnflutter/service/loginService.dart';
 import 'package:learnflutter/service/userInfoService.dart';
+import 'package:learnflutter/utils/bottomUpAnimation.dart';
 import 'package:learnflutter/widgets/OnlineList.dart';
 import 'package:learnflutter/widgets/RecentChats.dart';
 import 'package:learnflutter/widgets/RequestFriends.dart';
@@ -124,6 +125,7 @@ class _HomeScreenState extends State<HomeScreen>
     mTabController.dispose();
   }
   signOut() async {
+    print('aaa');
     try {
 
       await widget.auth.signOut();
@@ -133,32 +135,13 @@ class _HomeScreenState extends State<HomeScreen>
       print(e);
     }
   }
+  _signOut(){
+    signOut();
 
-jumpToProfile(){
-  return Navigator.push(
-    context,
+  }
 
-    PageRouteBuilder(
 
-      transitionDuration: Duration(milliseconds: 500), //动画时间为500毫秒
-      pageBuilder: (BuildContext context, Animation animation,
-          Animation secondaryAnimation)=>MyProfile(info,userInfo), //路由B
 
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        var begin = Offset(0.0, 1.0);
-        var end = Offset.zero;
-        var curve = Curves.ease;
-
-        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
-        return SlideTransition(
-          position: animation.drive(tween),
-          child: child,
-        );
-      },
-    ),
-  );
-}
 
   @override
   Widget build(BuildContext context) {
@@ -173,7 +156,8 @@ jumpToProfile(){
 
             leading: GestureDetector(
               onTap: (){
-                jumpToProfile();
+                jumpToProfile((BuildContext context, Animation animation,
+                    Animation secondaryAnimation)=>MyProfile(info,userInfo,()=>_signOut()),context);
               },
               child: Padding(
 

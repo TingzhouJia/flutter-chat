@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
 
 
       routes: {
-        '/root':(BuildContext contex)=>RootPage(),
+        '/root':(BuildContext context)=>RootPage(auth:new Auth()),
         '/app': (BuildContext context)=> HomeScreen(),
 
 
