@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:learnflutter/model/message_model.dart';
-import 'package:learnflutter/model/userModel.dart';
+import 'package:learnflutter/model/user.dart';
 
 
 class OnlineList extends StatelessWidget {

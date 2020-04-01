@@ -1,4 +1,5 @@
-import 'package:learnflutter/model/userModel.dart';
+import 'package:learnflutter/model/user.dart';
+
 
 class Message {
   final User sender;
@@ -11,12 +12,13 @@ class Message {
 
 
 }
-final User currentUser= User(0, "Current", 'assets/female1.jpg',DateTime.now(),'goof',1,"aaa","aaa");
-final User james= User(1, "james", 'assets/female2.jpg',DateTime.now(),'goof',1,"aaa","aaa");
-final User kevin= User(2, "kevin", 'assets/male1.jpg',DateTime.now(),'goof',1,"aaa","aaa");
-final User nacho= User(3, "nacho", 'assets/male2.jpg',DateTime.now(),'goof',1,"aaa","aaa");
-final User mila= User(4, "mila", 'assets/male3.jpg',DateTime.now(),'goof',1,"aaa","aaa");
-final User henry= User(5, "henry", 'assets/male4.jpg',DateTime.now(),'goof',1,"aaa","aaa");
+final  currentUser= User((b)=>b ..uid=0 ..name="Current" ..imgUrl='assets/female1.jpg' ..lastOnline=DateTime.now() ..description='goof' ..gender=1 ..address="aaa" ..UserId="aaa");
+final  james= User((b)=>b ..uid=1 ..name="james" ..imgUrl='assets/female2.jpg' ..lastOnline=DateTime.now() ..description='goof' ..gender=1 ..address="aaa" ..UserId="aaa");
+final  kevin= User((b)=>b ..uid=2 ..name="kevin" ..imgUrl='assets/female1.jpg' ..lastOnline=DateTime.now() ..description='goof' ..gender=1 ..address="aaa" ..UserId="aaa");
+final  nacho= User((b)=>b ..uid=3 ..name="nacho" ..imgUrl='assets/male1.jpg' ..lastOnline=DateTime.now() ..description='goof' ..gender=1 ..address="aaa" ..UserId="aaa");
+final  mila= User((b)=>b ..uid=4 ..name="mila" ..imgUrl='assets/male3.jpgg' ..lastOnline=DateTime.now() ..description='goof' ..gender=1 ..address="aaa" ..UserId="aaa");
+final  henry= User((b)=>b ..uid=5 ..name="henry" ..imgUrl='assets/male4.jpg' ..lastOnline=DateTime.now() ..description='goof' ..gender=1 ..address="aaa" ..UserId="aaa");
+
 
 List<User> favoriteList=[james,kevin,nacho,mila,henry,currentUser];
 

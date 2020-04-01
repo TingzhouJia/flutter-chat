@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:learnflutter/model/message_model.dart';
-import 'package:learnflutter/model/userModel.dart';
+import 'package:learnflutter/model/user.dart';
 class RequestFriends extends StatefulWidget {
   @override
   _RequestFriendsState createState() => _RequestFriendsState();

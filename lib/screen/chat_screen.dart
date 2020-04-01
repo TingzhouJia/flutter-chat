@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:learnflutter/model/userModel.dart';
+import 'package:learnflutter/model/user.dart';
 import 'package:learnflutter/model/message_model.dart';
 import 'package:learnflutter/widgets/ChatList.dart';
 class ChatScreen extends StatefulWidget {
