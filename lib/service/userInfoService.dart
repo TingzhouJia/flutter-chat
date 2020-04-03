@@ -2,79 +2,217 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:learnflutter/model/user.dart';
 import 'package:path/path.dart' as Path;
-abstract class BaseUserInfo {
-  Future<LinkedHashMap<String,dynamic>> getUserInfo();
 
-  Future<void> setUserAddress( String address);
-  Future<void> setUserDescription( String description);
-  Future<void> setUserGender( int gender);
-  Future<void> setUserAvatar( File imgUrl);
+import 'firestoreService.dart';
 
 
-}
-
-class UserInfo implements BaseUserInfo{
-  final databaseReference = Firestore.instance;
+class UserRepository {
+  static const NAME = "name";
+  static const BIRTHDAY = "birthday";
+  static const IMAGE = "imgUrl";
+  static const UID = "uid";
+ // static const TOKEN = "token";
+  static const ADDRESS = "address";
+  static const LASTONLINE = "lastOnline";
+  static const DESCRIPTION = "description";
+//  static const UPDATEDGROUPS = "updatedGroups";
+//  static const JOINEDGROUPS = "joinedGroups";
+  static const STATUS = "status";
+  static const GENDER="gender";
   final firebaseStorage=FirebaseStorage.instance;
-  UserInfo(this.userId);
+  final FirebaseAuth _firebaseAuth;
+  final Firestore _firestore;
 
-  final String userId;
-
-  @override
-  Future<LinkedHashMap<String,dynamic>> getUserInfo() async {
-    LinkedHashMap<String,dynamic> user=new LinkedHashMap();
-
-//   await databaseReference.collection("user").where('uid',isEqualTo: userId).getDocuments().then((val){
-//     val.documents.forEach((f)=>user.addAll(f.data));
-//   });
-
-    await databaseReference.collection("user").document(userId).get().then((val) {user.addAll(val.data);});
+   UserRepository(
+      this._firebaseAuth,
+      this._firestore,
+      );
 
 
+  Future<User> signIn(String email, String password) async {
+    final firebaseUser = await _firebaseAuth.signInWithEmailAndPassword(
+        email: email, password: password);
+
+    return await _fromFirebaseUser(firebaseUser.user);
+  }
+
+  Future<User> _fromFirebaseUser(FirebaseUser firebaseUser) async {
+    if (firebaseUser == null) return Future.value(null);
+
+    final documentReference =
+    _firestore.document(FirestorePaths.userPath(firebaseUser.uid));
+    final snapshot = await documentReference.get();
+
+    User user;
+    if (snapshot.data == null) {
+      user = User((u) => u
+        ..uid = firebaseUser.uid
+        ..gender=3
+        ..description=''
+        ..imgUrl=''
+        ..status='Online'
+        ..address=''
+        ..lastOnline=DateTime.now()
+        ..name = firebaseUser
+            .email // Default name will be the email, let user change later
+      );
+      await documentReference.setData(toMap(user));
+    } else {
+      user = fromDoc(snapshot);
+    }
     return user;
   }
 
-  @override
-  Future<String> setUserAddress( String address) {
-    // TODO: implement setUserAddress
-    return null;
+  Future<void> logOut() async {
+    await updateStatus(null);
+    await updateLastOnline(DateTime.now());
+    await _firebaseAuth.signOut();
   }
 
-  @override
-   setUserAvatar( File imgUrl) async{
+//  Future<void> updateUserToken(String token) async {
+//    final firebaseUser = await _firebaseAuth.currentUser();
+//    if (firebaseUser != null) {
+//      final documentReference =
+//      _firestore.document(FirestorePaths.userPath(firebaseUser.uid));
+//      return documentReference.updateData({
+//        TOKEN: token,
+//      });
+//    }
+//  }
+
+  ///
+  /// Allows to update the User, but only the following fields:
+  /// - name
+  /// - status
+  /// - image
+  ///
+  Future<void> updateStatus(String status) async {
+    final firebaseUser = await _firebaseAuth.currentUser();
+    if (firebaseUser != null) {
+      final documentReference =
+      _firestore.document(FirestorePaths.userPath(firebaseUser.uid));
+      return documentReference.updateData({STATUS:status});
+    }
+  }
+
+  Future<void> updateLastOnline(DateTime lastonline) async{
+    final firebaseUser = await _firebaseAuth.currentUser();
+    if (firebaseUser != null) {
+      final documentReference =
+      _firestore.document(FirestorePaths.userPath(firebaseUser.uid));
+      return documentReference.updateData({LASTONLINE:lastonline});
+    }
+  }
+
+  // Sets a users locale on our backend.
+  // The locale is used to send localized notifications.
+//  Future<void> updateUserLocale(String locale) async {
+//    final firebaseUser = await _firebaseAuth.currentUser();
+//    if (firebaseUser != null) {
+//      final documentReference =
+//      _firestore.document(FirestorePaths.userPath(firebaseUser.uid));
+//      return documentReference.updateData({
+//        LOCALE: locale,
+//      });
+//    }
+//  }
+  Stream<User> getUserStream(userId) {
+    return _firestore
+        .collection(FirestorePaths.PATH_USERS)
+        .document(userId)
+        .snapshots()
+        .map((userSnapshot) {
+      return fromDoc(userSnapshot);
+    });
+  }
+
+
+
+   Future<String> updateUserAvatar( File imgUrl) async{
     StorageReference storageReference=firebaseStorage.ref().child('avatar/${Path.basename(imgUrl.path)}}');
     StorageUploadTask uploadTask = storageReference.putFile(imgUrl);
     await uploadTask.onComplete;
     print('finished');
+    String img;
     storageReference.getDownloadURL().then((fileURL) async{
-      await databaseReference.collection('user').document(userId).updateData({'imgUrl':fileURL,'lastOnline':new DateTime.now()});
-    }).then((_) async{
-      await getUserInfo();
+      final firebaseUser = await _firebaseAuth.currentUser();
+      final documentReference = _firestore.document(FirestorePaths.userPath(firebaseUser.uid));
+      await documentReference.updateData({IMAGE:fileURL});
+       img= fileURL;
     });
+    return img;
     // databaseReference.collection('user').document(userId).updateData();
     // TODO: implement setUserAvatar
 
   }
 
-  @override
-  Future<void> setUserDescription( String description) async {
+
+  Future<void> updateUserDescription( String description) async {
+    final firebaseUser = await _firebaseAuth.currentUser();
+    if (firebaseUser != null) {
+      final documentReference =
+      _firestore.document(FirestorePaths.userPath(firebaseUser.uid));
+      return documentReference.updateData({DESCRIPTION:description});
+    }
     // TODO: implement setUserDescription
-    await databaseReference.collection('user').document(userId).updateData({'description':description,'lastOnline':new DateTime.now()}).then((_) async{
-      await getUserInfo();
-    });
+//    await databaseReference.collection('user').document(userId).updateData({'description':description,'lastOnline':new DateTime.now()}).then((_) async{
+////      await getUserInfo();
+////    });
     print('finished');
   }
 
-  @override
-  Future<String> setUserGender( int gender) {
-    // TODO: implement setUserGender
+
+  Future<void> updateUserGender( int gender) async {
+    final firebaseUser = await _firebaseAuth.currentUser();
+    if (firebaseUser != null) {
+      final documentReference =
+      _firestore.document(FirestorePaths.userPath(firebaseUser.uid));
+      return documentReference.updateData({GENDER:gender});
+    }
     return null;
   }
 
-}
-main(){
-  UserInfo a=new UserInfo("WKZy0HfxNfUOanjspZ7Tbjt62cA2");
-  a.getUserInfo();
+  Stream<User> getAuthenticationStateChange() {
+    return _firebaseAuth.onAuthStateChanged.asyncMap((firebaseUser) {
+      return _fromFirebaseUser(firebaseUser);
+    });
+  }
+
+
+
+
+
+  static User fromDoc(DocumentSnapshot document) {
+    return User((u) => u
+      ..uid = document.documentID
+      ..name = document[NAME]
+      ..gender = document[GENDER]
+      ..imgUrl = document[IMAGE]
+      ..status = document[STATUS]
+        ..description=document[DESCRIPTION]
+        ..lastOnline=document[LASTONLINE]
+        ..address=document[ADDRESS]
+    );
+      //..unreadUpdates = MapBuilder(_parseUnreadChannels(document)));
+  }
+
+
+  static toMap(User user) {
+    return {
+    UID :user.uid,
+    GENDER:user.gender,
+    DESCRIPTION:user.description,
+    IMAGE:user.imgUrl,
+    STATUS:user.status,
+    ADDRESS:user.address,
+    LASTONLINE:user.lastOnline,
+    NAME:user.name
+    };
+  }
+
+
 }

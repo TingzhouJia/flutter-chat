@@ -8,7 +8,7 @@ part of 'user.dart';
 
 class _$User extends User {
   @override
-  final int uid;
+  final String uid;
   @override
   final String name;
   @override
@@ -22,7 +22,7 @@ class _$User extends User {
   @override
   final String address;
   @override
-  final String UserId;
+  final String status;
 
   factory _$User([void Function(UserBuilder) updates]) =>
       (new UserBuilder()..update(updates)).build();
@@ -35,7 +35,7 @@ class _$User extends User {
       this.description,
       this.gender,
       this.address,
-      this.UserId})
+      this.status})
       : super._() {
     if (uid == null) {
       throw new BuiltValueNullFieldError('User', 'uid');
@@ -58,8 +58,8 @@ class _$User extends User {
     if (address == null) {
       throw new BuiltValueNullFieldError('User', 'address');
     }
-    if (UserId == null) {
-      throw new BuiltValueNullFieldError('User', 'UserId');
+    if (status == null) {
+      throw new BuiltValueNullFieldError('User', 'status');
     }
   }
 
@@ -81,7 +81,7 @@ class _$User extends User {
         description == other.description &&
         gender == other.gender &&
         address == other.address &&
-        UserId == other.UserId;
+        status == other.status;
   }
 
   @override
@@ -97,7 +97,7 @@ class _$User extends User {
                     description.hashCode),
                 gender.hashCode),
             address.hashCode),
-        UserId.hashCode));
+        status.hashCode));
   }
 
   @override
@@ -110,7 +110,7 @@ class _$User extends User {
           ..add('description', description)
           ..add('gender', gender)
           ..add('address', address)
-          ..add('UserId', UserId))
+          ..add('status', status))
         .toString();
   }
 }
@@ -118,9 +118,9 @@ class _$User extends User {
 class UserBuilder implements Builder<User, UserBuilder> {
   _$User _$v;
 
-  int _uid;
-  int get uid => _$this._uid;
-  set uid(int uid) => _$this._uid = uid;
+  String _uid;
+  String get uid => _$this._uid;
+  set uid(String uid) => _$this._uid = uid;
 
   String _name;
   String get name => _$this._name;
@@ -146,9 +146,9 @@ class UserBuilder implements Builder<User, UserBuilder> {
   String get address => _$this._address;
   set address(String address) => _$this._address = address;
 
-  String _UserId;
-  String get UserId => _$this._UserId;
-  set UserId(String UserId) => _$this._UserId = UserId;
+  String _status;
+  String get status => _$this._status;
+  set status(String status) => _$this._status = status;
 
   UserBuilder();
 
@@ -161,7 +161,7 @@ class UserBuilder implements Builder<User, UserBuilder> {
       _description = _$v.description;
       _gender = _$v.gender;
       _address = _$v.address;
-      _UserId = _$v.UserId;
+      _status = _$v.status;
       _$v = null;
     }
     return this;
@@ -191,7 +191,7 @@ class UserBuilder implements Builder<User, UserBuilder> {
             description: description,
             gender: gender,
             address: address,
-            UserId: UserId);
+            status: status);
     replace(_$result);
     return _$result;
   }
