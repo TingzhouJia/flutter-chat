@@ -10,8 +10,9 @@ abstract class User implements Built<User,UserBuilder> {
    int get gender;
    String get address;
    String get status;
-
+   DateTime get birthday;
 
   User._();
+
   factory User([Updates(UserBuilder b)])=_$User;
 }

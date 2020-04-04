@@ -13,11 +13,7 @@ class _$AppState extends AppState {
   factory _$AppState([void Function(AppStateBuilder) updates]) =>
       (new AppStateBuilder()..update(updates)).build();
 
-  _$AppState._({this.user}) : super._() {
-    if (user == null) {
-      throw new BuiltValueNullFieldError('AppState', 'user');
-    }
-  }
+  _$AppState._({this.user}) : super._();
 
   @override
   AppState rebuild(void Function(AppStateBuilder) updates) =>
@@ -78,12 +74,12 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
   _$AppState build() {
     _$AppState _$result;
     try {
-      _$result = _$v ?? new _$AppState._(user: user.build());
+      _$result = _$v ?? new _$AppState._(user: _user?.build());
     } catch (_) {
       String _$failedField;
       try {
         _$failedField = 'user';
-        user.build();
+        _user?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'AppState', _$failedField, e.toString());

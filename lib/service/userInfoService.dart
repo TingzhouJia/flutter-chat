@@ -23,6 +23,7 @@ class UserRepository {
 //  static const JOINEDGROUPS = "joinedGroups";
   static const STATUS = "status";
   static const GENDER="gender";
+
   final firebaseStorage=FirebaseStorage.instance;
   final FirebaseAuth _firebaseAuth;
   final Firestore _firestore;
@@ -40,9 +41,15 @@ class UserRepository {
     return await _fromFirebaseUser(firebaseUser.user);
   }
 
-  Future<User> _fromFirebaseUser(FirebaseUser firebaseUser) async {
-    if (firebaseUser == null) return Future.value(null);
+  Future<User> signUp(String email,String password) async {
+    final firebaseUser=await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
+    return await _fromFirebaseUser(firebaseUser.user);
+  }
 
+  Future<User> _fromFirebaseUser(FirebaseUser firebaseUser) async {
+
+    if (firebaseUser == null) return Future.value(null);
+    print('_fromFirebaseUser');
     final documentReference =
     _firestore.document(FirestorePaths.userPath(firebaseUser.uid));
     final snapshot = await documentReference.get();
@@ -56,6 +63,7 @@ class UserRepository {
         ..imgUrl=''
         ..status='Online'
         ..address=''
+        ..birthday=null
         ..lastOnline=DateTime.now()
         ..name = firebaseUser
             .email // Default name will be the email, let user change later
@@ -158,10 +166,24 @@ class UserRepository {
       _firestore.document(FirestorePaths.userPath(firebaseUser.uid));
       return documentReference.updateData({DESCRIPTION:description});
     }
-    // TODO: implement setUserDescription
-//    await databaseReference.collection('user').document(userId).updateData({'description':description,'lastOnline':new DateTime.now()}).then((_) async{
-////      await getUserInfo();
-////    });
+    print('finished');
+  }
+  Future<void> updateUserName( String name) async {
+    final firebaseUser = await _firebaseAuth.currentUser();
+    if (firebaseUser != null) {
+      final documentReference =
+      _firestore.document(FirestorePaths.userPath(firebaseUser.uid));
+      return documentReference.updateData({NAME:name});
+    }
+    print('finished');
+  }
+  Future<void> updateUserLocation( String location) async {
+    final firebaseUser = await _firebaseAuth.currentUser();
+    if (firebaseUser != null) {
+      final documentReference =
+      _firestore.document(FirestorePaths.userPath(firebaseUser.uid));
+      return documentReference.updateData({ADDRESS:location});
+    }
     print('finished');
   }
 
@@ -175,9 +197,19 @@ class UserRepository {
     }
     return null;
   }
+  Future<void> updateUserBirthday( DateTime birthday) async {
+    final firebaseUser = await _firebaseAuth.currentUser();
+    if (firebaseUser != null) {
+      final documentReference =
+      _firestore.document(FirestorePaths.userPath(firebaseUser.uid));
+      return documentReference.updateData({BIRTHDAY:birthday});
+    }
+    return null;
+  }
 
   Stream<User> getAuthenticationStateChange() {
     return _firebaseAuth.onAuthStateChanged.asyncMap((firebaseUser) {
+
       return _fromFirebaseUser(firebaseUser);
     });
   }
@@ -196,6 +228,7 @@ class UserRepository {
         ..description=document[DESCRIPTION]
         ..lastOnline=document[LASTONLINE]
         ..address=document[ADDRESS]
+        ..birthday=document[BIRTHDAY].toDate()
     );
       //..unreadUpdates = MapBuilder(_parseUnreadChannels(document)));
   }

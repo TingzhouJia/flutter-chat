@@ -1,18 +1,23 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:learnflutter/redux/auth/auth_action.dart';
 import 'package:learnflutter/redux/auth/auth_middleware.dart';
 import 'package:learnflutter/redux/middleware.dart';
 import 'package:learnflutter/redux/reducer.dart';
 import 'package:learnflutter/redux/state.dart';
-import 'package:learnflutter/screen/a.dart';
+import 'package:learnflutter/redux/userRedux/user_middleware.dart';
+import 'package:learnflutter/screen/user/reset_avatar.dart';
 import 'package:learnflutter/screen/chat_screen.dart';
 import 'package:learnflutter/screen/loading_screen.dart';
 import 'package:learnflutter/screen/root_screen.dart';
-import 'package:learnflutter/screen/sign_screen.dart';
+import 'package:learnflutter/screen/login/sign_screen.dart';
 import 'package:learnflutter/service/loginService.dart';
+import 'package:learnflutter/service/userInfoService.dart';
 import 'package:redux/redux.dart';
 import 'model/user.dart';
-import 'screen/home_screen.dart';
+import 'screen/main/home_screen.dart';
 
 void main()  {
 WidgetsFlutterBinding.ensureInitialized();
@@ -20,19 +25,36 @@ runApp(MyApp());
 }
 
 
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
 
 
 
-class MyApp extends StatelessWidget {
-  final Store<AppState> store;
-  static final _navigatorKey = GlobalKey<NavigatorState>();
 
 
-  MyApp():store=Store<AppState>(
-      appReducer,
-      initialState:,
-      middleware: createStoreMiddleware()..addAll(createAuthMiddleware(new Auth(), _navigatorKey))
-  );
+
+class _MyAppState extends State<MyApp> {
+   Store<AppState> store;
+    final _navigatorKey = GlobalKey<NavigatorState>();
+   final userRepo = UserRepository(FirebaseAuth.instance, Firestore.instance);
+   
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    store=Store<AppState>(
+        appReducer,
+        initialState:AppState.init(),
+        middleware: createStoreMiddleware(userRepo)
+          ..addAll(createAuthMiddleware(userRepo, _navigatorKey))
+          ..addAll(createUserMiddleware(userRepo))
+
+    );
+    print('kkk');
+   // store.dispatch(VerifyAuth());
+  }
 
   // This widget is the root of your application.
   @override
@@ -58,11 +80,11 @@ class MyApp extends StatelessWidget {
             accentColor:Color(0xfffcf8e8) //Color(0xfffcf8e8)
 
         ),
-        home:LoadingScreen(),
+        home:LoadingScreen(store),
 
 
         routes: {
-          '/root':(BuildContext context)=>RootPage(),
+
           '/app': (BuildContext context)=> HomeScreen(),
 
 

@@ -23,6 +23,8 @@ class _$User extends User {
   final String address;
   @override
   final String status;
+  @override
+  final DateTime birthday;
 
   factory _$User([void Function(UserBuilder) updates]) =>
       (new UserBuilder()..update(updates)).build();
@@ -35,7 +37,8 @@ class _$User extends User {
       this.description,
       this.gender,
       this.address,
-      this.status})
+      this.status,
+      this.birthday})
       : super._() {
     if (uid == null) {
       throw new BuiltValueNullFieldError('User', 'uid');
@@ -61,6 +64,9 @@ class _$User extends User {
     if (status == null) {
       throw new BuiltValueNullFieldError('User', 'status');
     }
+    if (birthday == null) {
+      throw new BuiltValueNullFieldError('User', 'birthday');
+    }
   }
 
   @override
@@ -81,7 +87,8 @@ class _$User extends User {
         description == other.description &&
         gender == other.gender &&
         address == other.address &&
-        status == other.status;
+        status == other.status &&
+        birthday == other.birthday;
   }
 
   @override
@@ -91,13 +98,15 @@ class _$User extends User {
             $jc(
                 $jc(
                     $jc(
-                        $jc($jc($jc(0, uid.hashCode), name.hashCode),
-                            imgUrl.hashCode),
-                        lastOnline.hashCode),
-                    description.hashCode),
-                gender.hashCode),
-            address.hashCode),
-        status.hashCode));
+                        $jc(
+                            $jc($jc($jc(0, uid.hashCode), name.hashCode),
+                                imgUrl.hashCode),
+                            lastOnline.hashCode),
+                        description.hashCode),
+                    gender.hashCode),
+                address.hashCode),
+            status.hashCode),
+        birthday.hashCode));
   }
 
   @override
@@ -110,7 +119,8 @@ class _$User extends User {
           ..add('description', description)
           ..add('gender', gender)
           ..add('address', address)
-          ..add('status', status))
+          ..add('status', status)
+          ..add('birthday', birthday))
         .toString();
   }
 }
@@ -150,6 +160,10 @@ class UserBuilder implements Builder<User, UserBuilder> {
   String get status => _$this._status;
   set status(String status) => _$this._status = status;
 
+  DateTime _birthday;
+  DateTime get birthday => _$this._birthday;
+  set birthday(DateTime birthday) => _$this._birthday = birthday;
+
   UserBuilder();
 
   UserBuilder get _$this {
@@ -162,6 +176,7 @@ class UserBuilder implements Builder<User, UserBuilder> {
       _gender = _$v.gender;
       _address = _$v.address;
       _status = _$v.status;
+      _birthday = _$v.birthday;
       _$v = null;
     }
     return this;
@@ -191,7 +206,8 @@ class UserBuilder implements Builder<User, UserBuilder> {
             description: description,
             gender: gender,
             address: address,
-            status: status);
+            status: status,
+            birthday: birthday);
     replace(_$result);
     return _$result;
   }

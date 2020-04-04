@@ -17,6 +17,9 @@ List<Middleware<AppState>> createUserMiddleware(
     TypedMiddleware<AppState, UpdateUserAvatar>(_updateUserAvatar(userRepository)),
     TypedMiddleware<AppState, UpdateUserGender>(_updateUserGender(userRepository)),
     TypedMiddleware<AppState, UpdateUserStatus>(_updateUserStatus(userRepository)),
+    TypedMiddleware<AppState, UpdateUserBirthday>(_updateUserBirthday(userRepository)),
+    TypedMiddleware<AppState, UpdateUserName>(_updateUserName(userRepository)),
+    TypedMiddleware<AppState, UpdateUserLocation>(_updateUserLocation(userRepository)),
     //TypedMiddleware<AppState, UpdateUserAction>(_updateUser(userRepository)),
   ];
 }
@@ -124,6 +127,75 @@ void Function(
       try {
         await userRepository.updateStatus(action.status);
         final user1=action.user.rebuild((b)=>b ..status=action.status);
+        store.dispatch(OnUserUpdateAction(user1));
+
+      } catch (error) {
+        print(error);
+      }
+    }
+
+  };
+}
+void Function(
+    Store<AppState> store,
+    UpdateUserBirthday action,
+    NextDispatcher next,
+    ) _updateUserBirthday(
+    UserRepository userRepository,
+
+    ) {
+  return (store, action, next) async {
+    next(action);
+    if (store.state.user.uid == action.user.uid) {
+      try {
+        await userRepository.updateUserBirthday(action.birthday);
+        final user1=action.user.rebuild((b)=>b ..birthday=action.birthday);
+        store.dispatch(OnUserUpdateAction(user1));
+
+      } catch (error) {
+        print(error);
+      }
+    }
+
+  };
+}
+void Function(
+    Store<AppState> store,
+    UpdateUserLocation action,
+    NextDispatcher next,
+    ) _updateUserLocation(
+    UserRepository userRepository,
+
+    ) {
+  return (store, action, next) async {
+    next(action);
+    if (store.state.user.uid == action.user.uid) {
+      try {
+        await userRepository.updateUserLocation(action.Location);
+        final user1=action.user.rebuild((b)=>b ..address=action.Location);
+        store.dispatch(OnUserUpdateAction(user1));
+
+      } catch (error) {
+        print(error);
+      }
+    }
+
+  };
+}
+void Function(
+    Store<AppState> store,
+    UpdateUserName action,
+    NextDispatcher next,
+    ) _updateUserName(
+    UserRepository userRepository,
+
+    ) {
+  return (store, action, next) async {
+    next(action);
+    if (store.state.user.uid == action.user.uid) {
+      try {
+        await userRepository.updateUserName(action.name);
+        final user1=action.user.rebuild((b)=>b ..name=action.name);
         store.dispatch(OnUserUpdateAction(user1));
 
       } catch (error) {

@@ -1,7 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:learnflutter/screen/my_screen.dart';
+import 'package:learnflutter/screen/user/my_screen.dart';
 import 'package:learnflutter/service/loginService.dart';
 import 'package:learnflutter/service/userInfoService.dart';
 import 'package:learnflutter/utils/bottomUpAnimation.dart';
@@ -13,13 +13,13 @@ import 'package:learnflutter/widgets/SearchBar.dart';
 import 'package:learnflutter/widgets/favoriteContact.dart';
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({Key key, this.auth, this.userId, this.logoutCallback})
+  HomeScreen({Key key})
       : super(key: key);
 
-  final BaseAuth auth;
-
-  final VoidCallback logoutCallback;
-  final String userId;
+//  final BaseAuth auth;
+//
+//  final VoidCallback logoutCallback;
+//  final String userId;
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -37,7 +37,7 @@ class Message extends StatelessWidget {
         children: <Widget>[FavoriteContact(), RecentChat()],
       ),
     );
-    ;
+
   }
 }
 class Requests extends StatelessWidget {
@@ -96,27 +96,27 @@ class _HomeScreenState extends State<HomeScreen>
   var currentPage = 0;
   var isPageCanChanged = true;
   var info;
-  UserInfo userInfo;
+  //UserInfo userInfo;
   @override
-  void initState()  {
-    super.initState();
-    mTabController=TabController(length: tabList.length,vsync: this);
-    userInfo=new UserInfo(widget.userId);
-    fetchUser();
-
-
-
-  }
-
-  fetchUser() async{
-    await userInfo.getUserInfo().then((val)=>
-        setState((){
-          info=val;
-        })
-    );
-
-    print(info);
-  }
+//  void initState()  {
+//    super.initState();
+//    mTabController=TabController(length: tabList.length,vsync: this);
+//    userInfo=new UserInfo(widget.userId);
+//    fetchUser();
+//
+//
+//
+//  }
+//
+//  fetchUser() async{
+//    await userInfo.getUserInfo().then((val)=>
+//        setState((){
+//          info=val;
+//        })
+//    );
+//
+//    print(info);
+//  }
 
 
   @override
@@ -124,21 +124,21 @@ class _HomeScreenState extends State<HomeScreen>
     super.dispose();
     mTabController.dispose();
   }
-  signOut() async {
-    print('aaa');
-    try {
-
-      await widget.auth.signOut();
-
-      widget.logoutCallback();
-    } catch (e) {
-      print(e);
-    }
-  }
-  _signOut(){
-    signOut();
-
-  }
+//  signOut() async {
+//    print('aaa');
+//    try {
+//
+//      await widget.auth.signOut();
+//
+//      widget.logoutCallback();
+//    } catch (e) {
+//      print(e);
+//    }
+//  }
+//  _signOut(){
+//    signOut();
+//
+//  }
 
 
 
@@ -157,7 +157,7 @@ class _HomeScreenState extends State<HomeScreen>
             leading: GestureDetector(
               onTap: (){
                 jumpToProfile((BuildContext context, Animation animation,
-                    Animation secondaryAnimation)=>MyProfile(info,userInfo,()=>_signOut()),context);
+                    Animation secondaryAnimation)=>MyProfile(),context);
               },
               child: Padding(
 
@@ -181,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen>
                 icon: Icon(Icons.menu),
                 iconSize: 30.0,
                 color: Colors.white,
-                onPressed: (){signOut();} ,
+                //onPressed: (){signOut();} ,
               ),
             ],
 
@@ -224,13 +224,7 @@ class _HomeScreenState extends State<HomeScreen>
                     )),
                Requests()
               ],
-//            onPageChanged: (index) {
-//              if (!isPageCanChanged) {
-//
-//                _onTabPageChange(index, isOnTab: false);
-//              }
-//            },
-//            controller: mPageController,
+
 
             ),
 

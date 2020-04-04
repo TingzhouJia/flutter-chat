@@ -6,6 +6,7 @@ import 'package:learnflutter/model/user.dart';
 part 'state.g.dart';
 
  abstract class AppState implements Built<AppState,AppStateBuilder>{
+    @nullable
     User get  user;
 
     AppState._();

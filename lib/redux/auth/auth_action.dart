@@ -6,7 +6,14 @@ class Login{
   String email;
   String password;
 
-  Login(this.email, this.password);
+  Login({this.email, this.password});
+
+}
+class Signup{
+  String email;
+  String password;
+
+  Signup({this.email, this.password});
 
 }
 

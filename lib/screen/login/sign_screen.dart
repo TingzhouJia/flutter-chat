@@ -1,12 +1,16 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:learnflutter/redux/auth/auth_action.dart';
 import 'package:learnflutter/service/loginService.dart';
 class LoginIn extends StatefulWidget {
-  LoginIn({this.auth, this.loginCallback});
-
-   final BaseAuth auth;
-   final VoidCallback loginCallback;
+//  LoginIn({this.auth, this.loginCallback});
+//
+//   final BaseAuth auth;
+//   final VoidCallback loginCallback;
 
   @override
   _LoginInState createState() => _LoginInState();
@@ -128,22 +132,26 @@ class _LoginInState extends State<LoginIn> {
       String userId = "";
       try {
         if (_isLoginForm) {
-          userId = await widget.auth.signIn(_email, _password);
-          print('Signed in: $userId');
+          final loginAction=Login(email:_email,password:_password);
+          StoreProvider.of(context).dispatch(loginAction);
+//          userId = await widget.auth.signIn(_email, _password);
+//          print('Signed in: $userId');
         } else {
-          userId = await widget.auth.signUp(_email, _password);
-          //widget.auth.sendEmailVerification();
-          //_showVerifyEmailSentDialog();
-          print('Signed up user: $userId');
+          final signUpAction=Signup(email:_email,password:_password);
+          StoreProvider.of(context).dispatch(signUpAction);
+//          userId = await widget.auth.signUp(_email, _password);
+////          //widget.auth.sendEmailVerification();
+////          //_showVerifyEmailSentDialog();
+////          print('Signed up user: $userId');
         }
         setState(() {
           _isLoading = false;
         });
 
-        if (userId.length > 0 && userId != null && _isLoginForm) {
-          //Navigator.of(context).pushReplacementNamed('/app');
-          widget.loginCallback();
-        }
+//        if (userId.length > 0 && userId != null && _isLoginForm) {
+//          //Navigator.of(context).pushReplacementNamed('/app');
+//          widget.loginCallback();
+//        }
       } catch (e) {
         print('Error: $e');
         setState(() {

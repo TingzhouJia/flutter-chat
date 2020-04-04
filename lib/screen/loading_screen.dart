@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:learnflutter/redux/auth/auth_action.dart';
+import 'package:learnflutter/redux/state.dart';
+import 'package:learnflutter/screen/main/main_screen.dart';
 import 'package:learnflutter/screen/root_screen.dart';
 import 'package:learnflutter/service/loginService.dart';
+import 'package:redux/redux.dart';
 class LoadingScreen extends StatefulWidget {
+  Store<AppState> store;
+
+
+  LoadingScreen(this.store);
+
   @override
   _LoadingScreenState createState() => _LoadingScreenState();
 }
@@ -14,12 +23,13 @@ class _LoadingScreenState extends State<LoadingScreen> {
     //在加载页面停顿3秒
     new Future.delayed(Duration(seconds: 3),(){
       print("Flutter即时通讯APP界面实现...");
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (_) => RootPage(
-                auth: new Auth(),
-              )));
+      widget.store.dispatch(VerifyAuth());
+//      Navigator.push(
+//          context,
+//          MaterialPageRoute(
+//              builder: (_) => MainScreen(
+//
+//              )));
     });
   }
 

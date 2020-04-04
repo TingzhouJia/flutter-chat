@@ -2,25 +2,29 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:image_pickers/image_pickers.dart';
 import 'package:image_pickers/CropConfig.dart';
 import 'package:image_pickers/Media.dart';
 import 'package:image_pickers/UIConfig.dart';
-import 'package:learnflutter/screen/my_screen.dart';
+import 'package:learnflutter/redux/state.dart';
+import 'package:learnflutter/screen/user/my_screen.dart';
+import 'package:learnflutter/screen/user/reset_avatar_view.dart';
+import 'package:learnflutter/screen/user/user_reset_view.dart';
 import 'package:learnflutter/service/userInfoService.dart';
 
-class MyHomePage extends StatefulWidget {
+class MyAvatarPage extends StatefulWidget {
   String imageFile;
-  UserInfo userInfo;
-  MyHomePage({this.imageFile,this.userInfo});
+
+  MyAvatarPage({this.imageFile});
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MyAvatarPageState createState() => _MyAvatarPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyAvatarPageState extends State<MyAvatarPage> {
   File _imageFile;
   dynamic _pickImageError;
   bool isVideo = false;
@@ -160,7 +164,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
-  Widget _previewImage() {
+  Widget _previewImage(ResetAvatarViewModel vm) {
     final Text retrieveError = _getRetrieveErrorWidget();
 
     if (retrieveError != null) {
@@ -204,13 +208,13 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             GestureDetector(
               onTap: () async{
-              await widget.userInfo.setUserAvatar(_imageFile);
+              await vm.submit(_imageFile);
 
-             // Navigator.of(context).pop([widget.userInfo]);
-                Navigator.push(context, MaterialPageRoute(
-                    builder: (_) => MyProfile.origin(
-                      widget.userInfo,
-                    )));
+                Navigator.of(context).pop();
+//                Navigator.push(context, MaterialPageRoute(
+//                    builder: (_) => MyProfile.origin(
+//                      widget.userInfo,
+//                    )));
               },
               child: Container(
 
@@ -292,91 +296,13 @@ class _MyHomePageState extends State<MyHomePage> {
           )
         ],
       ),
-      body:
-//      SingleChildScrollView(
-//
-//          physics: BouncingScrollPhysics(),
-//          child: Column(
-//              children: <Widget>[
-//                RaisedButton(
-//                  child: Text('a'),
-//                  onPressed: (){selectImages();},
-//                ),
-//          GridView.builder(
-//          physics: NeverScrollableScrollPhysics(),
-//          itemCount: _listImagePaths == null ? 0 : _listImagePaths.length,
-//          shrinkWrap: true,
-//          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-//              crossAxisCount: 3,
-//              mainAxisSpacing: 20.0,
-//              crossAxisSpacing: 10.0,
-//              childAspectRatio: 1.0),
-//          itemBuilder: (BuildContext context, int index) {
-//            return GestureDetector(
-//              onTap: (){
-////                        ImagePickers.previewImage(_listImagePaths[index].path);
-//
-////                      List<String> paths = [];
-////                        _listImagePaths.forEach((media){
-////                          paths.add(media.path);
-////                        });
-////
-////                        ImagePickers.previewImages(paths,index);
-//
-//                ImagePickers.previewImagesByMedia(_listImagePaths,index);
-//              },
-//              child: Image.file(
-//                File(
-//                  _listImagePaths[index].path,
-//                ),
-//                fit: BoxFit.cover,
-//              ),
-//            );
-//          }),]))
-//
-//
-
-          Center(
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          color: Color(0xffdefcfc),
-          child: Column(
-
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Platform.isAndroid
-                  ? FutureBuilder<void>(
-                      future: retrieveLostData(),
-                      builder:
-                          (BuildContext context, AsyncSnapshot<void> snapshot) {
-                        switch (snapshot.connectionState) {
-                          case ConnectionState.none:
-                          case ConnectionState.waiting:
-                            return CircleAvatar(
-                              backgroundImage: AssetImage('assets/male1.jpg'),
-                            );
-                          case ConnectionState.done:
-                            return _previewImage();
-                          default:
-                            if (snapshot.hasError) {
-                              return Text(
-                                'Pick image/video error: ${snapshot.error}}',
-                                textAlign: TextAlign.center,
-                              );
-                            } else {
-                              return const Text(
-                                'You have not yet picked an image.',
-                                textAlign: TextAlign.center,
-                              );
-                            }
-                        }
-                      },
-                    )
-                  : (_previewImage())
-            ],
-          ),
-        ),
+      body:StoreConnector<AppState,ResetAvatarViewModel>(
+          converter: ResetAvatarViewModel.fromStore(),
+        builder: (context,vm)=>_get(context,vm) ,
       ),
+
+
+
     );
   }
 
@@ -388,7 +314,53 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     return null;
   }
+  _get(context,vm){
+    return Center(
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        color: Color(0xffdefcfc),
+        child: Column(
+
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Platform.isAndroid
+                ? FutureBuilder<void>(
+              future: retrieveLostData(),
+              builder:
+                  (BuildContext context, AsyncSnapshot<void> snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.none:
+                  case ConnectionState.waiting:
+                    return CircleAvatar(
+                      backgroundImage: AssetImage('assets/male1.jpg'),
+                    );
+                  case ConnectionState.done:
+                    return _previewImage(vm);
+                  default:
+                    if (snapshot.hasError) {
+                      return Text(
+                        'Pick image/video error: ${snapshot.error}}',
+                        textAlign: TextAlign.center,
+                      );
+                    } else {
+                      return const Text(
+                        'You have not yet picked an image.',
+                        textAlign: TextAlign.center,
+                      );
+                    }
+                }
+              },
+            )
+                : (_previewImage(vm))
+          ],
+        ),
+      ),
+    );
+
+  }
 }
+
+
 
 typedef void OnPickImageCallback(
     double maxWidth, double maxHeight, int quality);

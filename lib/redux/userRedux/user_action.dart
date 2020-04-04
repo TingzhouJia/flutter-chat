@@ -39,3 +39,19 @@ class UpdateUserStatus{
   String status;
   UpdateUserStatus({this.user,this.status});
 }
+
+class UpdateUserBirthday{
+  User user;
+  DateTime birthday;
+  UpdateUserBirthday({this.user,this.birthday});
+}
+class UpdateUserName{
+  User user;
+  String name;
+  UpdateUserName({this.user,this.name});
+}
+class UpdateUserLocation{
+  User user;
+  String Location;
+  UpdateUserLocation({this.user,this.Location});
+}

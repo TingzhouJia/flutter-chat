@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:learnflutter/service/userInfoService.dart';
 class ResetInfo extends StatefulWidget {
-  UserInfo userinfo;
-  String title;
 
-  ResetInfo({this.userinfo, this.title});
+  String title;
+  final callFunc;
+  ResetInfo({ this.title,this.callFunc});
 
   @override
   _ResetInfoState createState() => _ResetInfoState();
 }
 
 class _ResetInfoState extends State<ResetInfo> {
+//
+//  Widget getInput(title){
+//    switch(title){
+//      case "Username":
+//        return
+//    }
+//  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,10 +27,15 @@ class _ResetInfoState extends State<ResetInfo> {
         centerTitle: true,
         actions: <Widget>[
           GestureDetector(
-            onTap: (){},
+            onTap: (){
+
+            },
             child: Text('Save'),
           )
         ],
+      ),
+      body: TextField(
+        autofocus: true,
       ),
     );
   }
