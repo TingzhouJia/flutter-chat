@@ -58,14 +58,8 @@ class _$User extends User {
     if (gender == null) {
       throw new BuiltValueNullFieldError('User', 'gender');
     }
-    if (address == null) {
-      throw new BuiltValueNullFieldError('User', 'address');
-    }
     if (status == null) {
       throw new BuiltValueNullFieldError('User', 'status');
-    }
-    if (birthday == null) {
-      throw new BuiltValueNullFieldError('User', 'birthday');
     }
   }
 

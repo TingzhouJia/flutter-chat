@@ -35,8 +35,10 @@ void Function(
     next(action);
     try {
       userUpdateSubscription?.cancel();
+
       userUpdateSubscription =
           userRepository.getUserStream(action.user.uid).listen((user) {
+
             store.dispatch(OnUserUpdateAction(user));
           });
     } catch (e){

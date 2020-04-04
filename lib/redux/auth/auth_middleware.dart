@@ -62,18 +62,19 @@ void Function(
     UserRepository userRepository,
     GlobalKey<NavigatorState> navigatorKey,
     ) {
-  print('c');
   return (store, action, next) {
     next(action);
 
-    userRepository.getAuthenticationStateChange().listen((user) {
-      print('a');
+    userRepository.getAuthenticationStateChange().listen((user) async {
+
+
       if (user == null) {
-        print('aa');
         navigatorKey.currentState.pushReplacementNamed('/login');
       } else {
-        store.dispatch(OnAuthenticated(user: user));
-        store.dispatch(ConnectToDataSource());
+
+       await store.dispatch(OnAuthenticated(user: user));
+       store.dispatch(ConnectToDataSource());
+        navigatorKey.currentState.pushReplacementNamed('/app');
       }
     });
   };
@@ -89,7 +90,8 @@ void Function(
   return (store, action, next) async {
     next(action);
       await userRepository.logOut();
-
+    navigatorKey.currentState.pushNamedAndRemoveUntil(
+        "/login", ModalRoute.withName("/login"));
       store.dispatch(OnLogoutSuccess());
 
   };

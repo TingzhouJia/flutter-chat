@@ -16,6 +16,7 @@ import 'package:learnflutter/screen/user/reset_avatar.dart';
 import 'package:learnflutter/screen/user/user_view.dart';
 import 'package:learnflutter/service/userInfoService.dart';
 import 'package:learnflutter/widgets/InfoList.dart';
+import 'package:oktoast/oktoast.dart';
 
 class MyProfile extends StatefulWidget {
 //  LinkedHashMap info;
@@ -59,7 +60,7 @@ class _MyProfileState extends State<MyProfile> {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState,UserScreenViewModel>(
-        builder: (context,vm)=>_buildscaford(context,vm),
+        builder: (context,vm)=>_buildscaford(context, vm),
         converter: UserScreenViewModel.fromStore(),
         distinct: true,
 
@@ -106,212 +107,216 @@ class _MyProfileState extends State<MyProfile> {
               ],
             ),
           )),
-      body: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).requestFocus(FocusNode());
-          _textEditingController.clear();
-          setState(() {
-            onUse=false;
-          });
-        },
-        child: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints viewportConstraints) {
-            return SingleChildScrollView(
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    minHeight: viewportConstraints.maxHeight,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Column(
-                        // mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                            margin: EdgeInsets.only(top: 15.0, bottom: 10.0),
-                            // A fixed-height child.
-                            child: Stack(
-                              overflow: Overflow.visible,
-                              alignment: Alignment.center,
-                              children: <Widget>[
-                                CircleAvatar(
-                                  backgroundColor: Colors.white,
-                                  radius: 60.0,
-                                  backgroundImage: vm.user.imgUrl == null
-                                      ? AssetImage("assets/male1.jpg")
-                                      : NetworkImage(vm.user.imgUrl),
-                                ),
-                                Positioned(
-                                  bottom: 0,
-                                  right: -15.0,
-                                  child: Container(
-                                    width: 35.0,
-                                    decoration: BoxDecoration(
-                                        color: Colors.white, shape: BoxShape.circle),
-                                    child: IconButton(
-                                      iconSize: 20.0,
-                                      color: Colors.white,
-                                      onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (_) => MyAvatarPage(
-                                                  imageFile: vm.user.imgUrl,
+      body: OKToast(
+        child: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).requestFocus(FocusNode());
+            _textEditingController.clear();
+            setState(() {
+              onUse=false;
+            });
+          },
+          child: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints viewportConstraints) {
+              return SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: viewportConstraints.maxHeight,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Column(
+                          // mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                              margin: EdgeInsets.only(top: 15.0, bottom: 10.0),
+                              // A fixed-height child.
+                              child: Stack(
+                                overflow: Overflow.visible,
+                                alignment: Alignment.center,
+                                children: <Widget>[
+                                  CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    radius: 60.0,
+                                    backgroundImage: vm.user.imgUrl == null
+                                        ? AssetImage("assets/male1.jpg")
+                                        : NetworkImage(vm.user.imgUrl),
+                                  ),
+                                  Positioned(
+                                    bottom: 0,
+                                    right: -15.0,
+                                    child: Container(
+                                      width: 35.0,
+                                      decoration: BoxDecoration(
+                                          color: Colors.white, shape: BoxShape.circle),
+                                      child: IconButton(
+                                        iconSize: 20.0,
+                                        color: Colors.white,
+                                        onPressed: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) => MyAvatarPage(
+                                                    imageFile: vm.user.imgUrl,
 
-                                                )));
-                                      },
-                                      icon: Icon(
-                                        Icons.photo_camera,
-                                        color: Colors.grey,
+                                                  )));
+                                        },
+                                        icon: Icon(
+                                          Icons.photo_camera,
+                                          color: Colors.grey,
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                          Text(
-                            vm.user.name,
-                            style: TextStyle(
-                                fontSize: 26.0,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          InfoList(
+                            Text(
+                              vm.user.name,
+                              style: TextStyle(
+                                  fontSize: 26.0,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            InfoList(
 
                               info: 'Username',
                               index: vm.user.name,
-                          ),
-                          InfoList(
+                            ),
+                            InfoList(
+                              info: "Status",
+                              index: vm.user.status,
+                            ),
+                            InfoList(
 
-                              info: 'UID',
-                              index: vm.user.uid),
-                          InfoList(
+                                info: 'UID',
+                                index: vm.user.uid),
+                            InfoList(
 
-                              info: 'Location',
-                              index:vm.user.address
+                                info: 'Location',
+                                index:vm.user.address
 
-                          ),
-                          InfoList(
+                            ),
+                            InfoList(
 
-                            info: 'Gender',
-                            index: _getGender(vm.user.gender),
-                          ),
-                          InfoList(
+                              info: 'Gender',
+                              index: _getGender(vm.user.gender),
+                            ),
+                            InfoList(
 
-                              info: 'Birthday',
-                              index:  new DateFormat("yyyy-MM-dd ")
-                                  .format(vm.user.birthday)),
-                          Container(
-                            width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(
-                                border: Border(
-                                    bottom: BorderSide(
-                                        width: 1.0,
-                                        color: Colors.white))),
-                            child: Column(
-                              children: <Widget>[
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Expanded(
-                                      child: Container(
-                                          padding: EdgeInsets.only(
-                                              top: 10.0, bottom: 10.0, left: 20.0),
+                                info: 'Birthday',
+                                index:  new DateFormat("yyyy-MM-dd ")
+                                    .format(vm.user.birthday)),
+                            Container(
+                              width: MediaQuery.of(context).size.width,
+                              decoration: BoxDecoration(
+                                  border: Border(
+                                      bottom: BorderSide(
+                                          width: 1.0,
+                                          color: Colors.white))),
+                              child: Column(
+                                children: <Widget>[
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Expanded(
+                                        child: Container(
+                                            padding: EdgeInsets.only(
+                                                top: 10.0, bottom: 10.0, left: 20.0),
 
-                                          child: Text(
-                                            "Introduction",
-                                            style: TextStyle(
+                                            child: Text(
+                                              "Introduction",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 20.0),
+                                            )),
+                                      ),
+                                      Offstage(
+                                        offstage:!onUse,
+                                        child: GestureDetector(
+                                          child: Container(
+
+                                            child: Text('Save',style: TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w600,
                                                 fontSize: 20.0),
-                                          )),
-                                    ),
-                                    Offstage(
-                                      offstage:!onUse,
-                                      child: GestureDetector(
-                                        child: Container(
-
-                                          child: Text('Save',style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 20.0),
+                                            ),
+                                            padding: EdgeInsets.only(right: 20.0),
                                           ),
-                                          padding: EdgeInsets.only(right: 20.0),
+                                          onTap: ()  {
+                                            submit(vm.user,Intro);
+                                            _textEditingController.clear();
+                                            FocusScope.of(context).requestFocus(FocusNode());
+                                          },
                                         ),
-                                        onTap: ()  {
-                                          submit(vm.user,Intro);
-                                          _textEditingController.clear();
-                                          FocusScope.of(context).requestFocus(FocusNode());
-                                        },
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                Container(
-                                  height: 100.0,
-                                  padding: EdgeInsets.only(top: 5.0, left: 20.0),
-                                  child: TextField(
-                                    onTap: (){
-                                      setState(() {
-                                        onUse=true;
-                                      });
-                                    },
-                                    maxLines: 5,
-                                    controller: _textEditingController,
-                                    onChanged: (value){
-
-                                      setState(() {
-
-                                        Intro=value;
-                                      });
-                                    },
-                                    textAlign: TextAlign.justify,
-                                    decoration: InputDecoration(
-                                        contentPadding: EdgeInsets.all(2.0),
-                                        hintStyle: TextStyle(
-                                          color: Colors.white,
-                                        ),
-                                        border: InputBorder.none,
-                                        hintText: vm.user.description == ''
-                                            ? 'Add some description for yourself, and let more people know you'
-                                            : vm.user.description),
+                                      )
+                                    ],
                                   ),
-                                )
-                              ],
+                                  Container(
+                                    height: 100.0,
+                                    padding: EdgeInsets.only(top: 5.0, left: 20.0),
+                                    child: TextField(
+                                      onTap: (){
+                                        setState(() {
+                                          onUse=true;
+                                        });
+                                      },
+                                      maxLines: 5,
+                                      controller: _textEditingController,
+                                      onChanged: (value){
+
+                                        setState(() {
+
+                                          Intro=value;
+                                        });
+                                      },
+                                      textAlign: TextAlign.justify,
+                                      decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.all(2.0),
+                                          hintStyle: TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                          border: InputBorder.none,
+                                          hintText: vm.user.description == ''
+                                              ? 'Add some description for yourself, and let more people know you'
+                                              : vm.user.description),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                        GestureDetector(
+                          onTap:() async {
+                            StoreProvider.of<AppState>(context).dispatch(LogOut());
+                          },
+                          child: Container(
+                            padding:EdgeInsets.all(10.0),
+                            child: Text("Logout Current Account",style: TextStyle(
+                                color: Colors.white,fontSize: 30.0,fontWeight: FontWeight.bold
+                            ),),
+                            width:MediaQuery.of(context).size.width,
+
+                            alignment:Alignment.center,
+                            decoration: BoxDecoration(
+
+                                border:Border(top: BorderSide(color: Colors.white,width: 2.0),)
                             ),
-                          )
-                        ],
-                      ),
-                      GestureDetector(
-                        onTap:() async {
-                          StoreProvider.of<AppState>(context).dispatch(LogOut());
-                        },
-                        child: Container(
-                          padding:EdgeInsets.all(10.0),
-                          child: Text("Logout Current Account",style: TextStyle(
-                              color: Colors.white,fontSize: 30.0,fontWeight: FontWeight.bold
-                          ),),
-                          width:MediaQuery.of(context).size.width,
-
-                          alignment:Alignment.center,
-                          decoration: BoxDecoration(
-
-                              border:Border(top: BorderSide(color: Colors.white,width: 2.0),bottom: BorderSide(color: Colors.white,width: 2.0))
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 2,
-                      )
-                    ],
-                  ),
-                ));
-          },
+
+                      ],
+                    ),
+                  ));
+            },
+          ),
         ),
       ),
     );

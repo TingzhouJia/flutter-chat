@@ -4,12 +4,15 @@ part 'user.g.dart';
 abstract class User implements Built<User,UserBuilder> {
    String get uid;
    String get  name;
+   @nullable
    String get  imgUrl;
    DateTime get lastOnline;
    String get description;
    int get gender;
+   @nullable
    String get address;
    String get status;
+   @nullable
    DateTime get birthday;
 
   User._();

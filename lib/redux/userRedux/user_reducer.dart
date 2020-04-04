@@ -13,6 +13,7 @@ final userReducer=<AppState Function(AppState,dynamic)>[
 
 
 AppState _onUserUpdate(AppState state, OnUserUpdateAction action) {
+
   return state.rebuild((a) => a
   // Update the app user
     ..user = action.user.toBuilder()

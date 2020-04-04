@@ -49,7 +49,7 @@ class UserRepository {
   Future<User> _fromFirebaseUser(FirebaseUser firebaseUser) async {
 
     if (firebaseUser == null) return Future.value(null);
-    print('_fromFirebaseUser');
+
     final documentReference =
     _firestore.document(FirestorePaths.userPath(firebaseUser.uid));
     final snapshot = await documentReference.get();
@@ -72,6 +72,8 @@ class UserRepository {
     } else {
       user = fromDoc(snapshot);
     }
+    print('aaa');
+
     return user;
   }
 
@@ -219,16 +221,17 @@ class UserRepository {
 
 
   static User fromDoc(DocumentSnapshot document) {
+    print(document['gender']);
     return User((u) => u
       ..uid = document.documentID
       ..name = document[NAME]
       ..gender = document[GENDER]
       ..imgUrl = document[IMAGE]
-      ..status = document[STATUS]
+      ..status = document[STATUS]=='invisible'?'Invisible':'Online'
         ..description=document[DESCRIPTION]
-        ..lastOnline=document[LASTONLINE]
+        ..lastOnline=DateTime.parse(document[LASTONLINE].toDate().toString())
         ..address=document[ADDRESS]
-        ..birthday=document[BIRTHDAY].toDate()
+        ..birthday=DateTime.parse(document[BIRTHDAY].toDate().toString())
     );
       //..unreadUpdates = MapBuilder(_parseUnreadChannels(document)));
   }

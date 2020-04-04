@@ -1,6 +1,9 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:learnflutter/redux/state.dart';
+import 'package:learnflutter/screen/main/home_view.dart';
 import 'package:learnflutter/screen/user/my_screen.dart';
 import 'package:learnflutter/service/loginService.dart';
 import 'package:learnflutter/service/userInfoService.dart';
@@ -13,8 +16,7 @@ import 'package:learnflutter/widgets/SearchBar.dart';
 import 'package:learnflutter/widgets/favoriteContact.dart';
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({Key key})
-      : super(key: key);
+  HomeScreen({Key key}) : super(key: key);
 
 //  final BaseAuth auth;
 //
@@ -27,21 +29,30 @@ class HomeScreen extends StatefulWidget {
 class Message extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 500.0,
-      decoration: BoxDecoration(
-          color: Theme.of(context).accentColor,
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0))),
-      child: Column(
-        children: <Widget>[FavoriteContact(), RecentChat()],
-      ),
-    );
+    return
+      Container(
+
+          decoration: BoxDecoration(
+              color: Theme.of(context).accentColor,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0))),
+
+
+
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[ FavoriteContact()],
+          )
+
+
+
+      );
 
   }
 }
-class Requests extends StatelessWidget {
 
+class Requests extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -51,14 +62,13 @@ class Requests extends StatelessWidget {
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0))),
       child: Column(
-        children: <Widget>[SearchBar(),RequestFriends()],
+        children: <Widget>[SearchBar(), RequestFriends()],
       ),
     );
   }
 }
 
-
-class Online extends StatelessWidget{
+class Online extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -71,9 +81,9 @@ class Online extends StatelessWidget{
         children: <Widget>[OnlineList()],
       ),
     );
-
   }
 }
+
 class TabTitle {
   String title;
   int id;
@@ -88,92 +98,48 @@ List<TabTitle> tabList = [
   new TabTitle('Requests', 3)
 ];
 
-class _HomeScreenState extends State<HomeScreen>
-    with TickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   TabController mTabController;
   PageController mPageController = PageController(initialPage: 0);
 
   var currentPage = 0;
   var isPageCanChanged = true;
   var info;
+
   //UserInfo userInfo;
   @override
-//  void initState()  {
-//    super.initState();
-//    mTabController=TabController(length: tabList.length,vsync: this);
-//    userInfo=new UserInfo(widget.userId);
-//    fetchUser();
-//
-//
-//
-//  }
-//
-//  fetchUser() async{
-//    await userInfo.getUserInfo().then((val)=>
-//        setState((){
-//          info=val;
-//        })
-//    );
-//
-//    print(info);
-//  }
-
-
-  @override
-  void dispose() {
-    super.dispose();
-    mTabController.dispose();
-  }
-//  signOut() async {
-//    print('aaa');
-//    try {
-//
-//      await widget.auth.signOut();
-//
-//      widget.logoutCallback();
-//    } catch (e) {
-//      print(e);
-//    }
-//  }
-//  _signOut(){
-//    signOut();
-//
-//  }
-
-
-
-
-  @override
-  Widget build(BuildContext context) {
-
+_buildView(context,HomeScreenViewModel vm){
     return DefaultTabController(
       length: tabList.length,
-      child:  Scaffold(
+      child: Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
         appBar: PreferredSize(
-
           child: AppBar(
-
             leading: GestureDetector(
-              onTap: (){
-                jumpToProfile((BuildContext context, Animation animation,
-                    Animation secondaryAnimation)=>MyProfile(),context);
+              onTap: () {
+                jumpToProfile(
+                        (BuildContext context, Animation animation,
+                        Animation secondaryAnimation) =>
+                        MyProfile(),
+                    context);
               },
               child: Padding(
-
                 padding: EdgeInsets.only(left: 10),
                 child: CircleAvatar(
-
                   radius: 50,
                   backgroundColor: Colors.white70,
-                  backgroundImage: info==null?AssetImage('assets/male1.jpg'):NetworkImage(info['imgUrl']),
+                  backgroundImage: vm.user.imgUrl == null
+                      ? AssetImage('assets/male1.jpg')
+                      : NetworkImage(vm.user.imgUrl),
                 ),
               ),
             ),
             title: Text(
               'Chats',
-
-              style: TextStyle(fontSize: 28.0, fontWeight: FontWeight.bold,color: Colors.white),
+              style: TextStyle(
+                  fontSize: 28.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
             ),
             elevation: 0.0,
             actions: <Widget>[
@@ -184,54 +150,67 @@ class _HomeScreenState extends State<HomeScreen>
                 //onPressed: (){signOut();} ,
               ),
             ],
-
-          ) ,
-          preferredSize: Size.fromHeight(MediaQuery.of(context).size.height*0.05),
+          ),
+          preferredSize:
+          Size.fromHeight(MediaQuery.of(context).size.height * 0.05),
         ),
-
-        body: Column(
-          children: <Widget>[
-            Container(
-              height: 70.0,color: Theme.of(context).primaryColor,
-              child:  TabBar(
-
-                  labelColor: Colors.white,
-                  unselectedLabelColor: Colors.white60,
-                  isScrollable: true,
-                  indicator: const BoxDecoration(),
+        body: SafeArea(
+          child: Column(
+            children: <Widget>[
+              Container(
+                height: 70.0,
+                color: Theme.of(context).primaryColor,
+                child: TabBar(
+                    labelColor: Colors.white,
+                    unselectedLabelColor: Colors.white60,
+                    isScrollable: true,
+                    indicator: const BoxDecoration(),
+                    controller: mTabController,
+                    tabs: tabList.map((item) {
+                      return Tab(
+                          child: Text(
+                            item.title,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1.2,
+                                fontSize: 24.0),
+                          ));
+                    }).toList()),
+              ),
+              Expanded(
+                child: TabBarView(
                   controller: mTabController,
-                  tabs: tabList.map((item) {
-                    return Tab(
-                        child: Text(
-                          item.title,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 1.2,
-                              fontSize: 24.0),
-                        ));
-                  }).toList()),
-            ),
-            Expanded(child: TabBarView(
-              controller:mTabController,
-              children: <Widget>[
-                Message(),
-              Online(),
-                Center(
-                    child: Container(
-
-                      decoration: BoxDecoration(color: Colors.green),
-                      child: Text("发现"),
-                    )),
-               Requests()
-              ],
-
-
-            ),
-
-            )
-          ],
+                  children: <Widget>[
+                    Message(),
+                    Online(),
+                    Center(
+                        child: Container(
+                          decoration: BoxDecoration(color: Colors.green),
+                          child: Text("发现"),
+                        )),
+                    Requests()
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    mTabController.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StoreConnector<AppState,HomeScreenViewModel>(
+      converter: HomeScreenViewModel.fromStore(),
+      builder: (context,vm)=>_buildView(context,vm),
+      distinct: true,
     );
   }
 }

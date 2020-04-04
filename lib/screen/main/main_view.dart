@@ -19,6 +19,8 @@ abstract class MainScreenViewModel
   _$MainScreenViewModel;
 
   static bool _hasData(Store<AppState> store) {
+
+
     return store.state.user != null;
   }
 

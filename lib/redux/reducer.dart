@@ -1,9 +1,10 @@
 
+import 'package:learnflutter/redux/auth/authReducer.dart';
 import 'package:learnflutter/redux/state.dart';
+import 'package:learnflutter/redux/userRedux/user_reducer.dart';
 import 'package:redux/redux.dart';
 
-AppState appReducer(AppState state, action) {
-  return AppState(
-
-  );
-}
+final appReducer=combineReducers([
+  ...userReducer,
+  ...authReducers
+]);

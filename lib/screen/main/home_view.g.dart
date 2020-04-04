@@ -1,38 +1,38 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'user_view.dart';
+part of 'home_view.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
 // **************************************************************************
 
-class _$UserScreenViewModel extends UserScreenViewModel {
+class _$HomeScreenViewModel extends HomeScreenViewModel {
   @override
   final User user;
 
-  factory _$UserScreenViewModel(
-          [void Function(UserScreenViewModelBuilder) updates]) =>
-      (new UserScreenViewModelBuilder()..update(updates)).build();
+  factory _$HomeScreenViewModel(
+          [void Function(HomeScreenViewModelBuilder) updates]) =>
+      (new HomeScreenViewModelBuilder()..update(updates)).build();
 
-  _$UserScreenViewModel._({this.user}) : super._() {
+  _$HomeScreenViewModel._({this.user}) : super._() {
     if (user == null) {
-      throw new BuiltValueNullFieldError('UserScreenViewModel', 'user');
+      throw new BuiltValueNullFieldError('HomeScreenViewModel', 'user');
     }
   }
 
   @override
-  UserScreenViewModel rebuild(
-          void Function(UserScreenViewModelBuilder) updates) =>
+  HomeScreenViewModel rebuild(
+          void Function(HomeScreenViewModelBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
-  UserScreenViewModelBuilder toBuilder() =>
-      new UserScreenViewModelBuilder()..replace(this);
+  HomeScreenViewModelBuilder toBuilder() =>
+      new HomeScreenViewModelBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is UserScreenViewModel && user == other.user;
+    return other is HomeScreenViewModel && user == other.user;
   }
 
   @override
@@ -42,23 +42,23 @@ class _$UserScreenViewModel extends UserScreenViewModel {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('UserScreenViewModel')
+    return (newBuiltValueToStringHelper('HomeScreenViewModel')
           ..add('user', user))
         .toString();
   }
 }
 
-class UserScreenViewModelBuilder
-    implements Builder<UserScreenViewModel, UserScreenViewModelBuilder> {
-  _$UserScreenViewModel _$v;
+class HomeScreenViewModelBuilder
+    implements Builder<HomeScreenViewModel, HomeScreenViewModelBuilder> {
+  _$HomeScreenViewModel _$v;
 
   UserBuilder _user;
   UserBuilder get user => _$this._user ??= new UserBuilder();
   set user(UserBuilder user) => _$this._user = user;
 
-  UserScreenViewModelBuilder();
+  HomeScreenViewModelBuilder();
 
-  UserScreenViewModelBuilder get _$this {
+  HomeScreenViewModelBuilder get _$this {
     if (_$v != null) {
       _user = _$v.user?.toBuilder();
       _$v = null;
@@ -67,23 +67,23 @@ class UserScreenViewModelBuilder
   }
 
   @override
-  void replace(UserScreenViewModel other) {
+  void replace(HomeScreenViewModel other) {
     if (other == null) {
       throw new ArgumentError.notNull('other');
     }
-    _$v = other as _$UserScreenViewModel;
+    _$v = other as _$HomeScreenViewModel;
   }
 
   @override
-  void update(void Function(UserScreenViewModelBuilder) updates) {
+  void update(void Function(HomeScreenViewModelBuilder) updates) {
     if (updates != null) updates(this);
   }
 
   @override
-  _$UserScreenViewModel build() {
-    _$UserScreenViewModel _$result;
+  _$HomeScreenViewModel build() {
+    _$HomeScreenViewModel _$result;
     try {
-      _$result = _$v ?? new _$UserScreenViewModel._(user: user.build());
+      _$result = _$v ?? new _$HomeScreenViewModel._(user: user.build());
     } catch (_) {
       String _$failedField;
       try {
@@ -91,7 +91,7 @@ class UserScreenViewModelBuilder
         user.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'UserScreenViewModel', _$failedField, e.toString());
+            'HomeScreenViewModel', _$failedField, e.toString());
       }
       rethrow;
     }

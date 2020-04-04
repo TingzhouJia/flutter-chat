@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:learnflutter/redux/auth/auth_action.dart';
+import 'package:learnflutter/redux/state.dart';
 import 'package:learnflutter/service/loginService.dart';
 class LoginIn extends StatefulWidget {
 //  LoginIn({this.auth, this.loginCallback});
@@ -133,12 +134,12 @@ class _LoginInState extends State<LoginIn> {
       try {
         if (_isLoginForm) {
           final loginAction=Login(email:_email,password:_password);
-          StoreProvider.of(context).dispatch(loginAction);
+          StoreProvider.of<AppState>(context).dispatch(loginAction);
 //          userId = await widget.auth.signIn(_email, _password);
 //          print('Signed in: $userId');
         } else {
           final signUpAction=Signup(email:_email,password:_password);
-          StoreProvider.of(context).dispatch(signUpAction);
+          StoreProvider.of<AppState>(context).dispatch(signUpAction);
 //          userId = await widget.auth.signUp(_email, _password);
 ////          //widget.auth.sendEmailVerification();
 ////          //_showVerifyEmailSentDialog();
@@ -153,7 +154,7 @@ class _LoginInState extends State<LoginIn> {
 //          widget.loginCallback();
 //        }
       } catch (e) {
-        print('Error: $e');
+
         setState(() {
           _isLoading = false;
           _errorMessage = e.message;

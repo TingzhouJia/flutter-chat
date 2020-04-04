@@ -52,8 +52,12 @@ class _MyAppState extends State<MyApp> {
           ..addAll(createUserMiddleware(userRepo))
 
     );
-    print('kkk');
-   // store.dispatch(VerifyAuth());
+    new Future.delayed(Duration(seconds: 3),()  {
+      print("Flutter即时通讯APP界面实现...");
+      store.dispatch(VerifyAuth());
+
+    });
+
   }
 
   // This widget is the root of your application.
@@ -80,7 +84,7 @@ class _MyAppState extends State<MyApp> {
             accentColor:Color(0xfffcf8e8) //Color(0xfffcf8e8)
 
         ),
-        home:LoadingScreen(store),
+        home:LoadingScreen(),
 
 
         routes: {
