@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:image_picker/image_picker.dart';
@@ -66,46 +67,34 @@ class _MyProfileState extends State<MyProfile> {
 
     );
   }
-  String _getGender(int gender){
-    if(gender==1){
-      return "Male";
-    }else if(gender==2){
-      return "Female";
-    }else{
-      return "Secrect";
-    }
 
-  }
   Scaffold _buildscaford(context,UserScreenViewModel vm){
 
     return  new Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(45.0),
-          child: Padding(
-            padding: EdgeInsets.only(top: 5.0),
-            child: AppBar(
-              elevation: 0,
-              automaticallyImplyLeading: false,
-              actions: <Widget>[
-                GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text(
-                    "Finished",
-                    style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white,
-                        fontSize: 22.0),
-                    textAlign: TextAlign.center,
-                  ),
+          child: AppBar(
+            elevation: 0,
+            automaticallyImplyLeading: false,
+            actions: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  "Finished",
+                  style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                      fontSize: 22.0),
+                  textAlign: TextAlign.center,
                 ),
-                SizedBox(
-                  width: 15,
-                )
-              ],
-            ),
+              ),
+              SizedBox(
+                width: 15,
+              )
+            ],
           )),
       body: OKToast(
         child: GestureDetector(
@@ -119,18 +108,23 @@ class _MyProfileState extends State<MyProfile> {
           child: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints viewportConstraints) {
               return SingleChildScrollView(
+                padding: EdgeInsets.only(bottom: 0),
                   child: ConstrainedBox(
                     constraints: BoxConstraints(
                       minHeight: viewportConstraints.maxHeight,
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    child: Container(
+
+                      child:Column(
+                      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
                       children: <Widget>[
                         Column(
                           // mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Container(
                               margin: EdgeInsets.only(top: 15.0, bottom: 10.0),
+
                               // A fixed-height child.
                               child: Stack(
                                 overflow: Overflow.visible,
@@ -204,7 +198,7 @@ class _MyProfileState extends State<MyProfile> {
                             InfoList(
 
                               info: 'Gender',
-                              index: _getGender(vm.user.gender),
+                              index: vm.user.gender,
                             ),
                             InfoList(
 
@@ -213,9 +207,11 @@ class _MyProfileState extends State<MyProfile> {
                                     .format(vm.user.birthday)),
                             Container(
                               width: MediaQuery.of(context).size.width,
+                              margin: EdgeInsets.only(left: 10.0,right: 10.0),
                               decoration: BoxDecoration(
+
                                   border: Border(
-                                      bottom: BorderSide(
+                                      top: BorderSide(
                                           width: 1.0,
                                           color: Colors.white))),
                               child: Column(
@@ -290,29 +286,66 @@ class _MyProfileState extends State<MyProfile> {
                                   )
                                 ],
                               ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                              child: Container(
+                                color: Theme.of(context).accentColor
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap:() async {
+                                StoreProvider.of<AppState>(context).dispatch(LogOut());
+                              },
+                              child: Container(
+
+
+                                padding:EdgeInsets.all(10.0),
+                                child: Text("Logout Current Account",style: TextStyle(
+                                    color: Colors.white,fontSize: 20.0,fontWeight: FontWeight.bold
+                                ),),
+                                width:MediaQuery.of(context).size.width,
+
+                                alignment:Alignment.center,
+                                decoration: BoxDecoration(
+
+                                    border:Border(top: BorderSide(color: Colors.white,width: 2.0),)
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                              child: Container(
+                                  color: Theme.of(context).accentColor
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap:() async {
+                                StoreProvider.of<AppState>(context).dispatch(LogOut());
+                              },
+                              child: Container(
+
+
+                                padding:EdgeInsets.all(10.0),
+                                child: Text("Change Another Account",style: TextStyle(
+                                    color: Colors.white,fontSize: 20.0,fontWeight: FontWeight.bold
+                                ),),
+                                width:MediaQuery.of(context).size.width,
+
+                                alignment:Alignment.center,
+                                decoration: BoxDecoration(
+
+                                    border:Border(top: BorderSide(color: Colors.white,width: 2.0),)
+                                ),
+                              ),
                             )
                           ],
                         ),
-                        GestureDetector(
-                          onTap:() async {
-                            StoreProvider.of<AppState>(context).dispatch(LogOut());
-                          },
-                          child: Container(
-                            padding:EdgeInsets.all(10.0),
-                            child: Text("Logout Current Account",style: TextStyle(
-                                color: Colors.white,fontSize: 30.0,fontWeight: FontWeight.bold
-                            ),),
-                            width:MediaQuery.of(context).size.width,
 
-                            alignment:Alignment.center,
-                            decoration: BoxDecoration(
 
-                                border:Border(top: BorderSide(color: Colors.white,width: 2.0),)
-                            ),
-                          ),
-                        ),
 
                       ],
+                    ),
                     ),
                   ));
             },

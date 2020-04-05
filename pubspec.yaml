@@ -41,7 +41,7 @@ dependencies:
   redux: ^4.0.0
   redux_epics: ^0.13.0
   built_value: ^7.0.9
-
+  flutter_svg: ^0.17.3+1
   shared_preferences: ^0.5.6+3
   built_value_generator: ^7.0.9
   font_awesome_flutter: ^8.8.1
@@ -64,14 +64,7 @@ flutter:
   uses-material-design: true
   # To add assets to your application, add an assets section, like this:
   assets:
-     - assets/female1.jpg
-     - assets/female2.jpg
-     - assets/male1.jpg
-     - assets/male2.jpg
-     - assets/male3.jpg
-     - assets/male4.jpg
-     - assets/loadingPage.jpeg
-     - assets/signup.jpeg
+     - assets/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -30,7 +30,16 @@ class InfoList extends StatelessWidget {
       animationBuilder: Miui10AnimBuilder(),
     );
   }
+  String _getGender(int gender){
+    if(gender==1){
+      return "Male";
+    }else if(gender==2){
+      return "Female";
+    }else{
+      return "Secret";
+    }
 
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -56,10 +65,11 @@ class InfoList extends StatelessWidget {
 
                },
                child: Container(
-                 padding: EdgeInsets.all(20.0),
+                 margin: EdgeInsets.only(left: 10.0,right: 10.0),
+                 padding: EdgeInsets.only(top:20.0,bottom: 20.0),
                  decoration: BoxDecoration(
                      border:
-                     Border(bottom: BorderSide(width: 1.0, color: Colors.white))),
+                     Border(top:BorderSide(width: 1.0, color: Colors.white) )),
                  child: Row(
                    crossAxisAlignment: CrossAxisAlignment.center,
                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -81,7 +91,13 @@ class InfoList extends StatelessWidget {
                                fontWeight: FontWeight.w600,
                                fontSize: 20.0),
                          )
-                             : Text(
+                             :info=="Gender"? Text(
+                           _getGender(index),
+                           style: TextStyle(
+                               color: Colors.white,
+                               fontWeight: FontWeight.w600,
+                               fontSize: 20.0),
+                         ):Text(
                            index,
                            style: TextStyle(
                                color: Colors.white,
