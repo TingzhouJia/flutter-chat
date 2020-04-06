@@ -133,7 +133,7 @@ class _MyProfileState extends State<MyProfile> {
                                   CircleAvatar(
                                     backgroundColor: Colors.white,
                                     radius: 60.0,
-                                    backgroundImage: vm.user.imgUrl == null
+                                    backgroundImage: vm.user.imgUrl == ""
                                         ? AssetImage("assets/male1.jpg")
                                         : NetworkImage(vm.user.imgUrl),
                                   ),

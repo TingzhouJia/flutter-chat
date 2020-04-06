@@ -1,4 +1,5 @@
 
+import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:learnflutter/model/user.dart';
 
@@ -8,12 +9,17 @@ part 'state.g.dart';
  abstract class AppState implements Built<AppState,AppStateBuilder>{
     @nullable
     User get  user;
+    @nullable
+    BuiltList<User> get Friends;
+    @nullable
+    BuiltList<User> get FavorList;
 
     AppState._();
     factory AppState([void Function(AppStateBuilder) updates]) = _$AppState;
 
     factory AppState.init()=>AppState((a)=>a
-
+      ..FavorList=ListBuilder()
+        ..Friends=ListBuilder()
     );
     AppState clear() {
       // keep the temporal fcm token even when clearing state

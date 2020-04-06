@@ -13,6 +13,7 @@ import 'package:learnflutter/screen/chat_screen.dart';
 import 'package:learnflutter/screen/loading_screen.dart';
 import 'package:learnflutter/screen/root_screen.dart';
 import 'package:learnflutter/screen/login/sign_screen.dart';
+import 'package:learnflutter/service/friendService.dart';
 import 'package:learnflutter/service/loginService.dart';
 import 'package:learnflutter/service/userInfoService.dart';
 import 'package:redux/redux.dart';
@@ -39,15 +40,17 @@ class _MyAppState extends State<MyApp> {
    Store<AppState> store;
     final _navigatorKey = GlobalKey<NavigatorState>();
    final userRepo = UserRepository(FirebaseAuth.instance, Firestore.instance);
-   
+   final friendRepo=new FriendRepository(Firestore.instance);
   @override
   void initState() {
     // TODO: implement initState
+
+
     super.initState();
     store=Store<AppState>(
         appReducer,
         initialState:AppState.init(),
-        middleware: createStoreMiddleware(userRepo)
+        middleware: createStoreMiddleware(friendRepo)
           ..addAll(createAuthMiddleware(userRepo, _navigatorKey))
           ..addAll(createUserMiddleware(userRepo))
 

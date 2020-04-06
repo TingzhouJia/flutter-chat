@@ -38,6 +38,7 @@ dependencies:
   json_serializable: ^3.3.0
   image_pickers: ^1.0.7+1
   flutter_redux: ^0.6.0
+  built_collection: ^4.3.2
   redux: ^4.0.0
   redux_epics: ^0.13.0
   built_value: ^7.0.9
@@ -65,6 +66,8 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
      - assets/
+     - assets/svg/book.svg
+     - assets/svg/bookOpen.svg
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -73,7 +73,7 @@ void Function(
       } else {
 
        await store.dispatch(OnAuthenticated(user: user));
-       store.dispatch(ConnectToDataSource());
+       await store.dispatch(ConnectToDataSource());
         navigatorKey.currentState.pushReplacementNamed('/app');
       }
     });

@@ -53,9 +53,9 @@ class UserRepository {
     final documentReference =
     _firestore.document(FirestorePaths.userPath(firebaseUser.uid));
     final snapshot = await documentReference.get();
-
     User user;
-    if (snapshot.data == null) {
+    if (snapshot.data==null||snapshot.data.length == 0) {
+
       user = User((u) => u
         ..uid = firebaseUser.uid
         ..gender=3
@@ -63,7 +63,7 @@ class UserRepository {
         ..imgUrl=''
         ..status='Online'
         ..address=''
-        ..birthday=null
+        ..birthday=DateTime.now()
         ..lastOnline=DateTime.now()
         ..name = firebaseUser
             .email // Default name will be the email, let user change later
@@ -72,13 +72,13 @@ class UserRepository {
     } else {
       user = fromDoc(snapshot);
     }
-    print('aaa');
+
 
     return user;
   }
 
   Future<void> logOut() async {
-    await updateStatus(null);
+    await updateStatus("Offline");
     await updateLastOnline(DateTime.now());
     await _firebaseAuth.signOut();
   }
@@ -210,6 +210,7 @@ class UserRepository {
   }
 
   Stream<User> getAuthenticationStateChange() {
+
     return _firebaseAuth.onAuthStateChanged.asyncMap((firebaseUser) {
 
       return _fromFirebaseUser(firebaseUser);
@@ -221,13 +222,13 @@ class UserRepository {
 
 
   static User fromDoc(DocumentSnapshot document) {
-    print(document['gender']);
+
     return User((u) => u
       ..uid = document.documentID
       ..name = document[NAME]
       ..gender = document[GENDER]
       ..imgUrl = document[IMAGE]
-      ..status = document[STATUS]=='invisible'?'Invisible':'Online'
+      ..status = document[STATUS]
         ..description=document[DESCRIPTION]
         ..lastOnline=DateTime.parse(document[LASTONLINE].toDate().toString())
         ..address=document[ADDRESS]
@@ -246,6 +247,7 @@ class UserRepository {
     STATUS:user.status,
     ADDRESS:user.address,
     LASTONLINE:user.lastOnline,
+      BIRTHDAY:user.birthday,
     NAME:user.name
     };
   }

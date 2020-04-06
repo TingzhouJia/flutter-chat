@@ -9,11 +9,15 @@ part of 'state.dart';
 class _$AppState extends AppState {
   @override
   final User user;
+  @override
+  final BuiltList<User> Friends;
+  @override
+  final BuiltList<User> FavorList;
 
   factory _$AppState([void Function(AppStateBuilder) updates]) =>
       (new AppStateBuilder()..update(updates)).build();
 
-  _$AppState._({this.user}) : super._();
+  _$AppState._({this.user, this.Friends, this.FavorList}) : super._();
 
   @override
   AppState rebuild(void Function(AppStateBuilder) updates) =>
@@ -25,17 +29,24 @@ class _$AppState extends AppState {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is AppState && user == other.user;
+    return other is AppState &&
+        user == other.user &&
+        Friends == other.Friends &&
+        FavorList == other.FavorList;
   }
 
   @override
   int get hashCode {
-    return $jf($jc(0, user.hashCode));
+    return $jf(
+        $jc($jc($jc(0, user.hashCode), Friends.hashCode), FavorList.hashCode));
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('AppState')..add('user', user))
+    return (newBuiltValueToStringHelper('AppState')
+          ..add('user', user)
+          ..add('Friends', Friends)
+          ..add('FavorList', FavorList))
         .toString();
   }
 }
@@ -47,11 +58,22 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
   UserBuilder get user => _$this._user ??= new UserBuilder();
   set user(UserBuilder user) => _$this._user = user;
 
+  ListBuilder<User> _Friends;
+  ListBuilder<User> get Friends => _$this._Friends ??= new ListBuilder<User>();
+  set Friends(ListBuilder<User> Friends) => _$this._Friends = Friends;
+
+  ListBuilder<User> _FavorList;
+  ListBuilder<User> get FavorList =>
+      _$this._FavorList ??= new ListBuilder<User>();
+  set FavorList(ListBuilder<User> FavorList) => _$this._FavorList = FavorList;
+
   AppStateBuilder();
 
   AppStateBuilder get _$this {
     if (_$v != null) {
       _user = _$v.user?.toBuilder();
+      _Friends = _$v.Friends?.toBuilder();
+      _FavorList = _$v.FavorList?.toBuilder();
       _$v = null;
     }
     return this;
@@ -74,12 +96,20 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
   _$AppState build() {
     _$AppState _$result;
     try {
-      _$result = _$v ?? new _$AppState._(user: _user?.build());
+      _$result = _$v ??
+          new _$AppState._(
+              user: _user?.build(),
+              Friends: _Friends?.build(),
+              FavorList: _FavorList?.build());
     } catch (_) {
       String _$failedField;
       try {
         _$failedField = 'user';
         _user?.build();
+        _$failedField = 'Friends';
+        _Friends?.build();
+        _$failedField = 'FavorList';
+        _FavorList?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'AppState', _$failedField, e.toString());

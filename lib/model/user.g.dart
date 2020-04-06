@@ -46,9 +46,6 @@ class _$User extends User {
     if (name == null) {
       throw new BuiltValueNullFieldError('User', 'name');
     }
-    if (imgUrl == null) {
-      throw new BuiltValueNullFieldError('User', 'imgUrl');
-    }
     if (lastOnline == null) {
       throw new BuiltValueNullFieldError('User', 'lastOnline');
     }

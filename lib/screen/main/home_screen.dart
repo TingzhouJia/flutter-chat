@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:learnflutter/redux/state.dart';
@@ -17,6 +18,7 @@ import 'package:learnflutter/widgets/favoriteContact.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key}) : super(key: key);
+ 
 
 //  final BaseAuth auth;
 //
@@ -27,6 +29,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class Message extends StatelessWidget {
+    
+  
+  
   @override
   Widget build(BuildContext context) {
     return
@@ -105,10 +110,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   var currentPage = 0;
   var isPageCanChanged = true;
   var info;
-
+  
+  
   //UserInfo userInfo;
-  @override
-_buildView(context,HomeScreenViewModel vm){
+
+  _buildView(context,HomeScreenViewModel vm){
     return DefaultTabController(
       length: tabList.length,
       child: Scaffold(
@@ -128,7 +134,7 @@ _buildView(context,HomeScreenViewModel vm){
                 child: CircleAvatar(
                   radius: 50,
                   backgroundColor: Colors.white70,
-                  backgroundImage: vm.user.imgUrl == null
+                  backgroundImage: vm.user.imgUrl == ""
                       ? AssetImage('assets/male1.jpg')
                       : NetworkImage(vm.user.imgUrl),
                 ),
@@ -147,7 +153,9 @@ _buildView(context,HomeScreenViewModel vm){
                 icon: Icon(Icons.menu),
                 iconSize: 30.0,
                 color: Colors.white,
-                //onPressed: (){signOut();} ,
+                onPressed: (){
+
+                } ,
               ),
             ],
           ),
