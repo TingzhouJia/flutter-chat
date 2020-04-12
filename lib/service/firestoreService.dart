@@ -1,7 +1,9 @@
 class FirestorePaths {
   static const PATH_GROUPS = "groups";
   static const PATH_FRIEND = "friends";
-  static const PATH_MESSAGES = "messages";
+  static const PATH_MESSAGES = "message";
+  static const MESSAGE_SEND="send";
+  static const MESSAGE_RECEIVE="receive";
   static const PATH_USERS = "user";
   static const PATH_FAVOR = "favorUser";
 
@@ -27,17 +29,17 @@ class FirestorePaths {
 ////    return "$PATH_GROUPS/$groupId/$PATH_CHANNELS/$channelId/$PATH_USERS";
 ////  }
 ////
-////  static String messagesPath(String groupId, String channelId) {
-////    return "$PATH_GROUPS/$groupId/$PATH_CHANNELS/$channelId/$PATH_MESSAGES";
-////  }
 
-//  static String messagePath(
-//      String groupId,
-//      String channelId,
-//      String messageId,
-//      ) {
-//    return "$PATH_GROUPS/$groupId/$PATH_CHANNELS/$channelId/$PATH_MESSAGES/$messageId";
-//  }
+  static String messagePath(String sender,String receiver) {
+    return "$PATH_MESSAGES/$sender/$receiver";
+  }
+
+  static String messageReactPath(
+  String sender,String receiver,
+      String messageId,
+      ) {
+    return "$PATH_MESSAGES/$sender/$receiver/$messageId";
+  }
 
   static String userPath(String userId) {
     return "$PATH_USERS/$userId";

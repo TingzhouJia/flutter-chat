@@ -16,46 +16,16 @@ import 'package:learnflutter/widgets/SearchBar.dart';
 
 import 'package:learnflutter/widgets/favoriteContact.dart';
 
+import 'mainMessage/message.dart';
+
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key}) : super(key: key);
- 
 
-//  final BaseAuth auth;
-//
-//  final VoidCallback logoutCallback;
-//  final String userId;
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class Message extends StatelessWidget {
-    
-  
-  
-  @override
-  Widget build(BuildContext context) {
-    return
-      Container(
 
-          decoration: BoxDecoration(
-              color: Theme.of(context).accentColor,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0))),
-
-
-
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[ FavoriteContact()],
-          )
-
-
-
-      );
-
-  }
-}
 
 class Requests extends StatelessWidget {
   @override
@@ -189,7 +159,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 child: TabBarView(
                   controller: mTabController,
                   children: <Widget>[
-                    Message(),
+                    MessageScreen(),
                     Online(),
                     Center(
                         child: Container(

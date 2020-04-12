@@ -6,18 +6,17 @@ import 'package:learnflutter/model/user.dart';
 import 'package:learnflutter/redux/state.dart';
 import 'package:redux/redux.dart';
 
-part 'home_view.g.dart';
+part 'message_view.g.dart';
 
-abstract class HomeScreenViewModel
-    implements Built<HomeScreenViewModel, HomeScreenViewModelBuilder> {
-  User get user;
+abstract class MessageScreenViewModel
+    implements Built<MessageScreenViewModel, MessageScreenViewModelBuilder> {
   BuiltList<User> get favorContact;
 
-  HomeScreenViewModel._();
+  MessageScreenViewModel._();
 
-  factory HomeScreenViewModel(
-      [void Function(HomeScreenViewModelBuilder) updates]) =
-  _$HomeScreenViewModel;
+  factory MessageScreenViewModel(
+      [void Function(MessageScreenViewModelBuilder) updates]) =
+  _$MessageScreenViewModel;
 
 //  static bool _hasData(Store<AppState> store) {
 //    return store.state.user != null;
@@ -25,8 +24,8 @@ abstract class HomeScreenViewModel
 //
   static fromStore() {
     return (Store<AppState> store) {
-      return HomeScreenViewModel((u) => u
-        ..user =store.state.user.toBuilder()
+      return MessageScreenViewModel((u) => u
+
         ..favorContact=store.state.FavorList.toBuilder()
       );
 
@@ -34,4 +33,4 @@ abstract class HomeScreenViewModel
   }
 
 //      ..channelType = getSelectedChannel(store.state)?.type);
-  }
+}

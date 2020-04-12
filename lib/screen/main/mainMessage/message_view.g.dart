@@ -1,68 +1,58 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'home_view.dart';
+part of 'message_view.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
 // **************************************************************************
 
-class _$HomeScreenViewModel extends HomeScreenViewModel {
-  @override
-  final User user;
+class _$MessageScreenViewModel extends MessageScreenViewModel {
   @override
   final BuiltList<User> favorContact;
 
-  factory _$HomeScreenViewModel(
-          [void Function(HomeScreenViewModelBuilder) updates]) =>
-      (new HomeScreenViewModelBuilder()..update(updates)).build();
+  factory _$MessageScreenViewModel(
+          [void Function(MessageScreenViewModelBuilder) updates]) =>
+      (new MessageScreenViewModelBuilder()..update(updates)).build();
 
-  _$HomeScreenViewModel._({this.user, this.favorContact}) : super._() {
-    if (user == null) {
-      throw new BuiltValueNullFieldError('HomeScreenViewModel', 'user');
-    }
+  _$MessageScreenViewModel._({this.favorContact}) : super._() {
     if (favorContact == null) {
-      throw new BuiltValueNullFieldError('HomeScreenViewModel', 'favorContact');
+      throw new BuiltValueNullFieldError(
+          'MessageScreenViewModel', 'favorContact');
     }
   }
 
   @override
-  HomeScreenViewModel rebuild(
-          void Function(HomeScreenViewModelBuilder) updates) =>
+  MessageScreenViewModel rebuild(
+          void Function(MessageScreenViewModelBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
-  HomeScreenViewModelBuilder toBuilder() =>
-      new HomeScreenViewModelBuilder()..replace(this);
+  MessageScreenViewModelBuilder toBuilder() =>
+      new MessageScreenViewModelBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is HomeScreenViewModel &&
-        user == other.user &&
+    return other is MessageScreenViewModel &&
         favorContact == other.favorContact;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, user.hashCode), favorContact.hashCode));
+    return $jf($jc(0, favorContact.hashCode));
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('HomeScreenViewModel')
-          ..add('user', user)
+    return (newBuiltValueToStringHelper('MessageScreenViewModel')
           ..add('favorContact', favorContact))
         .toString();
   }
 }
 
-class HomeScreenViewModelBuilder
-    implements Builder<HomeScreenViewModel, HomeScreenViewModelBuilder> {
-  _$HomeScreenViewModel _$v;
-
-  UserBuilder _user;
-  UserBuilder get user => _$this._user ??= new UserBuilder();
-  set user(UserBuilder user) => _$this._user = user;
+class MessageScreenViewModelBuilder
+    implements Builder<MessageScreenViewModel, MessageScreenViewModelBuilder> {
+  _$MessageScreenViewModel _$v;
 
   ListBuilder<User> _favorContact;
   ListBuilder<User> get favorContact =>
@@ -70,11 +60,10 @@ class HomeScreenViewModelBuilder
   set favorContact(ListBuilder<User> favorContact) =>
       _$this._favorContact = favorContact;
 
-  HomeScreenViewModelBuilder();
+  MessageScreenViewModelBuilder();
 
-  HomeScreenViewModelBuilder get _$this {
+  MessageScreenViewModelBuilder get _$this {
     if (_$v != null) {
-      _user = _$v.user?.toBuilder();
       _favorContact = _$v.favorContact?.toBuilder();
       _$v = null;
     }
@@ -82,35 +71,32 @@ class HomeScreenViewModelBuilder
   }
 
   @override
-  void replace(HomeScreenViewModel other) {
+  void replace(MessageScreenViewModel other) {
     if (other == null) {
       throw new ArgumentError.notNull('other');
     }
-    _$v = other as _$HomeScreenViewModel;
+    _$v = other as _$MessageScreenViewModel;
   }
 
   @override
-  void update(void Function(HomeScreenViewModelBuilder) updates) {
+  void update(void Function(MessageScreenViewModelBuilder) updates) {
     if (updates != null) updates(this);
   }
 
   @override
-  _$HomeScreenViewModel build() {
-    _$HomeScreenViewModel _$result;
+  _$MessageScreenViewModel build() {
+    _$MessageScreenViewModel _$result;
     try {
       _$result = _$v ??
-          new _$HomeScreenViewModel._(
-              user: user.build(), favorContact: favorContact.build());
+          new _$MessageScreenViewModel._(favorContact: favorContact.build());
     } catch (_) {
       String _$failedField;
       try {
-        _$failedField = 'user';
-        user.build();
         _$failedField = 'favorContact';
         favorContact.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'HomeScreenViewModel', _$failedField, e.toString());
+            'MessageScreenViewModel', _$failedField, e.toString());
       }
       rethrow;
     }

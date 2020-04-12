@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:collection';
+import 'package:built_collection/built_collection.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -39,21 +40,20 @@ class FriendRepository {
         .collection(FirestorePaths.PATH_FAVOR)
       .document(userId)
         .snapshots()
-        .map((DocumentSnapshot d){
-          return from(d);
+        .asyncMap((DocumentSnapshot d) async{
+          List<dynamic> a=d.data['favorList'];
+          var aList = <User>[];
+          for (var groceryPath in a) {
+            aList.add(await _firestore.collection('user').document(groceryPath).get().then((value){
+              return get(value);
+            }));
+          }
+
+          return aList;
     });
   }
 
-  from(DocumentSnapshot each){
-    print(each["favorList"]);
-    List<User> a;
-    each["favorList"].map(
-        (String content)
-            =>_firestore.collection("user").document(content).snapshots().map((some)=>get(some)).listen((data){print(a); a.add(data);})
 
-    );
-    return a;
-  }
   static User get(document){
     return User((u) => u
       ..uid = document.documentID

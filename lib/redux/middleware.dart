@@ -29,8 +29,8 @@ void Function(
     print('kkkkk');
     try {
     friendRepository.getFavoriteStream(store.state.user.uid).listen((List<User> data){
-        store.dispatch(GET(data));
-      });
+      store.dispatch(GET(data));
+    });
 
 //      groupsSubscription =
 //          groupRepository.getGroupStream(store.state.user.uid).listen((group) {
