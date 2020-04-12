@@ -14,7 +14,7 @@ class _$Message extends Message {
   @override
   final String body;
   @override
-  final Reaction reactions;
+  final BuiltMap<String, Reaction> reactions;
   @override
   final MessageType messageType;
   @override
@@ -150,13 +150,13 @@ class _$MessageBuilder extends MessageBuilder {
   }
 
   @override
-  Reaction get reactions {
+  MapBuilder<String, Reaction> get reactions {
     _$this;
-    return super.reactions;
+    return super.reactions ??= new MapBuilder<String, Reaction>();
   }
 
   @override
-  set reactions(Reaction reactions) {
+  set reactions(MapBuilder<String, Reaction> reactions) {
     _$this;
     super.reactions = reactions;
   }
@@ -228,7 +228,7 @@ class _$MessageBuilder extends MessageBuilder {
       super.id = _$v.id;
       super.authorId = _$v.authorId;
       super.body = _$v.body;
-      super.reactions = _$v.reactions;
+      super.reactions = _$v.reactions?.toBuilder();
       super.messageType = _$v.messageType;
       super.pending = _$v.pending;
       super.timestamp = _$v.timestamp;
@@ -254,17 +254,30 @@ class _$MessageBuilder extends MessageBuilder {
 
   @override
   _$Message build() {
-    final _$result = _$v ??
-        new _$Message._(
-            id: id,
-            authorId: authorId,
-            body: body,
-            reactions: reactions,
-            messageType: messageType,
-            pending: pending,
-            timestamp: timestamp,
-            media: media,
-            mediaStatus: mediaStatus);
+    _$Message _$result;
+    try {
+      _$result = _$v ??
+          new _$Message._(
+              id: id,
+              authorId: authorId,
+              body: body,
+              reactions: super.reactions?.build(),
+              messageType: messageType,
+              pending: pending,
+              timestamp: timestamp,
+              media: media,
+              mediaStatus: mediaStatus);
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'reactions';
+        super.reactions?.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            'Message', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }

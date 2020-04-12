@@ -2,8 +2,7 @@ class FirestorePaths {
   static const PATH_GROUPS = "groups";
   static const PATH_FRIEND = "friends";
   static const PATH_MESSAGES = "message";
-  static const MESSAGE_SEND="send";
-  static const MESSAGE_RECEIVE="receive";
+  static const Path_RECENT="recentChat";
   static const PATH_USERS = "user";
   static const PATH_FAVOR = "favorUser";
 
@@ -39,6 +38,12 @@ class FirestorePaths {
       String messageId,
       ) {
     return "$PATH_MESSAGES/$sender/$receiver/$messageId";
+  }
+  static String RecentPath(String user){
+    return "$Path_RECENT/$user";
+  }
+  static String updateRecentPath(String sender, receiver){
+    return "$Path_RECENT/$sender/$receiver/info";
   }
 
   static String userPath(String userId) {

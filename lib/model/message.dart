@@ -17,7 +17,7 @@ abstract class Message implements Built<Message, MessageBuilder> {
   String get body;
 
   @nullable
-  Reaction get reactions;
+  BuiltMap<String, Reaction> get reactions;
 
   MessageType get messageType;
 
@@ -59,7 +59,7 @@ abstract class MessageBuilder implements Builder<Message, MessageBuilder> {
   String body;
 
   @nullable
-  Reaction reactions;
+  MapBuilder<String, Reaction> reactions;
 
   MessageType messageType = MessageType.USER;
 

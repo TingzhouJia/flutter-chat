@@ -3,21 +3,23 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:learnflutter/model/message.dart';
 import 'package:learnflutter/model/reaction.dart';
+import 'package:learnflutter/model/recentMessage.dart';
 
 import 'firestoreService.dart';
 
 class MessageRepository {
   static const BODY = "body";
-  static const AUTHOR = "author";
-  static const REACTION = "reaction";
-  static const TYPE = "type";
+  static const AUTHOR = "authorId";
+  static const REACTION = "reactions";
+  static const TYPE = "messageType";
   static const TIMESTAMP = "timestamp";
   static const EMOJI = "emoji";
   static const MESSAGEID = "messageId";
-  static const USER_ID = "user_id";
-  static const USER_NAME = "user_name";
+  static const USER_ID = "userId";
+  static const PENDING = "pending";
   static const MEDIA = "media";
-  static const MEDIA_STATUS = "media_status";
+  static const USERNAME = "username";
+  static const MEDIA_STATUS = "mediaStatus";
 
 
   final Firestore _firestore;
@@ -33,7 +35,14 @@ class MessageRepository {
     final data = toMap(message);
     await _firestore.collection(getPath).add(data);
     final reference = await _firestore.collection(messagesPath).add(data);
-
+    //update recent chat
+    final recentpath=FirestorePaths.updateRecentPath(senderId,receiverId);
+    final targte= await _firestore.document(recentpath).get();
+    if(targte.data==null||targte.data.length == 0){
+      await _firestore.collection(recentpath).add(data);
+    }else{
+      await _firestore.document(recentpath).updateData(toRecetMap(message));
+    }
     final doc = await reference.get();
     return fromDoc(doc);
   }
@@ -54,6 +63,16 @@ class MessageRepository {
     });
   }
 
+  Stream<List<recentMessage>> RecentChatStream(String userId){
+    return _firestore.collection(FirestorePaths.RecentPath(userId)).snapshots(includeMetadataChanges: true).map((querySnapshot) {
+      return querySnapshot.documents
+          .where((documentSnapshot) =>
+          isValidDocument(documentSnapshot, userId))
+          .map((documentSnapshot) => recentFromDoc(documentSnapshot))
+          .toList();
+    });
+  }
+
   Future<void> addReaction({
     @required String senderId,
     @required String receiverId,
@@ -67,10 +86,10 @@ class MessageRepository {
     if (message.authorId == reaction.userId) {
       return;
     }
-//    final reactions = message.reactions.toBuilder();
-//    reactions[reaction.userId] = reaction;
+    final reactions = message.reactions.toBuilder();
+    reactions[reaction.userId] = reaction;
     await _firestore.document(path).updateData({
-      REACTION: _reactionsToMap(reaction.toBuilder()),
+      REACTION: _reactionsToMap(reactions.build()),
     });
   }
 
@@ -107,22 +126,41 @@ class MessageRepository {
       ..authorId = messageType == MessageType.SYSTEM ? null : document[AUTHOR]
       ..reactions = _parseReactions(document)
       ..messageType = messageType
-      ..media = ListBuilder(document[MEDIA] ?? [])
+      ..media = ListBuilder(document[MEDIA] ?? []).build()
       ..mediaStatus = MediaStatusHelper.valueOf(document[MEDIA_STATUS])
-
-      ..timestamp = DateTime.fromMillisecondsSinceEpoch(
-          int.tryParse(document[TIMESTAMP]) ?? 0)
+//DateTime.fromMillisecondsSinceEpoch(
+//          int.tryParse(document[TIMESTAMP]) ?? 0)
+      ..timestamp = DateTime.parse(document[TIMESTAMP].toDate())
       ..pending = document.metadata.hasPendingWrites);
   }
 
-  static MapBuilder<String, String> _parseReactions(
+  static recentMessage recentFromDoc(DocumentSnapshot document){
+    final messageType = MessageTypeHelper.valueOf(document[TYPE]);
+    return recentMessage(
+        (m)=>m
+        ..id=document.documentID
+        ..authorId=document[AUTHOR]
+        ..imgUrl=document['imgUrl']
+            ..body=messageType==MessageType.MEDIA?"[Photo/Video]":document[BODY]
+            ..timestamp=document[TIMESTAMP]
+            ..userName=document[USERNAME]
+    );
+  }
+
+  static MapBuilder<String, Reaction> _parseReactions(
       DocumentSnapshot document) {
-    final map = MapBuilder<String, String>();
+    final map = MapBuilder<String, Reaction>();
     if (document[REACTION] == null) {
       return map;
     }
-
-
+    for (final key in document[REACTION].keys) {
+      final value = document[REACTION][key];
+      try {
+        map[key] = _parseReaction(value);
+      } catch (e) {
+        // Ignore reactions in old format
+      }
+    }
     return map;
   }
 
@@ -136,13 +174,15 @@ class MessageRepository {
   }
 
   static Map<String, dynamic> _reactionsToMap(
-     Reaction reactions) {
-    var a= new Map<String,dynamic>();
-    a.addAll({ EMOJI: reactions.emoji,
-      USER_ID: reactions.userId,
-      MESSAGEID:reactions.messageId});
-
-
+      BuiltMap<String, Reaction> reactions) {
+    return reactions
+        .map((k, v) =>
+        MapEntry(k, {
+          EMOJI: v.emoji,
+          USER_ID: v.userId,
+          MESSAGEID:v.messageId
+        }))
+        .toMap();
   }
 
   static toMap(Message message) {
@@ -151,8 +191,14 @@ class MessageRepository {
       AUTHOR: message.authorId,
       REACTION: _reactionsToMap(message.reactions),
       TYPE: MessageTypeHelper.stringOf(message.messageType),
-      TIMESTAMP: message.timestamp.millisecondsSinceEpoch.toString(),
+      TIMESTAMP: DateTime.now(),
+      MEDIA:message.media.toList()
     };
+  }
+  static  toRecetMap(Message message){
+      return {
+
+      };
   }
 
   static bool isValidDocument(DocumentSnapshot documentSnapshot, [String userId = ""]) {
