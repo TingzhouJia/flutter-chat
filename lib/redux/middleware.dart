@@ -1,5 +1,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:learnflutter/model/recentMessage.dart';
 import 'package:learnflutter/model/user.dart';
 import 'package:learnflutter/redux/action.dart';
 import 'package:learnflutter/redux/state.dart';
@@ -31,9 +32,9 @@ void Function(
     print('kkkkk');
     try {
     friendRepository.getFavoriteStream(store.state.user.uid).listen((List<User> data){
-      store.dispatch(GET(data));
+      store.dispatch(GetFavor(data));
     });
-    messageRepository.
+    messageRepository.RecentChatStream(store.state.user.uid).listen((List<recentMessage>data)=>store.dispatch(GetRecentChat(data)));
 
 
 //      groupsSubscription =

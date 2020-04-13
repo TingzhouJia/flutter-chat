@@ -18,7 +18,7 @@ abstract class recentMessage implements Built<recentMessage, recentMessageBuilde
 
 
   MessageType get messageType;
-
+  @nullable
   bool get pending;
 
   DateTime get timestamp;

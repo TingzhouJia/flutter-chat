@@ -19,9 +19,9 @@ class MessageRepository {
   static const USER_ID = "userId";
   static const PENDING = "pending";
   static const MEDIA = "media";
-  static const USERNAME = "username";
+  static const USERNAME = "userName";
   static const MEDIA_STATUS = "mediaStatus";
-  static const IMG="imgUrl";
+  static const IMG="userImage";
 
   final Firestore _firestore;
 
@@ -65,13 +65,18 @@ class MessageRepository {
   }
 
   Stream<List<recentMessage>> RecentChatStream(String userId){
-    return _firestore.collection(FirestorePaths.RecentPath(userId)).snapshots(includeMetadataChanges: true).map((querySnapshot) {
-      return querySnapshot.documents
-          .where((documentSnapshot) =>
-          isValidDocument(documentSnapshot, userId))
-          .map((documentSnapshot) => recentFromDoc(documentSnapshot))
-          .toList();
+
+   return  _firestore.collection(FirestorePaths.Path_RECENT).document(userId).collection('info').snapshots().map((querySnapshot){
+      return querySnapshot.documents.map((document)=>recentFromDoc(document)).toList();
     });
+   
+//    .snapshots(includeMetadataChanges: true).map((querySnapshot) {
+//      return querySnapshot.
+//          .where((documentSnapshot) =>
+//          isValidDocument(documentSnapshot, userId))
+//          .map((documentSnapshot) => recentFromDoc(documentSnapshot))
+//          .toList();
+//    });
   }
 
   Future<void> addReaction({
@@ -143,8 +148,9 @@ class MessageRepository {
         ..authorId=document[AUTHOR]
         ..imgUrl=document[IMG]
             ..body=messageType==MessageType.MEDIA?"[Photo/Video]":document[BODY]
-            ..timestamp=document[TIMESTAMP]
+            ..timestamp=DateTime.parse(document[TIMESTAMP].toDate().toString())
             ..userName=document[USERNAME]
+            ..messageType=messageType
     );
   }
 

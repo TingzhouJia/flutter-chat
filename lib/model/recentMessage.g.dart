@@ -49,9 +49,6 @@ class _$recentMessage extends recentMessage {
     if (messageType == null) {
       throw new BuiltValueNullFieldError('recentMessage', 'messageType');
     }
-    if (pending == null) {
-      throw new BuiltValueNullFieldError('recentMessage', 'pending');
-    }
     if (timestamp == null) {
       throw new BuiltValueNullFieldError('recentMessage', 'timestamp');
     }

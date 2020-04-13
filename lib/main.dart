@@ -4,6 +4,7 @@ import 'package:flutter/material.dart' hide Action;
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:learnflutter/redux/auth/auth_action.dart';
 import 'package:learnflutter/redux/auth/auth_middleware.dart';
+import 'package:learnflutter/redux/messages/message_middleware.dart';
 import 'package:learnflutter/redux/middleware.dart';
 import 'package:learnflutter/redux/reducer.dart';
 import 'package:learnflutter/redux/state.dart';
@@ -15,6 +16,7 @@ import 'package:learnflutter/screen/root_screen.dart';
 import 'package:learnflutter/screen/login/sign_screen.dart';
 import 'package:learnflutter/service/friendService.dart';
 import 'package:learnflutter/service/loginService.dart';
+import 'package:learnflutter/service/messageService.dart';
 import 'package:learnflutter/service/userInfoService.dart';
 import 'package:redux/redux.dart';
 import 'model/user.dart';
@@ -38,9 +40,11 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
    Store<AppState> store;
+   static final _firestore=Firestore.instance;
     final _navigatorKey = GlobalKey<NavigatorState>();
-   final userRepo = UserRepository(FirebaseAuth.instance, Firestore.instance);
+   final userRepo = UserRepository(FirebaseAuth.instance, _firestore);
    final friendRepo=new FriendRepository(Firestore.instance);
+   final messageRepo=new MessageRepository(_firestore);
   @override
   void initState() {
     // TODO: implement initState
@@ -50,10 +54,10 @@ class _MyAppState extends State<MyApp> {
     store=Store<AppState>(
         appReducer,
         initialState:AppState.init(),
-        middleware: createStoreMiddleware(friendRepo)
+        middleware: createStoreMiddleware(friendRepo,messageRepo)
           ..addAll(createAuthMiddleware(userRepo, _navigatorKey))
           ..addAll(createUserMiddleware(userRepo))
-
+          ..addAll(createMessagesMiddleware(messageRepo))
     );
     new Future.delayed(Duration(seconds: 3),()  {
       print("Flutter即时通讯APP界面实现...");

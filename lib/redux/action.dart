@@ -1,10 +1,23 @@
+import 'package:learnflutter/model/recentMessage.dart';
 import 'package:learnflutter/model/user.dart';
 
 class ConnectToDataSource{}
-
-class GET{
+//get favorList
+class GetFavor{
   List<User> favors;
 
-  GET(this.favors);
+  GetFavor(this.favors);
 
 }
+class GetFriend{
+  List<User> friends;
+  GetFriend(this.friends);
+}
+
+class GetRecentChat{
+  List<recentMessage> recentChats;
+
+  GetRecentChat(this.recentChats);
+
+}
+
