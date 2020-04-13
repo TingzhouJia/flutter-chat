@@ -13,11 +13,21 @@ class _$AppState extends AppState {
   final BuiltList<User> Friends;
   @override
   final BuiltList<User> FavorList;
+  @override
+  final BuiltList<recentMessage> recentChatList;
+  @override
+  final BuiltList<Message> currentChat;
 
   factory _$AppState([void Function(AppStateBuilder) updates]) =>
       (new AppStateBuilder()..update(updates)).build();
 
-  _$AppState._({this.user, this.Friends, this.FavorList}) : super._();
+  _$AppState._(
+      {this.user,
+      this.Friends,
+      this.FavorList,
+      this.recentChatList,
+      this.currentChat})
+      : super._();
 
   @override
   AppState rebuild(void Function(AppStateBuilder) updates) =>
@@ -32,13 +42,19 @@ class _$AppState extends AppState {
     return other is AppState &&
         user == other.user &&
         Friends == other.Friends &&
-        FavorList == other.FavorList;
+        FavorList == other.FavorList &&
+        recentChatList == other.recentChatList &&
+        currentChat == other.currentChat;
   }
 
   @override
   int get hashCode {
-    return $jf(
-        $jc($jc($jc(0, user.hashCode), Friends.hashCode), FavorList.hashCode));
+    return $jf($jc(
+        $jc(
+            $jc($jc($jc(0, user.hashCode), Friends.hashCode),
+                FavorList.hashCode),
+            recentChatList.hashCode),
+        currentChat.hashCode));
   }
 
   @override
@@ -46,7 +62,9 @@ class _$AppState extends AppState {
     return (newBuiltValueToStringHelper('AppState')
           ..add('user', user)
           ..add('Friends', Friends)
-          ..add('FavorList', FavorList))
+          ..add('FavorList', FavorList)
+          ..add('recentChatList', recentChatList)
+          ..add('currentChat', currentChat))
         .toString();
   }
 }
@@ -67,6 +85,18 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
       _$this._FavorList ??= new ListBuilder<User>();
   set FavorList(ListBuilder<User> FavorList) => _$this._FavorList = FavorList;
 
+  ListBuilder<recentMessage> _recentChatList;
+  ListBuilder<recentMessage> get recentChatList =>
+      _$this._recentChatList ??= new ListBuilder<recentMessage>();
+  set recentChatList(ListBuilder<recentMessage> recentChatList) =>
+      _$this._recentChatList = recentChatList;
+
+  ListBuilder<Message> _currentChat;
+  ListBuilder<Message> get currentChat =>
+      _$this._currentChat ??= new ListBuilder<Message>();
+  set currentChat(ListBuilder<Message> currentChat) =>
+      _$this._currentChat = currentChat;
+
   AppStateBuilder();
 
   AppStateBuilder get _$this {
@@ -74,6 +104,8 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
       _user = _$v.user?.toBuilder();
       _Friends = _$v.Friends?.toBuilder();
       _FavorList = _$v.FavorList?.toBuilder();
+      _recentChatList = _$v.recentChatList?.toBuilder();
+      _currentChat = _$v.currentChat?.toBuilder();
       _$v = null;
     }
     return this;
@@ -100,7 +132,9 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
           new _$AppState._(
               user: _user?.build(),
               Friends: _Friends?.build(),
-              FavorList: _FavorList?.build());
+              FavorList: _FavorList?.build(),
+              recentChatList: _recentChatList?.build(),
+              currentChat: _currentChat?.build());
     } catch (_) {
       String _$failedField;
       try {
@@ -110,6 +144,10 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
         _Friends?.build();
         _$failedField = 'FavorList';
         _FavorList?.build();
+        _$failedField = 'recentChatList';
+        _recentChatList?.build();
+        _$failedField = 'currentChat';
+        _currentChat?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'AppState', _$failedField, e.toString());

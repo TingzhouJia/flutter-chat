@@ -1,6 +1,8 @@
 
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
+import 'package:learnflutter/model/message.dart';
+import 'package:learnflutter/model/recentMessage.dart';
 import 'package:learnflutter/model/user.dart';
 
 
@@ -13,6 +15,11 @@ part 'state.g.dart';
     BuiltList<User> get Friends;
     @nullable
     BuiltList<User> get FavorList;
+    @nullable
+    BuiltList<recentMessage> get recentChatList;
+
+    @nullable
+    BuiltList<Message> get currentChat;
 
     AppState._();
     factory AppState([void Function(AppStateBuilder) updates]) = _$AppState;
@@ -20,6 +27,7 @@ part 'state.g.dart';
     factory AppState.init()=>AppState((a)=>a
       ..FavorList=ListBuilder()
         ..Friends=ListBuilder()
+      ..recentChatList=ListBuilder()
     );
     AppState clear() {
       // keep the temporal fcm token even when clearing state

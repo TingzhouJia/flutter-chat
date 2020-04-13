@@ -4,14 +4,15 @@ import 'package:learnflutter/model/user.dart';
 import 'package:learnflutter/redux/action.dart';
 import 'package:learnflutter/redux/state.dart';
 import 'package:learnflutter/service/friendService.dart';
+import 'package:learnflutter/service/messageService.dart';
 import 'package:learnflutter/service/userInfoService.dart';
 import 'package:redux/redux.dart';
 
 List<Middleware<AppState>> createStoreMiddleware(
-    FriendRepository friendRepository,
+    FriendRepository friendRepository,MessageRepository messageRepository
     ) {
   return [
-    TypedMiddleware<AppState, ConnectToDataSource>(_loadData(friendRepository)),
+    TypedMiddleware<AppState, ConnectToDataSource>(_loadData(friendRepository,messageRepository)),
   ];
 }
 
@@ -23,6 +24,7 @@ void Function(
     NextDispatcher next,
     ) _loadData(
     FriendRepository friendRepository,
+    MessageRepository messageRepository
     ) {
   return (store, action, next) {
     next(action);
@@ -31,6 +33,8 @@ void Function(
     friendRepository.getFavoriteStream(store.state.user.uid).listen((List<User> data){
       store.dispatch(GET(data));
     });
+    messageRepository.
+
 
 //      groupsSubscription =
 //          groupRepository.getGroupStream(store.state.user.uid).listen((group) {
