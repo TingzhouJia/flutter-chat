@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:learnflutter/model/message.dart';
 import 'package:learnflutter/model/reaction.dart';
 import 'package:learnflutter/model/recentMessage.dart';
+import 'package:learnflutter/model/user.dart';
 
 import 'firestoreService.dart';
 
@@ -20,28 +21,28 @@ class MessageRepository {
   static const MEDIA = "media";
   static const USERNAME = "username";
   static const MEDIA_STATUS = "mediaStatus";
-
+  static const IMG="imgUrl";
 
   final Firestore _firestore;
 
   MessageRepository(this._firestore);
 
-  Future<Message> sendMessage(String senderId,
-      String receiverId,
+  Future<Message> sendMessage(User sender,
+      User receiver,
       Message message,) async {
-    final messagesPath = FirestorePaths.messagePath(senderId,receiverId); //people send it
-    final getPath=FirestorePaths.messagePath(receiverId, senderId);
+    final messagesPath = FirestorePaths.messagePath(sender.uid,receiver.uid); //people send it
+    final getPath=FirestorePaths.messagePath(receiver.uid, sender.uid);
    //people receive it
     final data = toMap(message);
     await _firestore.collection(getPath).add(data);
     final reference = await _firestore.collection(messagesPath).add(data);
     //update recent chat
-    final recentpath=FirestorePaths.updateRecentPath(senderId,receiverId);
+    final recentpath=FirestorePaths.updateRecentPath(sender.uid,receiver.uid);
     final targte= await _firestore.document(recentpath).get();
     if(targte.data==null||targte.data.length == 0){
-      await _firestore.collection(recentpath).add(data);
+      await _firestore.collection(recentpath).add(toRecetMap(message,sender));
     }else{
-      await _firestore.document(recentpath).updateData(toRecetMap(message));
+      await _firestore.document(recentpath).updateData({BODY:message.body,TIMESTAMP:message.timestamp,});
     }
     final doc = await reference.get();
     return fromDoc(doc);
@@ -140,7 +141,7 @@ class MessageRepository {
         (m)=>m
         ..id=document.documentID
         ..authorId=document[AUTHOR]
-        ..imgUrl=document['imgUrl']
+        ..imgUrl=document[IMG]
             ..body=messageType==MessageType.MEDIA?"[Photo/Video]":document[BODY]
             ..timestamp=document[TIMESTAMP]
             ..userName=document[USERNAME]
@@ -195,9 +196,14 @@ class MessageRepository {
       MEDIA:message.media.toList()
     };
   }
-  static  toRecetMap(Message message){
+  static  toRecetMap(Message message,User user){
       return {
-
+          BODY:message.body,
+          AUTHOR:message.authorId,
+          PENDING:message.pending,
+          TYPE:message.messageType,
+        USERNAME:user.name,
+        IMG:user.imgUrl
       };
   }
 
