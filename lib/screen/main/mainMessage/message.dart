@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:learnflutter/redux/state.dart';
 import 'package:learnflutter/screen/main/mainMessage/message_view.dart';
+import 'package:learnflutter/widgets/RecentChats.dart';
 import 'package:learnflutter/widgets/favoriteContact.dart';
 
 class MessageScreen extends StatelessWidget {
@@ -21,7 +22,7 @@ class MessageScreen extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[ FavoriteContact(vm.favorContact)],
+            children: <Widget>[ FavoriteContact(vm.favorContact),RecentChat(vm.recentChatList,vm.uid)],
           )
 
 

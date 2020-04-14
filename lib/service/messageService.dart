@@ -37,12 +37,19 @@ class MessageRepository {
     await _firestore.collection(getPath).add(data);
     final reference = await _firestore.collection(messagesPath).add(data);
     //update recent chat
-    final recentpath=FirestorePaths.updateRecentPath(sender.uid,receiver.uid);
-    final targte= await _firestore.document(recentpath).get();
+    final recentpath=_firestore.collection(FirestorePaths.Path_RECENT).document(sender.uid).collection("info").document(receiver.uid);
+    final path2=_firestore.collection(FirestorePaths.Path_RECENT).document(receiver.uid).collection("info").document(sender.uid);
+    final targte= await recentpath.get();
+    final target2=await path2.get();
     if(targte.data==null||targte.data.length == 0){
-      await _firestore.collection(recentpath).add(toRecetMap(message,sender));
+      await recentpath.setData(toRecetMap(message,sender));
     }else{
-      await _firestore.document(recentpath).updateData({BODY:message.body,TIMESTAMP:message.timestamp,});
+      await recentpath.updateData({BODY:message.body,TIMESTAMP:message.timestamp,});
+    }
+    if(target2.data==null||target2.data.length==0){
+        await path2.setData(toRecetMap(message, sender));
+    }else{
+      await path2.updateData({BODY:message.body,TIMESTAMP:message.timestamp,});
     }
     final doc = await reference.get();
     return fromDoc(doc);
@@ -145,7 +152,7 @@ class MessageRepository {
     return recentMessage(
         (m)=>m
         ..id=document.documentID
-        ..authorId=document[AUTHOR]
+        ..authorId=document[USER_ID]
         ..imgUrl=document[IMG]
             ..body=messageType==MessageType.MEDIA?"[Photo/Video]":document[BODY]
             ..timestamp=DateTime.parse(document[TIMESTAMP].toDate().toString())
@@ -205,7 +212,7 @@ class MessageRepository {
   static  toRecetMap(Message message,User user){
       return {
           BODY:message.body,
-          AUTHOR:message.authorId,
+          USER_ID:message.authorId,
           PENDING:message.pending,
           TYPE:message.messageType,
         USERNAME:user.name,

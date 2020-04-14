@@ -2,7 +2,7 @@ import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:learnflutter/model/message_model.dart';
 import 'package:learnflutter/model/user.dart';
-import 'package:learnflutter/screen/chat_screen.dart';
+import 'package:learnflutter/screen/chat/chat_screen.dart';
 class FavoriteContact extends StatelessWidget {
   BuiltList<User> favor;
 
@@ -49,7 +49,7 @@ class FavoriteContact extends StatelessWidget {
                 itemBuilder: (BuildContext context,int index){
                   var favorOne=favor[index];
                   return GestureDetector(
-                      onTap:()=> Navigator.push(context,MaterialPageRoute(builder: (_)=>ChatScreen(user: favorOne,))),
+                      onTap:()=> Navigator.push(context,MaterialPageRoute(builder: (_)=>ChatScreen(userID: favorOne.uid,))),
                       onLongPress: ()=>{
 
                       },

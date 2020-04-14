@@ -3,9 +3,10 @@ import 'package:learnflutter/model/user.dart';
 import 'package:learnflutter/model/message_model.dart';
 import 'package:learnflutter/widgets/ChatList.dart';
 class ChatScreen extends StatefulWidget {
-  final User user;
+  final String userID;
 
-  ChatScreen({this.user});
+  ChatScreen({this.userID});
+
 
   @override
   _ChatScreenState createState() => _ChatScreenState();

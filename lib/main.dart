@@ -10,7 +10,7 @@ import 'package:learnflutter/redux/reducer.dart';
 import 'package:learnflutter/redux/state.dart';
 import 'package:learnflutter/redux/userRedux/user_middleware.dart';
 import 'package:learnflutter/screen/user/reset_avatar.dart';
-import 'package:learnflutter/screen/chat_screen.dart';
+import 'package:learnflutter/screen/chat/chat_screen.dart';
 import 'package:learnflutter/screen/loading_screen.dart';
 import 'package:learnflutter/screen/root_screen.dart';
 import 'package:learnflutter/screen/login/sign_screen.dart';

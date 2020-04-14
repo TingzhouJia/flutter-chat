@@ -1,10 +1,17 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:learnflutter/model/message_model.dart';
-import 'package:learnflutter/screen/chat_screen.dart';
+import 'package:learnflutter/model/recentMessage.dart';
+import 'package:learnflutter/screen/chat/chat_screen.dart';
 import 'package:learnflutter/utils/timeDuration.dart';
 import 'package:intl/intl.dart';
 
 class RecentChat extends StatelessWidget {
+  BuiltList<recentMessage> recentChatList;
+  String uid;
+  RecentChat(this.recentChatList,this.uid);
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -18,17 +25,17 @@ class RecentChat extends StatelessWidget {
           borderRadius: BorderRadius.only(
               topRight: Radius.circular(20.0), topLeft: Radius.circular(20.0)),
           child: ListView.builder(
-              itemCount: messageList.length,
+              itemCount: recentChatList.length,
               itemBuilder: (BuildContext context, int index) {
-                final Message chat = messageList[index];
+                final recentMessage chat = recentChatList[index];
                 final time =
-                    new DateFormat.jm().format(DateTime.parse(chat.time));
+                    new DateFormat.jm().format(DateTime.parse(chat.timestamp.toString()));
                 return GestureDetector(
                   onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (_) => ChatScreen(
-                                user: chat.sender,
+                                userID: chat.authorId,
                               ))),
                   child: Container(
                     margin: EdgeInsets.only(
@@ -36,7 +43,7 @@ class RecentChat extends StatelessWidget {
                     padding:
                         EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                     decoration: BoxDecoration(
-                        color: chat.unRead ? Color(0xFFffe6eb) : Colors.white,
+                        color: chat.pending ? Color(0xFFffe6eb) : Colors.white,
                         borderRadius: BorderRadius.all(Radius.circular(20.0)),
                         boxShadow: [
                           BoxShadow(
@@ -52,7 +59,7 @@ class RecentChat extends StatelessWidget {
                           children: <Widget>[
                             CircleAvatar(
                               radius: 35.0,
-                              backgroundImage: AssetImage(chat.sender.imgUrl),
+                              backgroundImage: chat.imgUrl=="" ?AssetImage('assets/male1.jpg'):NetworkImage(chat.imgUrl),
                             ),
                             SizedBox(
                               width: 10.0,
@@ -61,7 +68,7 @@ class RecentChat extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  chat.sender.name,
+                                  chat.authorId==uid?"You":chat.userName,
                                   style: TextStyle(
                                       color: Color(0xff333333),
                                       fontSize: 15.0,
@@ -71,7 +78,7 @@ class RecentChat extends StatelessWidget {
                                   width:
                                       MediaQuery.of(context).size.width * 0.45,
                                   child: Text(
-                                    chat.text,
+                                    chat.body,
                                     style: TextStyle(
                                         fontSize: 15.0,
                                         fontWeight: FontWeight.w600,
@@ -96,7 +103,7 @@ class RecentChat extends StatelessWidget {
                             SizedBox(
                               height: 5.0,
                             ),
-                            getDuration(chat.time) < 30
+                            getDuration(chat.timestamp) < 30
                                 ? Container(
                                     width: 40.0,
                                     height: 20.0,

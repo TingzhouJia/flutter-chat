@@ -9,15 +9,27 @@ part of 'message_view.dart';
 class _$MessageScreenViewModel extends MessageScreenViewModel {
   @override
   final BuiltList<User> favorContact;
+  @override
+  final BuiltList<recentMessage> recentChatList;
+  @override
+  final String uid;
 
   factory _$MessageScreenViewModel(
           [void Function(MessageScreenViewModelBuilder) updates]) =>
       (new MessageScreenViewModelBuilder()..update(updates)).build();
 
-  _$MessageScreenViewModel._({this.favorContact}) : super._() {
+  _$MessageScreenViewModel._({this.favorContact, this.recentChatList, this.uid})
+      : super._() {
     if (favorContact == null) {
       throw new BuiltValueNullFieldError(
           'MessageScreenViewModel', 'favorContact');
+    }
+    if (recentChatList == null) {
+      throw new BuiltValueNullFieldError(
+          'MessageScreenViewModel', 'recentChatList');
+    }
+    if (uid == null) {
+      throw new BuiltValueNullFieldError('MessageScreenViewModel', 'uid');
     }
   }
 
@@ -34,18 +46,23 @@ class _$MessageScreenViewModel extends MessageScreenViewModel {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is MessageScreenViewModel &&
-        favorContact == other.favorContact;
+        favorContact == other.favorContact &&
+        recentChatList == other.recentChatList &&
+        uid == other.uid;
   }
 
   @override
   int get hashCode {
-    return $jf($jc(0, favorContact.hashCode));
+    return $jf($jc($jc($jc(0, favorContact.hashCode), recentChatList.hashCode),
+        uid.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('MessageScreenViewModel')
-          ..add('favorContact', favorContact))
+          ..add('favorContact', favorContact)
+          ..add('recentChatList', recentChatList)
+          ..add('uid', uid))
         .toString();
   }
 }
@@ -60,11 +77,23 @@ class MessageScreenViewModelBuilder
   set favorContact(ListBuilder<User> favorContact) =>
       _$this._favorContact = favorContact;
 
+  ListBuilder<recentMessage> _recentChatList;
+  ListBuilder<recentMessage> get recentChatList =>
+      _$this._recentChatList ??= new ListBuilder<recentMessage>();
+  set recentChatList(ListBuilder<recentMessage> recentChatList) =>
+      _$this._recentChatList = recentChatList;
+
+  String _uid;
+  String get uid => _$this._uid;
+  set uid(String uid) => _$this._uid = uid;
+
   MessageScreenViewModelBuilder();
 
   MessageScreenViewModelBuilder get _$this {
     if (_$v != null) {
       _favorContact = _$v.favorContact?.toBuilder();
+      _recentChatList = _$v.recentChatList?.toBuilder();
+      _uid = _$v.uid;
       _$v = null;
     }
     return this;
@@ -88,12 +117,17 @@ class MessageScreenViewModelBuilder
     _$MessageScreenViewModel _$result;
     try {
       _$result = _$v ??
-          new _$MessageScreenViewModel._(favorContact: favorContact.build());
+          new _$MessageScreenViewModel._(
+              favorContact: favorContact.build(),
+              recentChatList: recentChatList.build(),
+              uid: uid);
     } catch (_) {
       String _$failedField;
       try {
         _$failedField = 'favorContact';
         favorContact.build();
+        _$failedField = 'recentChatList';
+        recentChatList.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'MessageScreenViewModel', _$failedField, e.toString());
