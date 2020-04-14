@@ -3,9 +3,9 @@ import 'package:learnflutter/model/user.dart';
 import 'package:learnflutter/model/message_model.dart';
 import 'package:learnflutter/widgets/ChatList.dart';
 class ChatScreen extends StatefulWidget {
-  final String userID;
+  final String username;
 
-  ChatScreen({this.userID});
+  ChatScreen({this.username});
 
 
   @override
@@ -116,18 +116,22 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
 
       backgroundColor: Theme.of(context).primaryColor,
-      appBar: AppBar(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(50.0),
+        child: AppBar(
+          centerTitle: true,
 
-        title: Text(widget.user.name,style: TextStyle(fontSize: 28.0,fontWeight: FontWeight.bold)),
-        elevation: 0.0,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.more_horiz),
-            iconSize: 30.0,
-            color: Colors.white,
-            onPressed: () => {},
-          ),
-        ],
+          title: Text("aa",style: TextStyle(fontSize: 28.0,fontWeight: FontWeight.bold,)),
+          elevation: 0.0,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.more_horiz),
+              iconSize: 30.0,
+              color: Colors.black,
+              onPressed: () => {},
+            ),
+          ],
+        ),
       ),
       body:
  GestureDetector(

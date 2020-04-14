@@ -19,11 +19,11 @@ class FavoriteContact extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 10.0),
+      padding: EdgeInsets.symmetric(vertical: 2.0),
       child:  Column(
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            padding: EdgeInsets.symmetric(horizontal: 15.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -49,12 +49,14 @@ class FavoriteContact extends StatelessWidget {
                 itemBuilder: (BuildContext context,int index){
                   var favorOne=favor[index];
                   return GestureDetector(
-                      onTap:()=> Navigator.push(context,MaterialPageRoute(builder: (_)=>ChatScreen(userID: favorOne.uid,))),
+                      onTap:(){
+                        Navigator.push(context,MaterialPageRoute(builder: (_)=>ChatScreen(username: favorOne.name,)));
+                      },
                       onLongPress: ()=>{
 
                       },
                       child:  Padding(
-                        padding: EdgeInsets.all(10.0),
+                        padding: EdgeInsets.all(5.0),
                         child: Column(
                           children: <Widget>[
                             CircleAvatar(
@@ -69,7 +71,7 @@ class FavoriteContact extends StatelessWidget {
                                   fontWeight: FontWeight.w600
                               ),
                             ),
-                            SizedBox(height:6.0),
+
 
 
                           ],

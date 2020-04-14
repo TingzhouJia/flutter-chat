@@ -17,6 +17,10 @@ List<Middleware<AppState>> createMessagesMiddleware(
     TypedMiddleware<AppState, SendMessage>(_sendMessage(messagesRepository)),
     TypedMiddleware<AppState, DeleteMessage>(
         _deleteMessage(messagesRepository)),
+    TypedMiddleware<AppState, DeleteRecentChat>(
+        _deleteRecentChat(messagesRepository)),
+    TypedMiddleware<AppState, SetUnread>(
+        _setUnread(messagesRepository)),
     TypedMiddleware<AppState, SelectChat>(
         _listenMessages(messagesRepository)),
 
@@ -71,6 +75,42 @@ void Function(
     }
   };
 }
+void Function(
+    Store<AppState> store,
+    DeleteRecentChat action,
+    NextDispatcher next,
+    ) _deleteRecentChat(
+    MessageRepository messageRepository,
+    ) {
+  return (store, action, next) async {
+    next(action);
+    final senderId = store.state.user.uid;
+    final receiveId=action.uid;
+    try {
+      await messageRepository.RemoveRecentChat(senderId, receiveId).then((_)=>store.dispatch(OnDeleteRecentChat(receiveId)));
+    } catch (e) {
+      print(e);
+    }
+  };
+}
+void Function(
+    Store<AppState> store,
+    SetUnread action,
+    NextDispatcher next,
+    ) _setUnread(
+    MessageRepository messageRepository,
+    ) {
+  return (store, action, next) async {
+    next(action);
+    final senderId = store.state.user.uid;
+    final receiveId=action.uid;
+    try {
+      await messageRepository.SetUnRead(senderId, receiveId,action.pending).then((_)=>store.dispatch(OnSetUnread(receiveId,action.pending)));
+    } catch (e) {
+      print(e);
+    }
+  };
+}
 
 void Function(
     Store<AppState> store,
@@ -90,7 +130,7 @@ void Function(
       messagesSubscription?.cancel();
 
       final author = store.state.user.uid;
-      final target = action.target.uid;
+      final target = action.target;
 
 
       // ignore: cancel_subscriptions

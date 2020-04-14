@@ -86,6 +86,13 @@ class MessageRepository {
 //    });
   }
 
+  Future<void> RemoveRecentChat(String uid,String targetId) async{
+      return  await _firestore.collection(FirestorePaths.Path_RECENT).document(uid).collection('info').document(targetId).delete();
+  }
+  Future<void> SetUnRead(String uid,String targetId,bool pending) async{
+      return await _firestore.collection(FirestorePaths.Path_RECENT).document(uid).collection('info').document(targetId).updateData({PENDING:!pending});
+  }
+
   Future<void> addReaction({
     @required String senderId,
     @required String receiverId,
@@ -154,6 +161,7 @@ class MessageRepository {
         ..id=document.documentID
         ..authorId=document[USER_ID]
         ..imgUrl=document[IMG]
+          ..pending=document[PENDING]
             ..body=messageType==MessageType.MEDIA?"[Photo/Video]":document[BODY]
             ..timestamp=DateTime.parse(document[TIMESTAMP].toDate().toString())
             ..userName=document[USERNAME]
@@ -217,6 +225,7 @@ class MessageRepository {
           TYPE:message.messageType,
         USERNAME:user.name,
         IMG:user.imgUrl
+
       };
   }
 

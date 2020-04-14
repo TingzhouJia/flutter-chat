@@ -12,13 +12,16 @@ class _$MessageScreenViewModel extends MessageScreenViewModel {
   @override
   final BuiltList<recentMessage> recentChatList;
   @override
+  final void Function(String uid) loadMessage;
+  @override
   final String uid;
 
   factory _$MessageScreenViewModel(
           [void Function(MessageScreenViewModelBuilder) updates]) =>
       (new MessageScreenViewModelBuilder()..update(updates)).build();
 
-  _$MessageScreenViewModel._({this.favorContact, this.recentChatList, this.uid})
+  _$MessageScreenViewModel._(
+      {this.favorContact, this.recentChatList, this.loadMessage, this.uid})
       : super._() {
     if (favorContact == null) {
       throw new BuiltValueNullFieldError(
@@ -27,6 +30,10 @@ class _$MessageScreenViewModel extends MessageScreenViewModel {
     if (recentChatList == null) {
       throw new BuiltValueNullFieldError(
           'MessageScreenViewModel', 'recentChatList');
+    }
+    if (loadMessage == null) {
+      throw new BuiltValueNullFieldError(
+          'MessageScreenViewModel', 'loadMessage');
     }
     if (uid == null) {
       throw new BuiltValueNullFieldError('MessageScreenViewModel', 'uid');
@@ -45,15 +52,19 @@ class _$MessageScreenViewModel extends MessageScreenViewModel {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
+    final dynamic _$dynamicOther = other;
     return other is MessageScreenViewModel &&
         favorContact == other.favorContact &&
         recentChatList == other.recentChatList &&
+        loadMessage == _$dynamicOther.loadMessage &&
         uid == other.uid;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc($jc(0, favorContact.hashCode), recentChatList.hashCode),
+    return $jf($jc(
+        $jc($jc($jc(0, favorContact.hashCode), recentChatList.hashCode),
+            loadMessage.hashCode),
         uid.hashCode));
   }
 
@@ -62,6 +73,7 @@ class _$MessageScreenViewModel extends MessageScreenViewModel {
     return (newBuiltValueToStringHelper('MessageScreenViewModel')
           ..add('favorContact', favorContact)
           ..add('recentChatList', recentChatList)
+          ..add('loadMessage', loadMessage)
           ..add('uid', uid))
         .toString();
   }
@@ -83,6 +95,11 @@ class MessageScreenViewModelBuilder
   set recentChatList(ListBuilder<recentMessage> recentChatList) =>
       _$this._recentChatList = recentChatList;
 
+  void Function(String uid) _loadMessage;
+  void Function(String uid) get loadMessage => _$this._loadMessage;
+  set loadMessage(void Function(String uid) loadMessage) =>
+      _$this._loadMessage = loadMessage;
+
   String _uid;
   String get uid => _$this._uid;
   set uid(String uid) => _$this._uid = uid;
@@ -93,6 +110,7 @@ class MessageScreenViewModelBuilder
     if (_$v != null) {
       _favorContact = _$v.favorContact?.toBuilder();
       _recentChatList = _$v.recentChatList?.toBuilder();
+      _loadMessage = _$v.loadMessage;
       _uid = _$v.uid;
       _$v = null;
     }
@@ -120,6 +138,7 @@ class MessageScreenViewModelBuilder
           new _$MessageScreenViewModel._(
               favorContact: favorContact.build(),
               recentChatList: recentChatList.build(),
+              loadMessage: loadMessage,
               uid: uid);
     } catch (_) {
       String _$failedField;

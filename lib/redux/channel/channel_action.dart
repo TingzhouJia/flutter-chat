@@ -101,9 +101,9 @@ import 'package:learnflutter/model/user.dart';
 //}
 
 class SelectChat{
-  final User target;
+  final String target;
 
-  SelectChat(this.target,);
+  SelectChat(this.target);
 
 }
 //@immutable

@@ -10,7 +10,7 @@ import 'package:learnflutter/service/loginService.dart';
 import 'package:learnflutter/service/userInfoService.dart';
 import 'package:learnflutter/utils/bottomUpAnimation.dart';
 import 'package:learnflutter/widgets/OnlineList.dart';
-import 'package:learnflutter/widgets/RecentChats.dart';
+import 'package:learnflutter/screen/main/mainMessage/RecentChats.dart';
 import 'package:learnflutter/widgets/RequestFriends.dart';
 import 'package:learnflutter/widgets/SearchBar.dart';
 
@@ -88,6 +88,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     return DefaultTabController(
       length: tabList.length,
       child: Scaffold(
+
         backgroundColor: Theme.of(context).primaryColor,
         appBar: PreferredSize(
           child: AppBar(
@@ -132,47 +133,52 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           preferredSize:
           Size.fromHeight(MediaQuery.of(context).size.height * 0.05),
         ),
-        body: SafeArea(
-          child: Column(
-            children: <Widget>[
-              Container(
-                height: 70.0,
-                color: Theme.of(context).primaryColor,
-                child: TabBar(
-                    labelColor: Colors.white,
-                    unselectedLabelColor: Colors.white60,
-                    isScrollable: true,
-                    indicator: const BoxDecoration(),
-                    controller: mTabController,
-                    tabs: tabList.map((item) {
-                      return Tab(
-                          child: Text(
-                            item.title,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 1.2,
-                                fontSize: 24.0),
-                          ));
-                    }).toList()),
-              ),
-              Expanded(
-                child: TabBarView(
-                  controller: mTabController,
-                  children: <Widget>[
-                    MessageScreen(),
-                    Online(),
-                    Center(
-                        child: Container(
-                          decoration: BoxDecoration(color: Colors.green),
-                          child: Text("发现"),
-                        )),
-                    Requests()
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
+        body:
+
+       SafeArea(
+         bottom: false,
+         child:  Column(
+             children: <Widget>[
+               Container(
+                 height: 70.0,
+                 color: Theme.of(context).primaryColor,
+                 child: TabBar(
+                     labelColor: Colors.white,
+                     unselectedLabelColor: Colors.white60,
+                     isScrollable: true,
+                     indicator: const BoxDecoration(),
+                     controller: mTabController,
+                     tabs: tabList.map((item) {
+                       return Tab(
+                           child: Text(
+                             item.title,
+                             style: TextStyle(
+                                 fontWeight: FontWeight.bold,
+                                 letterSpacing: 1.2,
+                                 fontSize: 24.0),
+                           ));
+                     }).toList()),
+               ),
+               Expanded(
+                 child: TabBarView(
+                   controller: mTabController,
+                   children: <Widget>[
+                     MessageScreen(),
+                     Online(),
+                     Center(
+                         child: Container(
+                           decoration: BoxDecoration(color: Colors.green),
+                           child: Text("发现"),
+                         )),
+                     Requests()
+                   ],
+                 ),
+               )
+             ],
+           )
+       ),
+
+
       ),
     );
   }

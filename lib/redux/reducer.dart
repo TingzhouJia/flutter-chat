@@ -20,6 +20,7 @@ final appReducer=combineReducers<AppState>([
 }
 
 AppState _onRecentChatList(AppState state,GetRecentChat action){
+
    return state.rebuild((a)=>a
    ..recentChatList=ListBuilder(action.recentChats)
    );

@@ -47,6 +47,23 @@ class DeleteRecentChat{
   DeleteRecentChat(this.uid);
 
 }
+class OnDeleteRecentChat{
+  final String uid;
+
+  OnDeleteRecentChat(this.uid);
+}
+class SetUnread{
+  final String uid;
+  final bool pending;
+  SetUnread(this.uid,this.pending);
+
+}
+class OnSetUnread{
+  final String uid;
+  final bool pending;
+  OnSetUnread(this.uid,this.pending);
+
+}
 @immutable
 class DeleteMessage {
   final String messageId;

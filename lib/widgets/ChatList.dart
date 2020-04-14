@@ -62,16 +62,33 @@ class ChatList extends StatelessWidget {
 
       borderRadius: BorderRadius.only(
           topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0)),
-      child: ListView.builder(
-        reverse: true,
-          padding: EdgeInsets.only(top: 15.0),
-          itemCount: messageList.length,
-          itemBuilder: (BuildContext context, int index) {
-            final Message message = messageListDemo[index];
-            final bool isMe = message.sender.uid == currentUser.uid;
+      child: Stack(
+        children: <Widget>[
+          Container(
+            height: double.infinity,
+            decoration: BoxDecoration(
+              image: DecorationImage(image: AssetImage('assets/loadingPage.jpeg'),repeat: ImageRepeat.noRepeat,fit: BoxFit.cover)
+            ),
+          ),
+         Column(
+           children: <Widget>[
 
-            return _buildMessage(message, isMe,context);
-          }),
+             Expanded(
+               child:  ListView.builder(
+                   reverse: true,
+                   padding: EdgeInsets.only(top: 15.0),
+                   itemCount: messageList.length,
+                   itemBuilder: (BuildContext context, int index) {
+                     final Message message = messageListDemo[index];
+                     final bool isMe = message.sender.uid == currentUser.uid;
+
+                     return _buildMessage(message, isMe,context);
+                   }),
+             )
+           ],
+         )
+        ],
+      ),
     );
   }
 }
