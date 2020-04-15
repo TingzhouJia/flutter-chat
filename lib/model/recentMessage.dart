@@ -3,9 +3,11 @@ import 'message.dart';
 
 part 'recentMessage.g.dart';
 abstract class recentMessage implements Built<recentMessage, recentMessageBuilder> {
+  //the person user can chat
   @nullable
   String get id;
 
+  //who send this message
   @nullable
   String get authorId;
 

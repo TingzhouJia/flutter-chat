@@ -29,7 +29,6 @@ void Function(
     ) {
   return (store, action, next) {
     next(action);
-    print('kkkkk');
     try {
     friendRepository.getFavoriteStream(store.state.user.uid).listen((List<User> data){
       store.dispatch(GetFavor(data));

@@ -17,7 +17,16 @@ class UpdateUserAction {
   const UpdateUserAction(this.user);
 }
 
+class UpdateCurrentTarget{
+  final String uid;
 
+  UpdateCurrentTarget(this.uid);
+
+}
+class OnUpdateCurrentTarget{
+  final User user;
+  OnUpdateCurrentTarget(this.user);
+}
 class UpdateUserDescription{
    User user;
    String description;

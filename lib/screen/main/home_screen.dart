@@ -14,7 +14,7 @@ import 'package:learnflutter/screen/main/mainMessage/RecentChats.dart';
 import 'package:learnflutter/widgets/RequestFriends.dart';
 import 'package:learnflutter/widgets/SearchBar.dart';
 
-import 'package:learnflutter/widgets/favoriteContact.dart';
+import 'package:learnflutter/screen/main/mainMessage/favoriteContact.dart';
 
 import 'mainMessage/message.dart';
 

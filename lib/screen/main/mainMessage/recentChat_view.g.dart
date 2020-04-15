@@ -17,10 +17,6 @@ class _$RecentChatViewModel extends RecentChatViewModel {
       (new RecentChatViewModelBuilder()..update(updates)).build();
 
   _$RecentChatViewModel._({this.recentChatList, this.uid}) : super._() {
-    if (recentChatList == null) {
-      throw new BuiltValueNullFieldError(
-          'RecentChatViewModel', 'recentChatList');
-    }
     if (uid == null) {
       throw new BuiltValueNullFieldError('RecentChatViewModel', 'uid');
     }
@@ -101,12 +97,12 @@ class RecentChatViewModelBuilder
     try {
       _$result = _$v ??
           new _$RecentChatViewModel._(
-              recentChatList: recentChatList.build(), uid: uid);
+              recentChatList: _recentChatList?.build(), uid: uid);
     } catch (_) {
       String _$failedField;
       try {
         _$failedField = 'recentChatList';
-        recentChatList.build();
+        _recentChatList?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'RecentChatViewModel', _$failedField, e.toString());

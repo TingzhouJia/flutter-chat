@@ -12,8 +12,6 @@ abstract class Message implements Built<Message, MessageBuilder> {
   @nullable
   String get authorId;
 
-
-
   String get body;
 
   @nullable

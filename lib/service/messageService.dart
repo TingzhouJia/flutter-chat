@@ -15,6 +15,7 @@ class MessageRepository {
   static const TYPE = "messageType";
   static const TIMESTAMP = "timestamp";
   static const EMOJI = "emoji";
+  static const ID = "id";
   static const MESSAGEID = "messageId";
   static const USER_ID = "userId";
   static const PENDING = "pending";
@@ -30,26 +31,26 @@ class MessageRepository {
   Future<Message> sendMessage(User sender,
       User receiver,
       Message message,) async {
-    final messagesPath = FirestorePaths.messagePath(sender.uid,receiver.uid); //people send it
-    final getPath=FirestorePaths.messagePath(receiver.uid, sender.uid);
+
    //people receive it
-    final data = toMap(message);
-    await _firestore.collection(getPath).add(data);
-    final reference = await _firestore.collection(messagesPath).add(data);
+    final data1 = toMap(message,true);
+    final data2=toMap(message, false);
+    final reference = await _firestore.collection(FirestorePaths.PATH_MESSAGES).document(sender.uid).collection(receiver.uid).add(data1);
+    await _firestore.collection(FirestorePaths.PATH_MESSAGES).document(receiver.uid).collection(sender.uid).add(data2);
     //update recent chat
     final recentpath=_firestore.collection(FirestorePaths.Path_RECENT).document(sender.uid).collection("info").document(receiver.uid);
     final path2=_firestore.collection(FirestorePaths.Path_RECENT).document(receiver.uid).collection("info").document(sender.uid);
     final targte= await recentpath.get();
     final target2=await path2.get();
     if(targte.data==null||targte.data.length == 0){
-      await recentpath.setData(toRecetMap(message,sender));
+      await recentpath.setData(toRecetMap(message,sender,true,receiver.uid));
     }else{
-      await recentpath.updateData({BODY:message.body,TIMESTAMP:message.timestamp,});
+      await recentpath.updateData({BODY:message.body,TIMESTAMP:message.timestamp,PENDING:false});
     }
     if(target2.data==null||target2.data.length==0){
-        await path2.setData(toRecetMap(message, sender));
+        await path2.setData(toRecetMap(message, sender,false,receiver.uid));
     }else{
-      await path2.updateData({BODY:message.body,TIMESTAMP:message.timestamp,});
+      await path2.updateData({BODY:message.body,TIMESTAMP:message.timestamp,PENDING:true});
     }
     final doc = await reference.get();
     return fromDoc(doc);
@@ -59,7 +60,7 @@ class MessageRepository {
       String targetId,
    ) {
     return _firestore
-        .collection(FirestorePaths.messagePath(userId,targetId))
+        .collection(FirestorePaths.PATH_MESSAGES).document(userId).collection(targetId)
         .orderBy(TIMESTAMP, descending: true)
         .snapshots(includeMetadataChanges: true)
         .map((querySnapshot) {
@@ -158,7 +159,7 @@ class MessageRepository {
     final messageType = MessageTypeHelper.valueOf(document[TYPE]);
     return recentMessage(
         (m)=>m
-        ..id=document.documentID
+        ..id=document[ID]
         ..authorId=document[USER_ID]
         ..imgUrl=document[IMG]
           ..pending=document[PENDING]
@@ -207,25 +208,27 @@ class MessageRepository {
         .toMap();
   }
 
-  static toMap(Message message) {
+  static toMap(Message message,bool send) {
     return {
       BODY: message.body,
       AUTHOR: message.authorId,
       REACTION: _reactionsToMap(message.reactions),
       TYPE: MessageTypeHelper.stringOf(message.messageType),
       TIMESTAMP: DateTime.now(),
-      MEDIA:message.media.toList()
+      MEDIA:message.media.toList(),
+      PENDING:send==true?false:true,
+      MEDIA_STATUS:MediaStatusHelper.stringOf(message.mediaStatus)
     };
   }
-  static  toRecetMap(Message message,User user){
+  static  toRecetMap(Message message,User user,bool send,String targetID){
       return {
           BODY:message.body,
           USER_ID:message.authorId,
-          PENDING:message.pending,
+          PENDING:send==true?false:true,
           TYPE:message.messageType,
         USERNAME:user.name,
-        IMG:user.imgUrl
-
+        IMG:user.imgUrl,
+        ID:targetID
       };
   }
 

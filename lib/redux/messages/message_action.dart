@@ -6,6 +6,7 @@ import 'package:learnflutter/model/user.dart';
 @immutable
 class SendMessage {
   final String message;
+
   final User receiver;
   final MessageType mediaType;
   const SendMessage(

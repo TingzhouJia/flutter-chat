@@ -7,6 +7,7 @@ import 'package:learnflutter/model/recentMessage.dart';
 import 'package:learnflutter/redux/channel/channel_action.dart';
 import 'package:learnflutter/redux/messages/message_action.dart';
 import 'package:learnflutter/redux/state.dart';
+import 'package:learnflutter/redux/userRedux/user_action.dart';
 import 'package:learnflutter/screen/chat/chat_screen.dart';
 import 'package:learnflutter/screen/main/mainMessage/recentChat_view.dart';
 import 'package:learnflutter/utils/timeDuration.dart';
@@ -114,13 +115,11 @@ class _RecentChatState extends State<RecentChat> {
                                 offset: Offset(3.0, 3.0))
                           ]),
                       child: IconSlideAction(
-                        caption: chat.pending!=true?'Unread':"Have Read",
+                        caption: chat.pending!=true?'Unseen':"Seen",
 
                         icon: Icons.more_horiz,
                         onTap: () {
-
-                         StoreProvider.of<AppState>(context).dispatch(SetUnread(chat.authorId,chat.pending));
-
+                         StoreProvider.of<AppState>(context).dispatch(SetUnread(chat.id,chat.pending));
                         },
                         closeOnTap: true,
                       ),
@@ -145,7 +144,7 @@ class _RecentChatState extends State<RecentChat> {
                         icon: Icons.delete,
                         onTap: (){
 
-                          StoreProvider.of<AppState>(context).dispatch(DeleteRecentChat(chat.authorId));
+                          StoreProvider.of<AppState>(context).dispatch(DeleteRecentChat(chat.id));
                         },
                         closeOnTap: true,
                       ),
@@ -157,16 +156,21 @@ class _RecentChatState extends State<RecentChat> {
                     onTap: () {
                       if(curOpen==true){
                         print(1);
-
+                        Slidable.of(context)?.close();
                         return;
                       }
-                      StoreProvider.of<AppState>(context).dispatch(SelectChat(chat.authorId));
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => ChatScreen(
-                                username: chat.userName,
-                              )));
+                      StoreProvider.of<AppState>(context).dispatch(UpdateCurrentTarget(chat.id));
+                      StoreProvider.of<AppState>(context).dispatch(SelectChat(chat.id));
+                      Future.delayed(Duration(seconds: 2),()  {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => ChatScreen(
+                                  username: chat.userName,
+                                )));
+
+                      });
+
                     },
                     child: Container(
                       margin: EdgeInsets.only(

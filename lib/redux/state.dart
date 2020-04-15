@@ -17,7 +17,8 @@ part 'state.g.dart';
     BuiltList<User> get FavorList;
     @nullable
     BuiltList<recentMessage> get recentChatList;
-
+    @nullable
+    User get currentTarget;
     @nullable
     BuiltList<Message> get currentChat;
 

@@ -8,6 +8,7 @@ final messageReducers = <AppState Function(AppState, dynamic)>[
   TypedReducer<AppState, UpdateAllMessages>(_onMessageUpdated),
   TypedReducer<AppState, OnDeleteRecentChat>(_onRecentChatDelete),
   TypedReducer<AppState, OnSetUnread>(_onSetUnread),
+  TypedReducer<AppState, UpdateRecentChat>(_onUpdateRecent),
 ];
 
 AppState _onMessageUpdated(AppState state, UpdateAllMessages action) {
@@ -24,4 +25,10 @@ AppState _onSetUnread(AppState state,OnSetUnread action){
   newList.rebuild((c)=>c ..pending=!action.pending);
   var c=state.recentChatList.rebuild((a)=>a ..add(newList));
   return state.rebuild((a)=>a ..recentChatList=ListBuilder(c));
+}
+AppState _onUpdateRecent(AppState state,UpdateRecentChat action){
+//  var newList=state.recentChatList.firstWhere((test){
+//    return test.authorId==action;
+//  });
+//  return state.rebuild((a)=>a, )
 }

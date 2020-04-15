@@ -13,6 +13,7 @@ part 'recentChat_view.g.dart';
 
 abstract class RecentChatViewModel
     implements Built<RecentChatViewModel, RecentChatViewModelBuilder> {
+  @nullable
   BuiltList<recentMessage> get recentChatList;
 
   String get uid;

@@ -4,7 +4,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:learnflutter/redux/state.dart';
 import 'package:learnflutter/screen/main/mainMessage/message_view.dart';
 import 'package:learnflutter/screen/main/mainMessage/RecentChats.dart';
-import 'package:learnflutter/widgets/favoriteContact.dart';
+import 'package:learnflutter/screen/main/mainMessage/favoriteContact.dart';
 
 class MessageScreen extends StatelessWidget {
 

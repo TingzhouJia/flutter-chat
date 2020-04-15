@@ -13,6 +13,7 @@ List<Middleware<AppState>> createUserMiddleware(
     ) {
   return [
     TypedMiddleware<AppState, OnAuthenticated>(_listenToUser(userRepository)),
+    TypedMiddleware<AppState, UpdateCurrentTarget>(_listenToCurrentTarget(userRepository)),
     TypedMiddleware<AppState, UpdateUserDescription>(_updateUserDescription(userRepository)),
     TypedMiddleware<AppState, UpdateUserAvatar>(_updateUserAvatar(userRepository)),
     TypedMiddleware<AppState, UpdateUserGender>(_updateUserGender(userRepository)),
@@ -23,7 +24,28 @@ List<Middleware<AppState>> createUserMiddleware(
     //TypedMiddleware<AppState, UpdateUserAction>(_updateUser(userRepository)),
   ];
 }
+void Function(
+    Store<AppState> store,
+    UpdateCurrentTarget action,
+    NextDispatcher next,
+    ) _listenToCurrentTarget(
+    UserRepository userRepository,
+    ) {
+  return (store, action, next) {
+    next(action);
+    try {
+      userUpdateSubscription?.cancel();
 
+      userUpdateSubscription =
+          userRepository.getUserStream(action.uid).listen((user) {
+
+            store.dispatch(OnUpdateCurrentTarget(user));
+          });
+    } catch (e){
+      print("Failed to listen user");
+    }
+  };
+}
 void Function(
     Store<AppState> store,
     OnAuthenticated action,
@@ -69,6 +91,7 @@ void Function(
 
   };
 }
+
 void Function(
     Store<AppState> store,
     UpdateUserGender action,
@@ -98,7 +121,6 @@ void Function(
     NextDispatcher next,
     ) _updateUserAvatar(
     UserRepository userRepository,
-
     ) {
   return (store, action, next) async {
     next(action);
@@ -115,6 +137,7 @@ void Function(
 
   };
 }
+
 void Function(
     Store<AppState> store,
     UpdateUserStatus action,
@@ -138,6 +161,7 @@ void Function(
 
   };
 }
+
 void Function(
     Store<AppState> store,
     UpdateUserBirthday action,

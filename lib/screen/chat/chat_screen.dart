@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:learnflutter/model/user.dart';
 import 'package:learnflutter/model/message_model.dart';
-import 'package:learnflutter/widgets/ChatList.dart';
+import 'package:learnflutter/screen/chat/ChatList.dart';
 class ChatScreen extends StatefulWidget {
   final String username;
 
@@ -121,7 +121,7 @@ class _ChatScreenState extends State<ChatScreen> {
         child: AppBar(
           centerTitle: true,
 
-          title: Text("aa",style: TextStyle(fontSize: 28.0,fontWeight: FontWeight.bold,)),
+          title: Text(widget.username,style: TextStyle(fontSize: 28.0,fontWeight: FontWeight.bold,)),
           elevation: 0.0,
           actions: <Widget>[
             IconButton(
@@ -145,8 +145,6 @@ class _ChatScreenState extends State<ChatScreen> {
           child: Column(
            // mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-
-
                 Flexible(
                   child:  Container(
                     margin: EdgeInsets.only(top: 20),

@@ -1,7 +1,11 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:learnflutter/model/message_model.dart';
 import 'package:learnflutter/model/user.dart';
+import 'package:learnflutter/redux/channel/channel_action.dart';
+import 'package:learnflutter/redux/state.dart';
+import 'package:learnflutter/redux/userRedux/user_action.dart';
 import 'package:learnflutter/screen/chat/chat_screen.dart';
 class FavoriteContact extends StatelessWidget {
   BuiltList<User> favor;
@@ -50,6 +54,8 @@ class FavoriteContact extends StatelessWidget {
                   var favorOne=favor[index];
                   return GestureDetector(
                       onTap:(){
+                        StoreProvider.of<AppState>(context).dispatch(UpdateCurrentTarget(favorOne.uid));
+                        StoreProvider.of<AppState>(context).dispatch(SelectChat(favorOne.uid));
                         Navigator.push(context,MaterialPageRoute(builder: (_)=>ChatScreen(username: favorOne.name,)));
                       },
                       onLongPress: ()=>{

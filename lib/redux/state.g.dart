@@ -16,6 +16,8 @@ class _$AppState extends AppState {
   @override
   final BuiltList<recentMessage> recentChatList;
   @override
+  final User currentTarget;
+  @override
   final BuiltList<Message> currentChat;
 
   factory _$AppState([void Function(AppStateBuilder) updates]) =>
@@ -26,6 +28,7 @@ class _$AppState extends AppState {
       this.Friends,
       this.FavorList,
       this.recentChatList,
+      this.currentTarget,
       this.currentChat})
       : super._();
 
@@ -44,6 +47,7 @@ class _$AppState extends AppState {
         Friends == other.Friends &&
         FavorList == other.FavorList &&
         recentChatList == other.recentChatList &&
+        currentTarget == other.currentTarget &&
         currentChat == other.currentChat;
   }
 
@@ -51,9 +55,11 @@ class _$AppState extends AppState {
   int get hashCode {
     return $jf($jc(
         $jc(
-            $jc($jc($jc(0, user.hashCode), Friends.hashCode),
-                FavorList.hashCode),
-            recentChatList.hashCode),
+            $jc(
+                $jc($jc($jc(0, user.hashCode), Friends.hashCode),
+                    FavorList.hashCode),
+                recentChatList.hashCode),
+            currentTarget.hashCode),
         currentChat.hashCode));
   }
 
@@ -64,6 +70,7 @@ class _$AppState extends AppState {
           ..add('Friends', Friends)
           ..add('FavorList', FavorList)
           ..add('recentChatList', recentChatList)
+          ..add('currentTarget', currentTarget)
           ..add('currentChat', currentChat))
         .toString();
   }
@@ -91,6 +98,11 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
   set recentChatList(ListBuilder<recentMessage> recentChatList) =>
       _$this._recentChatList = recentChatList;
 
+  UserBuilder _currentTarget;
+  UserBuilder get currentTarget => _$this._currentTarget ??= new UserBuilder();
+  set currentTarget(UserBuilder currentTarget) =>
+      _$this._currentTarget = currentTarget;
+
   ListBuilder<Message> _currentChat;
   ListBuilder<Message> get currentChat =>
       _$this._currentChat ??= new ListBuilder<Message>();
@@ -105,6 +117,7 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
       _Friends = _$v.Friends?.toBuilder();
       _FavorList = _$v.FavorList?.toBuilder();
       _recentChatList = _$v.recentChatList?.toBuilder();
+      _currentTarget = _$v.currentTarget?.toBuilder();
       _currentChat = _$v.currentChat?.toBuilder();
       _$v = null;
     }
@@ -134,6 +147,7 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
               Friends: _Friends?.build(),
               FavorList: _FavorList?.build(),
               recentChatList: _recentChatList?.build(),
+              currentTarget: _currentTarget?.build(),
               currentChat: _currentChat?.build());
     } catch (_) {
       String _$failedField;
@@ -146,6 +160,8 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
         _FavorList?.build();
         _$failedField = 'recentChatList';
         _recentChatList?.build();
+        _$failedField = 'currentTarget';
+        _currentTarget?.build();
         _$failedField = 'currentChat';
         _currentChat?.build();
       } catch (e) {

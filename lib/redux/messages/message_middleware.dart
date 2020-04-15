@@ -2,6 +2,7 @@
 
 import 'package:learnflutter/model/message.dart';
 import 'package:learnflutter/model/reaction.dart';
+import 'package:learnflutter/model/recentMessage.dart';
 import 'package:learnflutter/redux/channel/channel_action.dart';
 import 'package:learnflutter/service/messageService.dart';
 import 'package:redux/redux.dart';
@@ -48,9 +49,12 @@ void Function(
       ..messageType=action.mediaType
       ..authorId = store.state.user.uid);
     try {
-      await messageRepository.sendMessage(sender, receiver, message).then((a){
-        store.dispatch(UpdateRecentChat);
-      });
+      await messageRepository.sendMessage(sender, receiver, message);
+//          .then(( Message a){
+//        recentMessage a=recentMessage((a)=>a
+//        ..authorId=a.authorId ..pending=a.pending ..userName=a.userName ..timestamp=a.timestamp ..messageType=a.messageType ..body=a.body ..imgUrl=sender.imgUrl);
+//        store.dispatch(UpdateRecentChat(a));
+//      });
     } catch (e) {
       print(e);
     }
@@ -139,6 +143,7 @@ void Function(
        author,target
       )
           .listen((data) {
+            print(data);
         store.dispatch(UpdateAllMessages(data));
       });
     } catch (e) {
