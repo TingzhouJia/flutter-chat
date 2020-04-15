@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:learnflutter/model/user.dart';
 import 'package:learnflutter/model/message_model.dart';
+import 'package:learnflutter/redux/channel/channel_action.dart';
+import 'package:learnflutter/redux/state.dart';
 import 'package:learnflutter/screen/chat/ChatList.dart';
+import 'package:learnflutter/screen/friends/friend_screen.dart';
 class ChatScreen extends StatefulWidget {
   final String username;
+  final String uid;
+  ChatScreen({this.username,this.uid});
 
-  ChatScreen({this.username});
 
 
   @override
@@ -13,6 +18,9 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+
+
+
   bool onUse=false;
   _buildMessageComposer(){
     return Container(
@@ -81,7 +89,6 @@ class _ChatScreenState extends State<ChatScreen> {
                 });},
                 textCapitalization: TextCapitalization.sentences,
                 decoration: InputDecoration.collapsed(
-
                     hintText: "Aa",
                     hintStyle: TextStyle(color: Colors.grey)
                 ),
@@ -128,7 +135,12 @@ class _ChatScreenState extends State<ChatScreen> {
               icon: Icon(Icons.more_horiz),
               iconSize: 30.0,
               color: Colors.black,
-              onPressed: () => {},
+              onPressed: () {
+              Navigator.push(
+              context,
+              MaterialPageRoute(
+              builder: (_) => FriendScreen()));
+              },
             ),
           ],
         ),
@@ -141,6 +153,7 @@ class _ChatScreenState extends State<ChatScreen> {
             setState(() {
               onUse=false;
             });
+
           },
           child: Column(
            // mainAxisSize: MainAxisSize.min,

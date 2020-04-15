@@ -4,6 +4,7 @@ import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:learnflutter/model/recentMessage.dart';
 import 'package:learnflutter/model/user.dart';
+import 'package:learnflutter/redux/action.dart';
 import 'package:learnflutter/redux/channel/channel_action.dart';
 import 'package:learnflutter/redux/messages/message_action.dart';
 import 'package:learnflutter/redux/state.dart';
@@ -16,7 +17,9 @@ abstract class RecentChatViewModel
   @nullable
   BuiltList<recentMessage> get recentChatList;
 
+  bool get loading;
   String get uid;
+  Function get setLoading;
   RecentChatViewModel._();
 
   factory RecentChatViewModel(
@@ -32,9 +35,8 @@ abstract class RecentChatViewModel
       return RecentChatViewModel((u) => u
         ..recentChatList=store.state.recentChatList.toBuilder()
         ..uid=store.state.user.uid
-
-
-        
+        ..loading=store.state.loading
+        ..setLoading=()=>store.dispatch(StartLoading())
       );
 
     };

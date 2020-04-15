@@ -12,7 +12,7 @@ final messageReducers = <AppState Function(AppState, dynamic)>[
 ];
 
 AppState _onMessageUpdated(AppState state, UpdateAllMessages action) {
-  return state.rebuild((a) => a..currentChat = ListBuilder(action.data));
+  return state.rebuild((a) => a ..currentChat = ListBuilder(action.data) ..loading=false);
 }
 AppState _onRecentChatDelete(AppState state,OnDeleteRecentChat action){
   var newList=state.recentChatList.where((id)=>id.authorId!=action.uid);

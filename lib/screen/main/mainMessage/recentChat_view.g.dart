@@ -10,15 +10,27 @@ class _$RecentChatViewModel extends RecentChatViewModel {
   @override
   final BuiltList<recentMessage> recentChatList;
   @override
+  final bool loading;
+  @override
   final String uid;
+  @override
+  final Function setLoading;
 
   factory _$RecentChatViewModel(
           [void Function(RecentChatViewModelBuilder) updates]) =>
       (new RecentChatViewModelBuilder()..update(updates)).build();
 
-  _$RecentChatViewModel._({this.recentChatList, this.uid}) : super._() {
+  _$RecentChatViewModel._(
+      {this.recentChatList, this.loading, this.uid, this.setLoading})
+      : super._() {
+    if (loading == null) {
+      throw new BuiltValueNullFieldError('RecentChatViewModel', 'loading');
+    }
     if (uid == null) {
       throw new BuiltValueNullFieldError('RecentChatViewModel', 'uid');
+    }
+    if (setLoading == null) {
+      throw new BuiltValueNullFieldError('RecentChatViewModel', 'setLoading');
     }
   }
 
@@ -36,19 +48,26 @@ class _$RecentChatViewModel extends RecentChatViewModel {
     if (identical(other, this)) return true;
     return other is RecentChatViewModel &&
         recentChatList == other.recentChatList &&
-        uid == other.uid;
+        loading == other.loading &&
+        uid == other.uid &&
+        setLoading == other.setLoading;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, recentChatList.hashCode), uid.hashCode));
+    return $jf($jc(
+        $jc($jc($jc(0, recentChatList.hashCode), loading.hashCode),
+            uid.hashCode),
+        setLoading.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('RecentChatViewModel')
           ..add('recentChatList', recentChatList)
-          ..add('uid', uid))
+          ..add('loading', loading)
+          ..add('uid', uid)
+          ..add('setLoading', setLoading))
         .toString();
   }
 }
@@ -63,16 +82,26 @@ class RecentChatViewModelBuilder
   set recentChatList(ListBuilder<recentMessage> recentChatList) =>
       _$this._recentChatList = recentChatList;
 
+  bool _loading;
+  bool get loading => _$this._loading;
+  set loading(bool loading) => _$this._loading = loading;
+
   String _uid;
   String get uid => _$this._uid;
   set uid(String uid) => _$this._uid = uid;
+
+  Function _setLoading;
+  Function get setLoading => _$this._setLoading;
+  set setLoading(Function setLoading) => _$this._setLoading = setLoading;
 
   RecentChatViewModelBuilder();
 
   RecentChatViewModelBuilder get _$this {
     if (_$v != null) {
       _recentChatList = _$v.recentChatList?.toBuilder();
+      _loading = _$v.loading;
       _uid = _$v.uid;
+      _setLoading = _$v.setLoading;
       _$v = null;
     }
     return this;
@@ -97,7 +126,10 @@ class RecentChatViewModelBuilder
     try {
       _$result = _$v ??
           new _$RecentChatViewModel._(
-              recentChatList: _recentChatList?.build(), uid: uid);
+              recentChatList: _recentChatList?.build(),
+              loading: loading,
+              uid: uid,
+              setLoading: setLoading);
     } catch (_) {
       String _$failedField;
       try {

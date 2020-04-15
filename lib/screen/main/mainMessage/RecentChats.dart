@@ -4,6 +4,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:learnflutter/model/message_model.dart';
 import 'package:learnflutter/model/recentMessage.dart';
+import 'package:learnflutter/redux/action.dart';
 import 'package:learnflutter/redux/channel/channel_action.dart';
 import 'package:learnflutter/redux/messages/message_action.dart';
 import 'package:learnflutter/redux/state.dart';
@@ -159,17 +160,22 @@ class _RecentChatState extends State<RecentChat> {
                         Slidable.of(context)?.close();
                         return;
                       }
-                      StoreProvider.of<AppState>(context).dispatch(UpdateCurrentTarget(chat.id));
-                      StoreProvider.of<AppState>(context).dispatch(SelectChat(chat.id));
-                      Future.delayed(Duration(seconds: 2),()  {
+                      vm.setLoading();
+
+
+                      if(!vm.loading){
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (_) => ChatScreen(
-                                  username: chat.userName,
+                                    username: chat.userName,
+                                    uid:chat.id
                                 )));
+                      }
 
-                      });
+                      StoreProvider.of<AppState>(context).dispatch(SelectChat(chat.id));
+                      StoreProvider.of<AppState>(context).dispatch(UpdateCurrentTarget(chat.id));
+
 
                     },
                     child: Container(

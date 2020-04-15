@@ -102,7 +102,6 @@ import 'package:learnflutter/model/user.dart';
 
 class SelectChat{
   final String target;
-
   SelectChat(this.target);
 
 }

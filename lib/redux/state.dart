@@ -22,6 +22,7 @@ part 'state.g.dart';
     @nullable
     BuiltList<Message> get currentChat;
 
+    bool get loading;
     AppState._();
     factory AppState([void Function(AppStateBuilder) updates]) = _$AppState;
 
@@ -29,6 +30,7 @@ part 'state.g.dart';
       ..FavorList=ListBuilder()
         ..Friends=ListBuilder()
       ..recentChatList=ListBuilder()
+      ..loading=false
     );
     AppState clear() {
       // keep the temporal fcm token even when clearing state

@@ -10,18 +10,21 @@ class _$ChatScreenViewModel extends ChatScreenViewModel {
   @override
   final BuiltList<Message> messageList;
   @override
-  final User target;
-  @override
   final User me;
+  @override
+  final bool loading;
 
   factory _$ChatScreenViewModel(
           [void Function(ChatScreenViewModelBuilder) updates]) =>
       (new ChatScreenViewModelBuilder()..update(updates)).build();
 
-  _$ChatScreenViewModel._({this.messageList, this.target, this.me})
+  _$ChatScreenViewModel._({this.messageList, this.me, this.loading})
       : super._() {
     if (me == null) {
       throw new BuiltValueNullFieldError('ChatScreenViewModel', 'me');
+    }
+    if (loading == null) {
+      throw new BuiltValueNullFieldError('ChatScreenViewModel', 'loading');
     }
   }
 
@@ -39,22 +42,22 @@ class _$ChatScreenViewModel extends ChatScreenViewModel {
     if (identical(other, this)) return true;
     return other is ChatScreenViewModel &&
         messageList == other.messageList &&
-        target == other.target &&
-        me == other.me;
+        me == other.me &&
+        loading == other.loading;
   }
 
   @override
   int get hashCode {
     return $jf(
-        $jc($jc($jc(0, messageList.hashCode), target.hashCode), me.hashCode));
+        $jc($jc($jc(0, messageList.hashCode), me.hashCode), loading.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('ChatScreenViewModel')
           ..add('messageList', messageList)
-          ..add('target', target)
-          ..add('me', me))
+          ..add('me', me)
+          ..add('loading', loading))
         .toString();
   }
 }
@@ -69,21 +72,21 @@ class ChatScreenViewModelBuilder
   set messageList(ListBuilder<Message> messageList) =>
       _$this._messageList = messageList;
 
-  UserBuilder _target;
-  UserBuilder get target => _$this._target ??= new UserBuilder();
-  set target(UserBuilder target) => _$this._target = target;
-
   UserBuilder _me;
   UserBuilder get me => _$this._me ??= new UserBuilder();
   set me(UserBuilder me) => _$this._me = me;
+
+  bool _loading;
+  bool get loading => _$this._loading;
+  set loading(bool loading) => _$this._loading = loading;
 
   ChatScreenViewModelBuilder();
 
   ChatScreenViewModelBuilder get _$this {
     if (_$v != null) {
       _messageList = _$v.messageList?.toBuilder();
-      _target = _$v.target?.toBuilder();
       _me = _$v.me?.toBuilder();
+      _loading = _$v.loading;
       _$v = null;
     }
     return this;
@@ -109,15 +112,13 @@ class ChatScreenViewModelBuilder
       _$result = _$v ??
           new _$ChatScreenViewModel._(
               messageList: _messageList?.build(),
-              target: _target?.build(),
-              me: me.build());
+              me: me.build(),
+              loading: loading);
     } catch (_) {
       String _$failedField;
       try {
         _$failedField = 'messageList';
         _messageList?.build();
-        _$failedField = 'target';
-        _target?.build();
         _$failedField = 'me';
         me.build();
       } catch (e) {

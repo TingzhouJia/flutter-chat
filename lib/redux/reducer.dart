@@ -9,6 +9,8 @@ import 'package:redux/redux.dart';
 final appReducer=combineReducers<AppState>([
   TypedReducer<AppState, GetFavor>(_onUserList),
   TypedReducer<AppState, GetRecentChat>(_onRecentChatList),
+  TypedReducer<AppState, StartLoading>(_onLoading),
+  TypedReducer<AppState, EndLoading>(_endLoading),
   ...userReducer,
   ...authReducers
 ]);
@@ -24,4 +26,10 @@ AppState _onRecentChatList(AppState state,GetRecentChat action){
    return state.rebuild((a)=>a
    ..recentChatList=ListBuilder(action.recentChats)
    );
+}
+AppState _onLoading(AppState state,StartLoading ac){
+   return state.rebuild((a)=>a ..loading=true );
+}
+AppState _endLoading(AppState state,EndLoading ac){
+  return state.rebuild((a)=>a ..loading=false );
 }

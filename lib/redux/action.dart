@@ -20,4 +20,7 @@ class GetRecentChat{
   GetRecentChat(this.recentChats);
 
 }
+class StartLoading{}
+
+class EndLoading{}
 

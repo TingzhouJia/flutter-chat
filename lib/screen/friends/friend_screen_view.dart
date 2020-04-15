@@ -12,34 +12,27 @@ import 'package:learnflutter/redux/state.dart';
 import 'package:learnflutter/redux/userRedux/user_action.dart';
 import 'package:redux/redux.dart';
 
-part 'chat_view.g.dart';
+part 'friend_screen_view.g.dart';
 
-abstract class ChatScreenViewModel
-    implements Built<ChatScreenViewModel, ChatScreenViewModelBuilder> {
-  @nullable
-  BuiltList<Message> get messageList;
+abstract class FriendScreenViewModel
+    implements Built<FriendScreenViewModel, FriendScreenViewModelBuilder> {
 
-  User get me;
+  User get friend;
 
-  bool get loading;
-  ChatScreenViewModel._();
+  FriendScreenViewModel._();
 
-  factory ChatScreenViewModel(
-      [void Function(ChatScreenViewModelBuilder) updates]) =
-  _$ChatScreenViewModel;
+  factory FriendScreenViewModel(
+      [void Function(FriendScreenViewModelBuilder) updates]) =
+  _$FriendScreenViewModel;
 
 
 
   static fromStore() {
-
     return (Store<AppState> store)  {
-        print(store.state.currentTarget);
-        print(store.state.currentChat);
+
 //      store.dispatch(SelectChat(store.state.currentTarget.uid));
-      return ChatScreenViewModel((u) => u
-            ..loading=store.state.loading
-          ..messageList=store.state.loading?ListBuilder():ListBuilder(store.state.currentChat)
-          ..me=store.state.user.toBuilder()
+      return FriendScreenViewModel((u) => u
+
       );
 
     };

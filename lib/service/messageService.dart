@@ -59,16 +59,20 @@ class MessageRepository {
   Stream<List<Message>> getMessagesStream(String userId,
       String targetId,
    ) {
-    return _firestore
+      return _firestore
         .collection(FirestorePaths.PATH_MESSAGES).document(userId).collection(targetId)
-        .orderBy(TIMESTAMP, descending: true)
+          .orderBy(TIMESTAMP, descending: true)
         .snapshots(includeMetadataChanges: true)
+
         .map((querySnapshot) {
+
       return querySnapshot.documents
-          .where((documentSnapshot) =>
-          isValidDocument(documentSnapshot, userId))
-          .map((documentSnapshot) => fromDoc(documentSnapshot))
-          .toList();
+//          .where((documentSnapshot) =>
+////          isValidDocument(documentSnapshot, userId))
+          .map((documentSnapshot) {
+
+        return fromDoc(documentSnapshot);
+      }).toList();
     });
   }
 
@@ -139,7 +143,6 @@ class MessageRepository {
 
   static Message fromDoc(DocumentSnapshot document) {
     final messageType = MessageTypeHelper.valueOf(document[TYPE]);
-
     return Message((m) =>
     m
       ..id = document.documentID
@@ -147,11 +150,11 @@ class MessageRepository {
       ..authorId = messageType == MessageType.SYSTEM ? null : document[AUTHOR]
       ..reactions = _parseReactions(document)
       ..messageType = messageType
-      ..media = ListBuilder(document[MEDIA] ?? []).build()
+      ..media = ListBuilder<String>(document[MEDIA] ?? []).build()
       ..mediaStatus = MediaStatusHelper.valueOf(document[MEDIA_STATUS])
 //DateTime.fromMillisecondsSinceEpoch(
 //          int.tryParse(document[TIMESTAMP]) ?? 0)
-      ..timestamp = DateTime.parse(document[TIMESTAMP].toDate())
+      ..timestamp = DateTime.parse(document[TIMESTAMP].toDate().toString())
       ..pending = document.metadata.hasPendingWrites);
   }
 

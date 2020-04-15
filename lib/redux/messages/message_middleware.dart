@@ -3,6 +3,7 @@
 import 'package:learnflutter/model/message.dart';
 import 'package:learnflutter/model/reaction.dart';
 import 'package:learnflutter/model/recentMessage.dart';
+import 'package:learnflutter/redux/action.dart';
 import 'package:learnflutter/redux/channel/channel_action.dart';
 import 'package:learnflutter/service/messageService.dart';
 import 'package:redux/redux.dart';
@@ -126,24 +127,22 @@ void Function(
   return (store, action, next) {
     next(action);
     try {
+      store.dispatch(StartLoading());
       // Do not update subscription if there's already a valid subscription to it.
       // This is necessary since we'll update the channel as well (e.g. when users join/leave etc).
-
 
       // cancel previous message subscription
       messagesSubscription?.cancel();
 
       final author = store.state.user.uid;
       final target = action.target;
-
-
       // ignore: cancel_subscriptions
-      messagesSubscription = messageRepository
+     messageRepository
           .getMessagesStream(
        author,target
       )
           .listen((data) {
-            print(data);
+
         store.dispatch(UpdateAllMessages(data));
       });
     } catch (e) {

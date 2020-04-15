@@ -19,6 +19,8 @@ class _$AppState extends AppState {
   final User currentTarget;
   @override
   final BuiltList<Message> currentChat;
+  @override
+  final bool loading;
 
   factory _$AppState([void Function(AppStateBuilder) updates]) =>
       (new AppStateBuilder()..update(updates)).build();
@@ -29,8 +31,13 @@ class _$AppState extends AppState {
       this.FavorList,
       this.recentChatList,
       this.currentTarget,
-      this.currentChat})
-      : super._();
+      this.currentChat,
+      this.loading})
+      : super._() {
+    if (loading == null) {
+      throw new BuiltValueNullFieldError('AppState', 'loading');
+    }
+  }
 
   @override
   AppState rebuild(void Function(AppStateBuilder) updates) =>
@@ -48,7 +55,8 @@ class _$AppState extends AppState {
         FavorList == other.FavorList &&
         recentChatList == other.recentChatList &&
         currentTarget == other.currentTarget &&
-        currentChat == other.currentChat;
+        currentChat == other.currentChat &&
+        loading == other.loading;
   }
 
   @override
@@ -56,11 +64,13 @@ class _$AppState extends AppState {
     return $jf($jc(
         $jc(
             $jc(
-                $jc($jc($jc(0, user.hashCode), Friends.hashCode),
-                    FavorList.hashCode),
-                recentChatList.hashCode),
-            currentTarget.hashCode),
-        currentChat.hashCode));
+                $jc(
+                    $jc($jc($jc(0, user.hashCode), Friends.hashCode),
+                        FavorList.hashCode),
+                    recentChatList.hashCode),
+                currentTarget.hashCode),
+            currentChat.hashCode),
+        loading.hashCode));
   }
 
   @override
@@ -71,7 +81,8 @@ class _$AppState extends AppState {
           ..add('FavorList', FavorList)
           ..add('recentChatList', recentChatList)
           ..add('currentTarget', currentTarget)
-          ..add('currentChat', currentChat))
+          ..add('currentChat', currentChat)
+          ..add('loading', loading))
         .toString();
   }
 }
@@ -109,6 +120,10 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
   set currentChat(ListBuilder<Message> currentChat) =>
       _$this._currentChat = currentChat;
 
+  bool _loading;
+  bool get loading => _$this._loading;
+  set loading(bool loading) => _$this._loading = loading;
+
   AppStateBuilder();
 
   AppStateBuilder get _$this {
@@ -119,6 +134,7 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
       _recentChatList = _$v.recentChatList?.toBuilder();
       _currentTarget = _$v.currentTarget?.toBuilder();
       _currentChat = _$v.currentChat?.toBuilder();
+      _loading = _$v.loading;
       _$v = null;
     }
     return this;
@@ -148,7 +164,8 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
               FavorList: _FavorList?.build(),
               recentChatList: _recentChatList?.build(),
               currentTarget: _currentTarget?.build(),
-              currentChat: _currentChat?.build());
+              currentChat: _currentChat?.build(),
+              loading: loading);
     } catch (_) {
       String _$failedField;
       try {

@@ -8,20 +8,20 @@ import 'package:learnflutter/model/message.dart';
 
 import 'package:intl/intl.dart';
 import 'package:learnflutter/model/user.dart';
+import 'package:learnflutter/redux/channel/channel_action.dart';
 import 'package:learnflutter/redux/state.dart';
 import 'package:learnflutter/screen/chat/chat_view.dart';
 
 class ChatList extends StatelessWidget {
-  _buildMessage(Message message, bool isMe,BuildContext context,User me,User target) {
+
+
+
+  _buildMessage(Message message, bool isMe,BuildContext context,User me,) {
     final time = new DateFormat.jm().format(DateTime.parse(message.timestamp.toString()));
     final msg= Container(
-      width: MediaQuery.of(context).size.width*0.75,
+      width: MediaQuery.of(context).size.width,
       child: Row(
         children: <Widget>[
-          CircleAvatar(
-            backgroundImage:NetworkImage(me.imgUrl) ,
-            radius: 30.0,
-          ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -73,37 +73,42 @@ class ChatList extends StatelessWidget {
   }
 
   _buildView(context,ChatScreenViewModel vm){
-    return ClipRRect(
+    return GestureDetector(
+      onTap: (){
+        var provider=StoreProvider.of<AppState>(context).state.currentTarget.uid;
+        StoreProvider.of<AppState>(context).dispatch(SelectChat(provider));
+      },
+      child:ClipRRect(
 
-      borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0)),
-      child: Stack(
-        children: <Widget>[
-          Container(
-            height: double.infinity,
-            decoration: BoxDecoration(
-                image: DecorationImage(image: AssetImage('assets/loadingPage.jpeg'),repeat: ImageRepeat.noRepeat,fit: BoxFit.cover)
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0)),
+        child: Stack(
+          children: <Widget>[
+            Container(
+              height: double.infinity,
+              decoration: BoxDecoration(
+                  image: DecorationImage(image: AssetImage('assets/loadingPage.jpeg'),repeat: ImageRepeat.noRepeat,fit: BoxFit.cover)
+              ),
             ),
-          ),
-          Column(
-            children: <Widget>[
-
-              Expanded(
-                child:  ListView.builder(
-                    reverse: true,
-                    padding: EdgeInsets.only(top: 15.0),
-                    itemCount: vm.messageList.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final Message message = vm.messageList[index];
-                      final bool isMe = message.authorId == vm.me.uid;
-                      return _buildMessage(message, isMe,context,vm.me,vm.target);
-                    }),
-              )
-            ],
-          )
-        ],
-      ),
-    );
+            Column(
+              children: <Widget>[
+                Expanded(
+                  child:  ListView.builder(
+                      reverse: true,
+                      padding: EdgeInsets.only(top: 15.0),
+                      itemCount: vm.messageList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final Message message = vm.messageList[index];
+                        final bool isMe = message.authorId == vm.me.uid;
+                        return _buildMessage(message, isMe,context,vm.me,);
+                      }),
+                )
+              ],
+            )
+          ],
+        ),
+      ) ,
+    ) ;
   }
   @override
   Widget build(BuildContext context) {
