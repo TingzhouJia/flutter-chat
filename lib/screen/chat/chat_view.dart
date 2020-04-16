@@ -33,8 +33,7 @@ abstract class ChatScreenViewModel
   static fromStore() {
 
     return (Store<AppState> store)  {
-        print(store.state.currentTarget);
-        print(store.state.currentChat);
+
 //      store.dispatch(SelectChat(store.state.currentTarget.uid));
       return ChatScreenViewModel((u) => u
             ..loading=store.state.loading

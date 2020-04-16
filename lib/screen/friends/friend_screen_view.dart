@@ -32,7 +32,7 @@ abstract class FriendScreenViewModel
 
 //      store.dispatch(SelectChat(store.state.currentTarget.uid));
       return FriendScreenViewModel((u) => u
-
+          ..friend=store.state.currentTarget.toBuilder()
       );
 
     };

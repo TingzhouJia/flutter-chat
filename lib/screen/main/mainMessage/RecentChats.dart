@@ -160,10 +160,10 @@ class _RecentChatState extends State<RecentChat> {
                         Slidable.of(context)?.close();
                         return;
                       }
-                      vm.setLoading();
 
 
-                      if(!vm.loading){
+
+
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -171,7 +171,7 @@ class _RecentChatState extends State<RecentChat> {
                                     username: chat.userName,
                                     uid:chat.id
                                 )));
-                      }
+
 
                       StoreProvider.of<AppState>(context).dispatch(SelectChat(chat.id));
                       StoreProvider.of<AppState>(context).dispatch(UpdateCurrentTarget(chat.id));
