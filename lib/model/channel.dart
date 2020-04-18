@@ -18,6 +18,10 @@ abstract class Channel implements Built<Channel, ChannelBuilder> {
 
   String get hexColor;
 
+  bool get marked;
+
+  bool get received;
+
   
 
 

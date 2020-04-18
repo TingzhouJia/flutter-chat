@@ -23,7 +23,7 @@ class FirestorePaths {
 ////  }
 ////
   static String channelUsersPath(String userId, String groupId) {
-    return "$USER_GROUP/$userId/$groupId/info";
+    return "$USER_GROUP/$userId/info/$groupId";
   }
 ////
 

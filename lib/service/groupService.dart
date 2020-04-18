@@ -2,7 +2,10 @@ import 'package:built_collection/built_collection.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:learnflutter/model/channel.dart';
 import 'package:learnflutter/model/group.dart';
+import 'package:learnflutter/model/message.dart';
 import 'package:learnflutter/model/user.dart';
+import 'package:learnflutter/screen/main/mainMessage/RecentChats.dart';
+import 'package:learnflutter/service/messageService.dart';
 import 'package:learnflutter/service/userInfoService.dart';
 
 import 'firestoreService.dart';
@@ -11,7 +14,7 @@ class GroupRepository {
   static const String NAME = "name";
   static const String VISIBILITY = "visibility";
   static const String DESCRIPTION = "description";
-  static const String USERS = "users";
+
   static const String USERID = "uid";
   static const String HASUPDATES = "hasUpdates";
   static const String AUTHORID = "authorId";
@@ -32,7 +35,8 @@ class GroupRepository {
   static const String INVITEDMEMBERS = "newInvitation";
   static const String METADATA = "metadata";
   static const String MEMBERS = "users";
-
+  static const String MARKREAD="marked";
+  static const String RECEIVED='received';
   final Firestore _firestore;
   const GroupRepository(this._firestore);
 
@@ -108,117 +112,125 @@ class GroupRepository {
 
 
   Future<void> markChannelRead(
-      String groupId, String channelId, String userId) async {
+      String groupId, String userId,bool choice) async {
     final channelUsersPath =
-    FirestorePaths.channelUsersPath(groupId, channelId);
-
+    FirestorePaths.channelUsersPath(userId,groupId);
     // We're removing the indicator for the group then the channel.
     try {
-      await _firestore
-          .collection(FirestorePaths.PATH_USERS)
-          .document(userId)
-          .updateData({
-        groupId: FieldValue.arrayRemove([channelId])
-      });
-
       return await _firestore
-          .collection(channelUsersPath)
-          .document(userId)
-          .updateData({HASUPDATES: false});
+          .document(channelUsersPath)
+          .updateData({MARKREAD: choice});
     } catch (e) {
-
-
+      return Future.error("Error marking channel as read");
+    }
+  }
+  Future<void> markChannelReceived(
+      String groupId, String userId,bool choice) async {
+    final channelUsersPath =
+    FirestorePaths.channelUsersPath(userId,groupId);
+    // We're removing the indicator for the group then the channel.
+    try {
+      return await _firestore
+          .document(channelUsersPath)
+          .updateData({RECEIVED: choice});
+    } catch (e) {
       return Future.error("Error marking channel as read");
     }
   }
 
   Future<void> leaveChannel(
       String groupId,
-      String channelId,
       String userId,
+      List<String> memebers,
       ) async {
-    final channelUsersPath =
-    FirestorePaths.channelUsersPath(groupId, channelId);
-    await _firestore.collection(channelUsersPath).document(userId).delete();
+    //delete info of userGroup
+    await  _firestore.document(FirestorePaths.channelUsersPath(userId, groupId)).delete();
+
+  //delete from group
+    await _firestore.collection(FirestorePaths.PATH_GROUPS).document(groupId).updateData({MEMBERS:memebers});
   }
 
-  Future<Channel> joinChannel(
+  Future<Group> joinChannel(
       String groupId,
-      Channel channel,
+      Group group,
       String userId,
       ) async {
-    final channelUser = ChannelUser((c) => c
-      ..id = userId
-      ..rsvp = RSVP.UNSET);
+    
     final channelUsersPath =
-    FirestorePaths.channelUsersPath(groupId, channel.id);
-    final data = toChannelUserMap(channelUser);
+    FirestorePaths.channelUsersPath(userId,groupId);
 
     await _firestore
-        .collection(channelUsersPath)
-        .document(userId)
-        .setData(data);
+        .collection(channelUsersPath).add({MARKREAD:false,RECEIVED:true});
 
-    return channel.rebuild((c) => c..users.add(channelUser));
+     _firestore.collection(FirestorePaths.PATH_USERS).document(userId).snapshots().map((snap){
+        return UserRepository.fromDoc(snap);
+    }).listen((data){
+      group.rebuild((c)=>c ..users.add(data));
+    });
+   List<String> listString= group.users.map((each){
+      return each.uid;
+    }).toList();
+    await _firestore.collection(FirestorePaths.PATH_GROUPS).document(groupId).updateData({MEMBERS:listString});
+    return group;
   }
 
-  Future<Channel> inviteToChannel({
+  Future<void> inviteToChannel({
     String groupId,
     String groupName,
-    Channel channel,
+    Group group,
     List<String> members,
     String invitingUsername,
   }) async {
-    final channelUsersPath =
-    FirestorePaths.channelUsersPath(groupId, channel.id);
 
-    final users = members.map((userId) {
-      return ChannelUser((c) => c
-        ..id = userId
-        ..rsvp = RSVP.UNSET);
+
+
+    members.map((user) async{
+        final data = {'body':'You have been invited by $invitingUsername to join $groupName','messageType':MessageType.SYSTEM,'pending':true,
+          'userId':user,'userName':'SYSTEM','timestamp':DateTime.now()
+        };
+        await _firestore
+            .document(FirestorePaths.RecentPath(user))
+            .collection('info').add(data);
+      });
+
+      _firestore.document(FirestorePaths.groupPath(groupId)).snapshots().map((each) {
+        return each[INVITEDMEMBERS];
+      }).listen((data) async{
+       await  _firestore.document(FirestorePaths.groupPath(groupId)).updateData({INVITEDMEMBERS:data.addAll(members)});
+      });
+
+  }
+
+  Future<Channel> createChannel(Channel channel, List<String> members, String authorUid) async {
+    final data = toGroupMap(authorId: authorUid,group: channel,members: members);
+    String docuId=await _firestore
+        .collection(FirestorePaths.PATH_GROUPS).add(data).then((val){
+          return val.documentID;
     });
 
-    for (final user in users) {
-      final data = toChannelUserInviteMap(
-          user: user,
-          channel: channel,
-          invitingUsername: invitingUsername,
-          groupName: groupName);
-      await _firestore
-          .collection(channelUsersPath)
-          .document(user.id)
-          .setData(data);
-    }
+    await _firestore.collection(FirestorePaths.USER_GROUP).document(authorUid).collection('info').
+    document(docuId).setData({RECEIVED:true,MARKREAD:false});
 
-    return channel.rebuild((c) => c..users.addAll(users));
-  }
+    members.map((each) async{
 
-  Future<Channel> createChannel(
-      String groupId, Channel channel, List<String> members, String authorUid) async {
-    final data = toMap(channel, members);
-    final snapshot = await _firestore
-        .collection(FirestorePaths.channelsPath(groupId))
-        .getDocuments();
+      await _firestore.collection(FirestorePaths.PATH_MESSAGES).document('group').collection(docuId).add({
+        'authorId':'SYSTEM','body':"$each is joined in group chat",'messageType':MessageType.SYSTEM,'pending':true,'timestamp':DateTime.now()
+      });
+    });
 
-    final channelExists = snapshot.documents
-        .any((doc) => doc[NAME].toLowerCase() == channel.name.toLowerCase());
-    if (channelExists) {
-      return Future.error(ChannelExistsError());
-    }
 
-    final reference = await _firestore
-        .collection(FirestorePaths.channelsPath(groupId))
-        .add(data);
-    final doc = await reference.get();
-
-    final users = members.map((userId) {
-      return ChannelUser((c) => c
-        ..id = userId
-        ..rsvp = userId == authorUid ? RSVP.YES : RSVP.UNSET);
-    }).toList();
-
-    return fromDocWithUsers(doc: doc, users: BuiltList<ChannelUser>(users));
   }
 
 
+  static toGroupMap({authorId, Channel group,List<String> members}){
+    return {
+      AUTHORID:authorId,
+      DESCRIPTION:group.description,
+      HEXCOLOR:group.hexColor,
+      VISIBILITY:group.visibility,
+      NAME:group.name,
+      MEMBERS:members,
+      START_DATE:DateTime.now()
+    };
+  }
 }

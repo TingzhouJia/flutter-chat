@@ -17,12 +17,22 @@ class _$Channel extends Channel {
   final ChannelVisibility visibility;
   @override
   final String hexColor;
+  @override
+  final bool marked;
+  @override
+  final bool received;
 
   factory _$Channel([void Function(ChannelBuilder) updates]) =>
       (new ChannelBuilder()..update(updates)).build();
 
   _$Channel._(
-      {this.id, this.name, this.description, this.visibility, this.hexColor})
+      {this.id,
+      this.name,
+      this.description,
+      this.visibility,
+      this.hexColor,
+      this.marked,
+      this.received})
       : super._() {
     if (name == null) {
       throw new BuiltValueNullFieldError('Channel', 'name');
@@ -32,6 +42,12 @@ class _$Channel extends Channel {
     }
     if (hexColor == null) {
       throw new BuiltValueNullFieldError('Channel', 'hexColor');
+    }
+    if (marked == null) {
+      throw new BuiltValueNullFieldError('Channel', 'marked');
+    }
+    if (received == null) {
+      throw new BuiltValueNullFieldError('Channel', 'received');
     }
   }
 
@@ -50,15 +66,23 @@ class _$Channel extends Channel {
         name == other.name &&
         description == other.description &&
         visibility == other.visibility &&
-        hexColor == other.hexColor;
+        hexColor == other.hexColor &&
+        marked == other.marked &&
+        received == other.received;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc($jc($jc(0, id.hashCode), name.hashCode), description.hashCode),
-            visibility.hashCode),
-        hexColor.hashCode));
+        $jc(
+            $jc(
+                $jc(
+                    $jc($jc($jc(0, id.hashCode), name.hashCode),
+                        description.hashCode),
+                    visibility.hashCode),
+                hexColor.hashCode),
+            marked.hashCode),
+        received.hashCode));
   }
 
   @override
@@ -68,7 +92,9 @@ class _$Channel extends Channel {
           ..add('name', name)
           ..add('description', description)
           ..add('visibility', visibility)
-          ..add('hexColor', hexColor))
+          ..add('hexColor', hexColor)
+          ..add('marked', marked)
+          ..add('received', received))
         .toString();
   }
 }
@@ -97,6 +123,14 @@ class ChannelBuilder implements Builder<Channel, ChannelBuilder> {
   String get hexColor => _$this._hexColor;
   set hexColor(String hexColor) => _$this._hexColor = hexColor;
 
+  bool _marked;
+  bool get marked => _$this._marked;
+  set marked(bool marked) => _$this._marked = marked;
+
+  bool _received;
+  bool get received => _$this._received;
+  set received(bool received) => _$this._received = received;
+
   ChannelBuilder();
 
   ChannelBuilder get _$this {
@@ -106,6 +140,8 @@ class ChannelBuilder implements Builder<Channel, ChannelBuilder> {
       _description = _$v.description;
       _visibility = _$v.visibility;
       _hexColor = _$v.hexColor;
+      _marked = _$v.marked;
+      _received = _$v.received;
       _$v = null;
     }
     return this;
@@ -132,7 +168,9 @@ class ChannelBuilder implements Builder<Channel, ChannelBuilder> {
             name: name,
             description: description,
             visibility: visibility,
-            hexColor: hexColor);
+            hexColor: hexColor,
+            marked: marked,
+            received: received);
     replace(_$result);
     return _$result;
   }
