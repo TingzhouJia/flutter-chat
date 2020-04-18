@@ -46,17 +46,11 @@ class _$User extends User {
     if (name == null) {
       throw new BuiltValueNullFieldError('User', 'name');
     }
-    if (lastOnline == null) {
-      throw new BuiltValueNullFieldError('User', 'lastOnline');
-    }
     if (description == null) {
       throw new BuiltValueNullFieldError('User', 'description');
     }
     if (gender == null) {
       throw new BuiltValueNullFieldError('User', 'gender');
-    }
-    if (status == null) {
-      throw new BuiltValueNullFieldError('User', 'status');
     }
   }
 
