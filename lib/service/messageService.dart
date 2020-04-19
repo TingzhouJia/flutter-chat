@@ -29,25 +29,25 @@ class MessageRepository {
 
   MessageRepository(this._firestore);
 
-  Future<Message> sendMessage(User sender, User receiver, Message message,) async {
+  Future<Message> sendMessage(User sender, String receiver, Message message,) async {
    
       //people receive it
       final data1 = toMap(message,true);
       final data2=toMap(message, false);
-      final reference = await _firestore.collection(FirestorePaths.PATH_MESSAGES).document(sender.uid).collection(receiver.uid).add(data1);
-      await _firestore.collection(FirestorePaths.PATH_MESSAGES).document(receiver.uid).collection(sender.uid).add(data2);
+      final reference = await _firestore.collection(FirestorePaths.PATH_MESSAGES).document(sender.uid).collection(receiver).add(data1);
+      await _firestore.collection(FirestorePaths.PATH_MESSAGES).document(receiver).collection(sender.uid).add(data2);
       //update recent chat
-      final recentpath=_firestore.collection(FirestorePaths.Path_RECENT).document(sender.uid).collection("info").document(receiver.uid);
-      final path2=_firestore.collection(FirestorePaths.Path_RECENT).document(receiver.uid).collection("info").document(sender.uid);
+      final recentpath=_firestore.collection(FirestorePaths.Path_RECENT).document(sender.uid).collection("info").document(receiver);
+      final path2=_firestore.collection(FirestorePaths.Path_RECENT).document(receiver).collection("info").document(sender.uid);
       final targte= await recentpath.get();
       final target2=await path2.get();
       if(targte.data==null||targte.data.length == 0){
-        await recentpath.setData(toRecetMap(message,sender,true,receiver.uid));
+        await recentpath.setData(toRecetMap(message,sender,true,receiver));
       }else{
         await recentpath.updateData({BODY:message.body,TIMESTAMP:message.timestamp,PENDING:false});
       }
       if(target2.data==null||target2.data.length==0){
-        await path2.setData(toRecetMap(message, sender,false,receiver.uid));
+        await path2.setData(toRecetMap(message, sender,false,receiver));
       }else{
         await path2.updateData({BODY:message.body,TIMESTAMP:message.timestamp,PENDING:true});
       }
@@ -55,6 +55,7 @@ class MessageRepository {
       return fromDoc(doc);
       
   }
+
 
   Future<void> sendGroupMessage(String sender,Message message,Group group) async{
       final data=toMap(message, true);
@@ -66,7 +67,7 @@ class MessageRepository {
      if(test.data==null||test.data.length==0){
        await target.setData(toRecetGroupMap(message, group, true, group.id));
      }else{
-       await target.updateData({BODY:message,TIMESTAMP:message.timestamp,PENDING:false});
+       await target.updateData({BODY:message,TIMESTAMP:message.timestamp,PENDING:true});
      }
   }
 
@@ -74,10 +75,10 @@ class MessageRepository {
 
   Stream<List<Message>> getMessagesStream(String userId,
       String targetId,
-   ) {
-      return _firestore
+      ) {
+    return _firestore
         .collection(FirestorePaths.PATH_MESSAGES).document(userId).collection(targetId)
-          .orderBy(TIMESTAMP, descending: true)
+        .orderBy(TIMESTAMP, descending: true)
         .snapshots(includeMetadataChanges: true)
 
         .map((querySnapshot) {
@@ -91,7 +92,23 @@ class MessageRepository {
       }).toList();
     });
   }
+  Stream<List<Message>> getGroupMessagesStream(String groupId,
 
+      ) {
+    return _firestore
+        .collection(FirestorePaths.PATH_MESSAGES).document('group').collection(groupId)
+        .orderBy(TIMESTAMP, descending: true)
+        .snapshots(includeMetadataChanges: true)
+        .map((querySnapshot) {
+      return querySnapshot.documents
+//          .where((documentSnapshot) =>
+////          isValidDocument(documentSnapshot, userId))
+          .map((documentSnapshot) {
+
+        return fromDoc(documentSnapshot);
+      }).toList();
+    });
+  }
   Stream<List<recentMessage>> RecentChatStream(String userId){
 
    return  _firestore.collection(FirestorePaths.Path_RECENT).document(userId).collection('info').snapshots().map((querySnapshot){

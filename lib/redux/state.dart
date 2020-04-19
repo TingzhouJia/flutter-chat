@@ -29,6 +29,8 @@ part 'state.g.dart';
     Group get selectedGroup;
     @nullable
     BuiltList<Message> get selectedGroupChat;
+    @nullable
+    BuiltList<Message> get SystemMessageList;
     bool get loading;
     AppState._();
     factory AppState([void Function(AppStateBuilder) updates]) = _$AppState;

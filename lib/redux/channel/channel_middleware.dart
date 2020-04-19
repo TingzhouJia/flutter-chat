@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
+import 'package:learnflutter/model/channel.dart';
+import 'package:learnflutter/model/group.dart';
 import 'package:learnflutter/redux/messages/message_action.dart';
 import 'package:learnflutter/service/groupService.dart';
 import 'package:redux/redux.dart';
 
 import '../state.dart';
+import '../subscription_stream.dart';
 import 'channel_action.dart';
 
 List<Middleware<AppState>> creategroupMiddleware(
@@ -11,35 +14,39 @@ List<Middleware<AppState>> creategroupMiddleware(
   GlobalKey<NavigatorState> navigatorKey,
 ) {
   return [
-    TypedMiddleware<AppState, SelectgroupIdAction>(
-      _selectgroupId(groupRepository),
-    ),
+
     TypedMiddleware<AppState, LoadGroup>(
-      _markgroupReadAndListenTogroupUpdates(groupRepository),
+      _markGroupReadAndListenToGroupUpdates(groupRepository),
     ),
-    TypedMiddleware<AppState, JoingroupAction>(
-      _joingroup(groupRepository),
+    TypedMiddleware<AppState, JoinChannelAction>(
+      _joinGroup(groupRepository),
     ),
-    TypedMiddleware<AppState, LeavegroupAction>(
-      _leavegroup(groupRepository),
+    TypedMiddleware<AppState, LeaveChannelAction>(
+      _leaveGroup(groupRepository),
+    ),
+    TypedMiddleware<AppState, NotJoinChannelAction>(
+      _notJoinGroup(groupRepository),
     ),
     TypedMiddleware<AppState, LoadGroups>(
       _listenToGroups(groupRepository),
     ),
-    TypedMiddleware<AppState, Creategroup>(
-      _creategroup(
+    TypedMiddleware<AppState, CreateChannel>(
+      _createGroup(
         groupRepository,
         navigatorKey,
       ),
     ),
-    TypedMiddleware<AppState, EditgroupAction>(
-      _editgroup(
+    TypedMiddleware<AppState, EditGroupAction>(
+      _editGroup(
         groupRepository,
         navigatorKey,
       ),
     ),
     TypedMiddleware<AppState, InviteToChannelAction>(
-      _inviteTogroup(groupRepository),
+      _inviteToGroup(groupRepository),
+    ),
+    TypedMiddleware<AppState, ApplyToGroup>(
+      _applyToGroup(groupRepository),
     ),
   ];
 }
@@ -59,48 +66,60 @@ void Function(
 
 void Function(
   Store<AppState> store,
-  LeavegroupAction action,
+  LeaveChannelAction action,
   NextDispatcher next,
-) _leavegroup(
-  groupRepository groupRepository,
+) _leaveGroup(
+  GroupRepository groupRepository,
 ) {
   return (store, action, next) async {
     next(action);
     await _leavegroupInternal(
       groupRepository: groupRepository,
       groupId: action.groupId,
-      groupId: action.group.id,
-      userId: action.userId,
+      userId: store.state.user.uid,
       store: store,
     );
   };
 }
 
+void Function(
+    Store<AppState> store,
+    NotJoinChannelAction action,
+    NextDispatcher next,
+    ) _notJoinGroup(
+    GroupRepository groupRepository,
+    ) {
+  return (store, action, next) async {
+    next(action);
+    await groupRepository.notJoinChannel(group: action.group,uid: store.state.user.uid);
+  };
+}
+
 Future<void> _leavegroupInternal({
-  @required groupRepository groupRepository,
+  @required GroupRepository groupRepository,
   @required String groupId,
-  @required String groupId,
+  @required List<String> members,
   @required String userId,
   @required Store<AppState> store,
 }) async {
   try {
-    await groupRepository.leavegroup(groupId, groupId, userId);
-    store.dispatch(LeftgroupAction(groupId, groupId, userId));
+    await groupRepository.leaveChannel(groupId, userId, members);
+    store.dispatch(LeftChannelAction(groupId));
   } catch (e) {
-    Logger.e("Failed to leave group", e: e, s: StackTrace.current);
+    print(e);
   }
 }
 
-_listenTogroupUpdates(
+_listenToGroupUpdates(
     {Store<AppState> store,
-    Selectgroup action,
-    groupRepository groupRepository}) {
-  selectedgroupubscription?.cancel();
+    LoadGroup action,
+    GroupRepository groupRepository}) {
+  selectedGroupSubscription?.cancel();
   // ignore: cancel_subscriptions
-  selectedgroupubscription = groupRepository
-      .getStreamForgroup(action.groupId, action.group.id, action.userId)
-      .listen((updatedgroup) {
-    store.dispatch(OnUpdatedgroupAction(action.groupId, updatedgroup));
+  selectedGroupSubscription = groupRepository
+      .getStreamForChannel(action.groupId)
+      .listen((updatedGroup) {
+    store.dispatch(OnUpdatedGroupAction(action.groupId,updatedGroup));
   });
 }
 
@@ -114,22 +133,18 @@ void Function(
   Store<AppState> store,
   LoadGroup action,
   NextDispatcher next,
-) _markgroupReadAndListenTogroupUpdates(GroupRepository groupRepository) {
+) _markGroupReadAndListenToGroupUpdates(GroupRepository groupRepository) {
   return (store, action, next) {
     next(action);
 
     try {
-      if (action.group.users.any((u) => u.id == action.userId)) {
+
         groupRepository
-            .markgroupRead(action.groupId, action.group.id, action.userId)
+            .markChannelRead(action.groupId, store.state.user.uid, true)
             .then((_) {
-          _listenTogroupUpdates(
+          _listenToGroupUpdates(
               action: action, store: store, groupRepository: groupRepository);
         });
-      } else {
-        _listenTogroupUpdates(
-            action: action, store: store, groupRepository: groupRepository);
-      }
     } catch (e) {
      print(e);
     }
@@ -138,103 +153,63 @@ void Function(
 
 void Function(
   Store<AppState> store,
-  JoingroupAction action,
+  JoinChannelAction action,
   NextDispatcher next,
-) _joingroup(
-  groupRepository groupRepository,
+) _joinGroup(
+  GroupRepository groupRepository,
 ) {
   return (store, action, next) async {
     next(action);
     try {
-      final group = await groupRepository.joingroup(
-        action.groupId,
+      final group = await groupRepository.joinChannel(
+
         action.group,
-        action.user.uid,
+        store.state.user.uid,
       );
-      store.dispatch(JoinedgroupAction(
-        action.groupId,
-        group,
+      final channel=Channel((c)=>c ..authorId=group.authorId ..name=group.name ..id=group.id ..description=group.description ..visibility=ChannelVisibilityHelper.valueOf(GroupVisibilityHelper.stringOf(group.visibility))
+      ..hexColor=group.hexColor ..marked=false ..received=true);
+     await store.dispatch(JoinedChannelAction(
+        group,channel
       ));
+     await store.dispatch(SelectGroupChat(action.groupId));
     } catch (error) {
-      Logger.e("Failed join group", e: error, s: StackTrace.current);
-      store.dispatch(JoingroupFailedAction());
+     print(error);
+      store.dispatch(JoinChannelFailedAction());
     }
   };
 }
 
 void Function(
-  Store<AppState> store,
-  Loadgroup action,
-  NextDispatcher next,
-) _listenTogroup(
-  groupRepository groupRepository,
-) {
-  return (store, action, next) {
+    Store<AppState> store,
+    ApplyToGroup action,
+    NextDispatcher next,
+    ) _applyToGroup(
+    GroupRepository groupRepository,
+    ) {
+  return (store, action, next) async {
     next(action);
-    listOfgroupSubscription?.cancel();
-    // ignore: cancel_subscriptions
-    listOfgroupSubscription = groupRepository
-        .getgroupStream(action.groupId, store.state.user.uid)
-        .listen((group) {
-      if (group.isNotEmpty) {
-        store.dispatch(OngroupLoaded(action.groupId, group));
+    try {
+  await groupRepository.applyToChannel(group: action.channel,uid: store.state.user.uid).then((_){
 
-        final selectedgroup = getSelectedgroup(store.state);
-
-        // If the selected group is null
-        // Or the selected group does NOT belong to this group
-        //  (e.g. user selected a different group)
-        if (selectedgroup == null || !_isgroupInList(group, selectedgroup)) {
-          // Select a group based on this logic
-          final group = _pickgroupToSelect(store, action, group);
-          if (group != null) {
-            store.dispatch(Selectgroup(
-                previousgroupId: null,
-                group: group,
-                groupId: action.groupId,
-                userId: store.state.user.uid));
-          }
-        }
-      }
-    });
+  });
+    } catch (error) {
+      print(error);
+      store.dispatch(JoinChannelFailedAction());
+    }
   };
 }
 
-group _pickgroupToSelect(
-    Store<AppState> store, Loadgroup action, List<group> group) {
-  // group to select automatically
-  group group;
 
-  // Select the previously selected group (if still exists)
-  final groupId =
-      store.state.uiState.groupUiState[action.groupId]?.lastSelectedgroup;
-  if (groupId != null) {
-    group = group.firstWhere((c) => c.id == groupId, orElse: null);
-  }
 
-  // If no previously selected group for a group
-  if (group == null) {
-    // Select a default OPEN group if there are group available
-    group = _defaultgroup(group);
-  }
-  return group;
-}
 
-group _defaultgroup(List<group> group) =>
-    group.firstWhere((c) => c.visibility == groupVisibility.OPEN);
 
-bool _isgroupInList(List<group> group, group group) {
-  if (group == null) {
-    return false;
-  }
-  return group.any((c) => c.id == group?.id);
-}
+
 
 void Function(
   Store<AppState> store,
   CreateChannel action,
   NextDispatcher next,
-) _creategroup(
+) _createGroup(
   GroupRepository groupRepository,
   GlobalKey<NavigatorState> navigatorKey,
 ) {
@@ -248,53 +223,41 @@ void Function(
         store.state.user.uid,
       ).then((val){
         val.listen((data){
-          store.dispatch(OnChannelCreated(data));
+
           store.dispatch(SystemMessageDispatch(action.invitedIds.toList()));
+          Future.delayed(const Duration(milliseconds: 1000), () {
+            store.dispatch(OnChannelCreated(data));
+          });
         });
       });
 
-     
-
-      // Select the newly created group.
-      // Adding delay to allow backend to add invited members
-      Future.delayed(const Duration(milliseconds: 1000), () {
-        store.dispatch(Selectgroup(
-          previousgroupId: store.state.grouptate.selectedgroup,
-          group: createdgroup,
-          groupId: store.state.selectedGroupId,
-          userId: store.state.user.uid,
-        ));
-      });
-
-      action.completer.complete();
     } catch (error) {
-      Logger.e("Failed create group", e: error, s: StackTrace.current);
-      action.completer.completeError(error);
+      print(error);
     }
   };
 }
 
 void Function(
   Store<AppState> store,
-  EditgroupAction action,
+  EditGroupAction action,
   NextDispatcher next,
-) _editgroup(
-  groupRepository groupRepository,
+) _editGroup(
+  GroupRepository groupRepository,
   GlobalKey<NavigatorState> navigatorKey,
 ) {
   return (store, action, next) async {
     next(action);
 
     try {
-      await groupRepository.updategroup(
-        store.state.selectedGroupId,
+      await groupRepository.updateChannel(
+        store.state.selectedGroup.id,
         action.group,
       );
       store.dispatch(
-          OnUpdatedgroupAction(store.state.selectedGroupId, action.group));
-      action.completer.complete();
+          OnUpdatedGroupAction(store.state.selectedGroup.id, action.group));
+
     } catch (error) {
-      action.completer.completeError(error);
+      print(error);
     }
   };
 }
@@ -307,7 +270,7 @@ void Function(
   Store<AppState> store,
   InviteToChannelAction action,
   NextDispatcher next,
-) _inviteTogroup(
+) _inviteToGroup(
   GroupRepository groupRepository,
 ) {
   return (store, action, next) async {
@@ -315,7 +278,6 @@ void Function(
     try {
       await groupRepository.inviteToChannel(
           groupId: store.state.selectedGroup.id,
-          group: store.state.selectedGroup,
           members: action.members,
           invitingUsername: store.state.user.name,
           groupName: store.state.selectedGroup.name).then(store.dispatch(SystemMessageDispatch(action.members)));

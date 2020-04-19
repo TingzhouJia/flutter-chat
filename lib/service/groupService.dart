@@ -63,6 +63,7 @@ class GroupRepository {
 
   static Channel fromChannelDoc(DocumentSnapshot document){
     return Channel((c)=>c
+        ..authorId=document[AUTHORID]
         ..id=document.documentID
         ..visibility=document[VISIBILITY]
         ..hexColor=document[HEXCOLOR]
@@ -76,14 +77,14 @@ class GroupRepository {
         .document(FirestorePaths.groupPath( channelId))
         .snapshots()
         .asyncMap((document) async {
-      return await fromDoc( document);
+      return  fromDoc( document);
     });
   }
 
 
-   Future<Group> fromDoc( DocumentSnapshot document) async{
-      List<User> userList= await getGroupUsers(document[MEMBERS]);
-      List<User> iniList= await getGroupUsers(document[INVITEDMEMBERS]);
+   Group fromDoc( DocumentSnapshot document) {
+      List<User> userList=  getGroupUsers(document[MEMBERS]);
+      List<User> iniList=  getGroupUsers(document[INVITEDMEMBERS]);
       return Group((c)=>c
           ..name=document[NAME]
           ..description=document[DESCRIPTION]
@@ -98,11 +99,11 @@ class GroupRepository {
       );
   }
 
-  Future<List<User>> getGroupUsers(List<String> documentString) async{
+  List<User> getGroupUsers(List<String> documentString) {
     List<User> a;
-     documentString.map((item) async{
-       await _firestore.collection(FirestorePaths.PATH_USERS).document(item).snapshots().map((repo){
-        return UserRepository.fromDoc(repo);
+     documentString.map((item) {
+        _firestore.collection(FirestorePaths.PATH_USERS).document(item).snapshots().map((repo) {
+        return  UserRepository.fromDoc(repo);
       }).listen((User data){
         a.add(data);
       });
@@ -150,13 +151,13 @@ class GroupRepository {
   }
 
   Future<Group> joinChannel(
-      String groupId,
+
       Group group,
       String userId,
       ) async {
-    
+
     final channelUsersPath =
-    FirestorePaths.channelUsersPath(userId,groupId);
+    FirestorePaths.channelUsersPath(userId,group.id);
 
     await _firestore
         .collection(channelUsersPath).add({MARKREAD:false,RECEIVED:true});
@@ -164,32 +165,32 @@ class GroupRepository {
      _firestore.collection(FirestorePaths.PATH_USERS).document(userId).snapshots().map((snap){
         return UserRepository.fromDoc(snap);
     }).listen((data){
-      group.rebuild((c)=>c ..users.add(data));
+
+       final a=group.newInvitation.where((user)=>user.uid!=userId);
+       group.rebuild((c)=>c ..users.add(data) ..newInvitation=ListBuilder(a));
     });
    List<String> listString= group.users.map((each){
       return each.uid;
     }).toList();
-    await _firestore.collection(FirestorePaths.PATH_GROUPS).document(groupId).updateData({MEMBERS:listString});
+   List<String> inivi=group.newInvitation.map((a){return a.uid;});
+    await _firestore.collection(FirestorePaths.PATH_GROUPS).document(group.id).updateData({MEMBERS:listString,INVITEDMEMBERS:inivi});
     return group;
   }
 
   Future<void> inviteToChannel({
     String groupId,
     String groupName,
-    Group group,
     List<String> members,
     String invitingUsername,
   }) async {
-
-
-
     members.map((user) async{
-        final data = {'body':'You have been invited by $invitingUsername to join $groupName','messageType':MessageType.SYSTEM,'pending':true,
+        final data = {'body':'You have been invited by $invitingUsername to join $groupName}','messageType':MessageType.SYSTEM,'pending':true,
           'userId':user,'userName':'SYSTEM','timestamp':DateTime.now()
         };
         await _firestore
             .document(FirestorePaths.RecentPath(user))
-            .collection('info').add(data);
+            .collection('info').document('system').updateData(data);
+        await _firestore.collection(FirestorePaths.messagePath(user, 'system')).add(data);
       });
 
       _firestore.document(FirestorePaths.groupPath(groupId)).snapshots().map((each) {
@@ -199,6 +200,38 @@ class GroupRepository {
       });
 
   }
+
+  Future<void> notJoinChannel({
+    Channel group,
+    String uid,
+  }) async{
+    _firestore.document(FirestorePaths.groupPath(group.id)).snapshots().map((each) {
+      return  each[INVITEDMEMBERS];
+    }).listen((data) async{
+      final data1=data.where((u)=>u!=uid);
+      await  _firestore.document(FirestorePaths.groupPath(group.id)).updateData({INVITEDMEMBERS:data1});
+
+    });
+  }
+  Future<void> applyToChannel({
+    Channel group,
+    String uid,
+    String username
+}) async{
+    _firestore.document(FirestorePaths.groupPath(group.id)).snapshots().map((each) {
+      return  each[INVITEDMEMBERS];
+    }).listen((data) async{
+      await  _firestore.document(FirestorePaths.groupPath(group.id)).updateData({INVITEDMEMBERS:data.add(uid)});
+      final data1 = {'body':'$username is expecting to join ${group.name}','messageType':MessageType.SYSTEM,'pending':true,
+        'userId':uid,'userName':'SYSTEM','timestamp':DateTime.now()
+      };
+      await _firestore.collection(FirestorePaths.messagePath(group.authorId, 'system')).add(data1);
+      await _firestore
+          .document(FirestorePaths.RecentPath(group.authorId))
+          .collection('info').document('system').updateData(data);
+    });
+  }
+
 
   Future<Stream<Group>> createChannel(Channel channel, List<String> members, String authorUid) async {
     final data = toGroupMap(authorId: authorUid,group: channel,members: members);
@@ -223,6 +256,22 @@ class GroupRepository {
 
   }
 
+  Future<void> updateChannel(String groupId, Group group) async {
+    await _firestore
+        .document(FirestorePaths.groupPath(groupId))
+        .updateData({
+      DESCRIPTION: group.description,
+      NAME:group.name,
+      START_DATE: _formatToTimestamp(group.startDate),
+      HEXCOLOR:group.hexColor
+    });
+
+  }
+  static Timestamp _formatToTimestamp( DateTime time) {
+
+
+    return Timestamp.fromDate(time);
+  }
 
   static toGroupMap({authorId, Channel group,List<String> members}){
     return {

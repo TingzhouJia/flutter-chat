@@ -10,6 +10,8 @@ class _$Channel extends Channel {
   @override
   final String id;
   @override
+  final String authorId;
+  @override
   final String name;
   @override
   final String description;
@@ -27,6 +29,7 @@ class _$Channel extends Channel {
 
   _$Channel._(
       {this.id,
+      this.authorId,
       this.name,
       this.description,
       this.visibility,
@@ -34,6 +37,9 @@ class _$Channel extends Channel {
       this.marked,
       this.received})
       : super._() {
+    if (authorId == null) {
+      throw new BuiltValueNullFieldError('Channel', 'authorId');
+    }
     if (name == null) {
       throw new BuiltValueNullFieldError('Channel', 'name');
     }
@@ -63,6 +69,7 @@ class _$Channel extends Channel {
     if (identical(other, this)) return true;
     return other is Channel &&
         id == other.id &&
+        authorId == other.authorId &&
         name == other.name &&
         description == other.description &&
         visibility == other.visibility &&
@@ -77,7 +84,9 @@ class _$Channel extends Channel {
         $jc(
             $jc(
                 $jc(
-                    $jc($jc($jc(0, id.hashCode), name.hashCode),
+                    $jc(
+                        $jc($jc($jc(0, id.hashCode), authorId.hashCode),
+                            name.hashCode),
                         description.hashCode),
                     visibility.hashCode),
                 hexColor.hashCode),
@@ -89,6 +98,7 @@ class _$Channel extends Channel {
   String toString() {
     return (newBuiltValueToStringHelper('Channel')
           ..add('id', id)
+          ..add('authorId', authorId)
           ..add('name', name)
           ..add('description', description)
           ..add('visibility', visibility)
@@ -105,6 +115,10 @@ class ChannelBuilder implements Builder<Channel, ChannelBuilder> {
   String _id;
   String get id => _$this._id;
   set id(String id) => _$this._id = id;
+
+  String _authorId;
+  String get authorId => _$this._authorId;
+  set authorId(String authorId) => _$this._authorId = authorId;
 
   String _name;
   String get name => _$this._name;
@@ -136,6 +150,7 @@ class ChannelBuilder implements Builder<Channel, ChannelBuilder> {
   ChannelBuilder get _$this {
     if (_$v != null) {
       _id = _$v.id;
+      _authorId = _$v.authorId;
       _name = _$v.name;
       _description = _$v.description;
       _visibility = _$v.visibility;
@@ -165,6 +180,7 @@ class ChannelBuilder implements Builder<Channel, ChannelBuilder> {
     final _$result = _$v ??
         new _$Channel._(
             id: id,
+            authorId: authorId,
             name: name,
             description: description,
             visibility: visibility,

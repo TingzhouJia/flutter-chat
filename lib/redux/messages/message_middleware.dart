@@ -25,6 +25,8 @@ List<Middleware<AppState>> createMessagesMiddleware(
         _setUnread(messagesRepository)),
     TypedMiddleware<AppState, SelectChat>(
         _listenMessages(messagesRepository)),
+    TypedMiddleware<AppState, SelectGroupChat>(
+        _selectGroupChat(messagesRepository)),
     TypedMiddleware<AppState, SystemMessageDispatch>(
         _groupDispatch(messagesRepository)),
     TypedMiddleware<AppState, SendGroupMessage>(
@@ -46,14 +48,13 @@ void Function(
   return (store, action, next) async {
     next(action);
     final sender = store.state.user;
-    final receiver = action.receiver;
     final message = Message((m) => m
       ..body = action.message
       ..timestamp=DateTime.now()
-      ..messageType=action.mediaType
+      ..messageType=action.messageType
       ..authorId = store.state.user.uid);
     try {
-      await messageRepository.sendMessage(sender, receiver, message);
+      await messageRepository.sendMessage(sender, store.state.currentTarget.uid, message);
     } catch (e) {
       print(e);
     }
@@ -68,19 +69,20 @@ void Function(
     ) {
   return (store, action, next) async {
     next(action);
-    final sender = store.state.user;
-    action.userList.map((each) async{
-      final message = Message((m) => m
-        ..body = 'You are invited to Join group ${store.state.selectedGroup.name}'
-        ..timestamp=DateTime.now()
-        ..messageType=MessageType.SYSTEM
-        ..authorId = 'SYSTEM');
-      try {
-        await messageRepository.sendGroupMessage(each, message, store.state.selectedGroup);
-      } catch (e) {
-        print(e);
-      }
-    });
+
+
+      action.userList.map((each) async{
+        final message = Message((m) => m
+          ..body = 'You are invited to Join group ${store.state.selectedGroup.name}'
+          ..timestamp=DateTime.now()
+          ..messageType=MessageType.SYSTEM
+          ..authorId = 'SYSTEM');
+        try {
+          await messageRepository.sendGroupMessage(each, message, store.state.selectedGroup);
+        } catch (e) {
+          print(e);
+        }
+      });
 
 
   };
@@ -101,7 +103,7 @@ void Function(
       ..messageType=action.type
       ..authorId = store.state.user.uid);
     try {
-      await messageRepository.sendGroupMessage(sender, message, store.state.selectedGroup);
+      await messageRepository.sendGroupMessage(sender.uid, message, store.state.selectedGroup);
     } catch (e) {
       print(e);
     }
@@ -157,6 +159,7 @@ void Function(
     final receiveId=action.uid;
     try {
       await messageRepository.SetUnRead(senderId, receiveId,action.pending).then((_)=>store.dispatch(OnSetUnread(receiveId,action.pending)));
+
     } catch (e) {
       print(e);
     }
@@ -193,6 +196,34 @@ void Function(
       });
     } catch (e) {
      print(e);
+    }
+  };
+}
+void Function(
+    Store<AppState> store,
+    SelectGroupChat action,
+    NextDispatcher next,
+    ) _selectGroupChat(
+    MessageRepository messageRepository,
+    ) {
+  return (store, action, next) {
+    next(action);
+    try {
+      store.dispatch(StartLoading());
+      // Do not update subscription if there's already a valid subscription to it.
+      // This is necessary since we'll update the channel as well (e.g. when users join/leave etc).
+
+      // cancel previous message subscription
+      messagesSubscription?.cancel();
+
+      messageRepository
+          .getGroupMessagesStream(
+            action.groupId
+      ).listen((data) {
+        store.dispatch(UpdateAllGroupChat(data));
+      });
+    } catch (e) {
+      print(e);
     }
   };
 }

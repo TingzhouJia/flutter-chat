@@ -9,6 +9,8 @@ abstract class Channel implements Built<Channel, ChannelBuilder> {
   @nullable
   String get id;
 
+  String get authorId;
+
   String get name;
 
   @nullable

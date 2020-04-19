@@ -26,6 +26,8 @@ class _$AppState extends AppState {
   @override
   final BuiltList<Message> selectedGroupChat;
   @override
+  final BuiltList<Message> SystemMessageList;
+  @override
   final bool loading;
 
   factory _$AppState([void Function(AppStateBuilder) updates]) =>
@@ -41,6 +43,7 @@ class _$AppState extends AppState {
       this.groupList,
       this.selectedGroup,
       this.selectedGroupChat,
+      this.SystemMessageList,
       this.loading})
       : super._() {
     if (loading == null) {
@@ -68,6 +71,7 @@ class _$AppState extends AppState {
         groupList == other.groupList &&
         selectedGroup == other.selectedGroup &&
         selectedGroupChat == other.selectedGroupChat &&
+        SystemMessageList == other.SystemMessageList &&
         loading == other.loading;
   }
 
@@ -81,15 +85,17 @@ class _$AppState extends AppState {
                         $jc(
                             $jc(
                                 $jc(
-                                    $jc($jc(0, user.hashCode),
-                                        Friends.hashCode),
-                                    FavorList.hashCode),
-                                recentChatList.hashCode),
-                            currentTarget.hashCode),
-                        currentChat.hashCode),
-                    groupList.hashCode),
-                selectedGroup.hashCode),
-            selectedGroupChat.hashCode),
+                                    $jc(
+                                        $jc($jc(0, user.hashCode),
+                                            Friends.hashCode),
+                                        FavorList.hashCode),
+                                    recentChatList.hashCode),
+                                currentTarget.hashCode),
+                            currentChat.hashCode),
+                        groupList.hashCode),
+                    selectedGroup.hashCode),
+                selectedGroupChat.hashCode),
+            SystemMessageList.hashCode),
         loading.hashCode));
   }
 
@@ -105,6 +111,7 @@ class _$AppState extends AppState {
           ..add('groupList', groupList)
           ..add('selectedGroup', selectedGroup)
           ..add('selectedGroupChat', selectedGroupChat)
+          ..add('SystemMessageList', SystemMessageList)
           ..add('loading', loading))
         .toString();
   }
@@ -161,6 +168,12 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
   set selectedGroupChat(ListBuilder<Message> selectedGroupChat) =>
       _$this._selectedGroupChat = selectedGroupChat;
 
+  ListBuilder<Message> _SystemMessageList;
+  ListBuilder<Message> get SystemMessageList =>
+      _$this._SystemMessageList ??= new ListBuilder<Message>();
+  set SystemMessageList(ListBuilder<Message> SystemMessageList) =>
+      _$this._SystemMessageList = SystemMessageList;
+
   bool _loading;
   bool get loading => _$this._loading;
   set loading(bool loading) => _$this._loading = loading;
@@ -178,6 +191,7 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
       _groupList = _$v.groupList?.toBuilder();
       _selectedGroup = _$v.selectedGroup?.toBuilder();
       _selectedGroupChat = _$v.selectedGroupChat?.toBuilder();
+      _SystemMessageList = _$v.SystemMessageList?.toBuilder();
       _loading = _$v.loading;
       _$v = null;
     }
@@ -212,6 +226,7 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
               groupList: _groupList?.build(),
               selectedGroup: _selectedGroup?.build(),
               selectedGroupChat: _selectedGroupChat?.build(),
+              SystemMessageList: _SystemMessageList?.build(),
               loading: loading);
     } catch (_) {
       String _$failedField;
@@ -234,6 +249,8 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
         _selectedGroup?.build();
         _$failedField = 'selectedGroupChat';
         _selectedGroupChat?.build();
+        _$failedField = 'SystemMessageList';
+        _SystemMessageList?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'AppState', _$failedField, e.toString());

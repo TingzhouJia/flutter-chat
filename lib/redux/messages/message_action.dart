@@ -7,12 +7,11 @@ import 'package:learnflutter/model/user.dart';
 class SendMessage {
   final String message;
 
-  final User receiver;
-  final MessageType mediaType;
+
+  final MessageType messageType;
   const SendMessage(
       this.message,
-      this.receiver,
-      this.mediaType
+      this.messageType
       );
 
   @override
@@ -37,6 +36,16 @@ class SystemMessageDispatch{
 
 }
 
+class GroupApply{
+
+}
+
+class SelectGroupChat{
+  String groupId;
+  SelectGroupChat(this.groupId);
+
+}
+
 @immutable
 class UpdateAllMessages {
   final List<Message> data;
@@ -55,6 +64,12 @@ class UpdateAllRecentChat{
   final List<recentMessage> data;
 
   UpdateAllRecentChat(this.data);
+
+}
+class UpdateAllGroupChat{
+  final List<Message> data;
+
+  UpdateAllGroupChat(this.data);
 
 }
 

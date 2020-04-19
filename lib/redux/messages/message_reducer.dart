@@ -9,10 +9,14 @@ final messageReducers = <AppState Function(AppState, dynamic)>[
   TypedReducer<AppState, OnDeleteRecentChat>(_onRecentChatDelete),
   TypedReducer<AppState, OnSetUnread>(_onSetUnread),
   TypedReducer<AppState, UpdateRecentChat>(_onUpdateRecent),
+  TypedReducer<AppState, UpdateAllGroupChat>(_onUpdateGroup),
 ];
 
 AppState _onMessageUpdated(AppState state, UpdateAllMessages action) {
   return state.rebuild((a) => a ..currentChat = ListBuilder(action.data) ..loading=false);
+}
+AppState _onUpdateGroup(AppState state, UpdateAllGroupChat action) {
+  return state.rebuild((a) => a ..selectedGroupChat = ListBuilder(action.data) ..loading=false);
 }
 AppState _onRecentChatDelete(AppState state,OnDeleteRecentChat action){
   var newList=state.recentChatList.where((id)=>id.authorId!=action.uid);

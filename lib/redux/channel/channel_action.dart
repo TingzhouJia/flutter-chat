@@ -101,13 +101,13 @@ class EditChannelAction {
       );
 }
 
-@immutable
-class OnUpdatedChannelAction {
-  final String groupId;
-  final Channel selectedChannel;
-
-  const OnUpdatedChannelAction(this.groupId, this.selectedChannel);
-}
+//@immutable
+//class OnUpdatedChannelAction {
+//  final String groupId;
+//  final Channel selectedChannel;
+//
+//  const OnUpdatedChannelAction(this.groupId, this.selectedChannel);
+//}
 
 @immutable
 class SelectChannelIdAction {
@@ -127,6 +127,12 @@ class SelectChannelIdAction {
 class SelectChat{
   final String target;
   SelectChat(this.target);
+
+}
+class ApplyToGroup{
+  final Channel channel;
+
+  ApplyToGroup(this.channel);
 
 }
 @immutable
@@ -170,22 +176,47 @@ class SelectChannel {
 class JoinChannelAction {
   final String groupId;
   final Group group;
-  final String userId;
+
 
   const JoinChannelAction({
     @required this.groupId,
     @required this.group,
-    @required this.userId,
+
+  });
+}
+class NotJoinChannelAction {
+  final String groupId;
+  final Channel group;
+
+
+  const NotJoinChannelAction({
+    @required this.groupId,
+    @required this.group,
+
   });
 }
 
 @immutable
 class JoinedChannelAction {
-  final String groupId;
+  final Group group;
+  final Channel channel;
   const JoinedChannelAction(
-      this.groupId,
-
+      this.group,
+      this.channel
       );
+}
+class EditGroupAction{
+  final Group group;
+
+  EditGroupAction(this.group);
+
+}
+class OnUpdatedGroupAction{
+  final String groupId;
+  final Group group;
+
+  OnUpdatedGroupAction(this.groupId, this.group);
+
 }
 
 @immutable
