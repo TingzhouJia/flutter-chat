@@ -1,6 +1,7 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:learnflutter/model/group.dart';
 import 'package:learnflutter/model/message.dart';
 import 'package:learnflutter/model/reaction.dart';
 import 'package:learnflutter/model/recentMessage.dart';
@@ -28,33 +29,48 @@ class MessageRepository {
 
   MessageRepository(this._firestore);
 
-  Future<Message> sendMessage(User sender,
-      User receiver,
-      Message message,) async {
-
-   //people receive it
-    final data1 = toMap(message,true);
-    final data2=toMap(message, false);
-    final reference = await _firestore.collection(FirestorePaths.PATH_MESSAGES).document(sender.uid).collection(receiver.uid).add(data1);
-    await _firestore.collection(FirestorePaths.PATH_MESSAGES).document(receiver.uid).collection(sender.uid).add(data2);
-    //update recent chat
-    final recentpath=_firestore.collection(FirestorePaths.Path_RECENT).document(sender.uid).collection("info").document(receiver.uid);
-    final path2=_firestore.collection(FirestorePaths.Path_RECENT).document(receiver.uid).collection("info").document(sender.uid);
-    final targte= await recentpath.get();
-    final target2=await path2.get();
-    if(targte.data==null||targte.data.length == 0){
-      await recentpath.setData(toRecetMap(message,sender,true,receiver.uid));
-    }else{
-      await recentpath.updateData({BODY:message.body,TIMESTAMP:message.timestamp,PENDING:false});
-    }
-    if(target2.data==null||target2.data.length==0){
+  Future<Message> sendMessage(User sender, User receiver, Message message,) async {
+   
+      //people receive it
+      final data1 = toMap(message,true);
+      final data2=toMap(message, false);
+      final reference = await _firestore.collection(FirestorePaths.PATH_MESSAGES).document(sender.uid).collection(receiver.uid).add(data1);
+      await _firestore.collection(FirestorePaths.PATH_MESSAGES).document(receiver.uid).collection(sender.uid).add(data2);
+      //update recent chat
+      final recentpath=_firestore.collection(FirestorePaths.Path_RECENT).document(sender.uid).collection("info").document(receiver.uid);
+      final path2=_firestore.collection(FirestorePaths.Path_RECENT).document(receiver.uid).collection("info").document(sender.uid);
+      final targte= await recentpath.get();
+      final target2=await path2.get();
+      if(targte.data==null||targte.data.length == 0){
+        await recentpath.setData(toRecetMap(message,sender,true,receiver.uid));
+      }else{
+        await recentpath.updateData({BODY:message.body,TIMESTAMP:message.timestamp,PENDING:false});
+      }
+      if(target2.data==null||target2.data.length==0){
         await path2.setData(toRecetMap(message, sender,false,receiver.uid));
-    }else{
-      await path2.updateData({BODY:message.body,TIMESTAMP:message.timestamp,PENDING:true});
-    }
-    final doc = await reference.get();
-    return fromDoc(doc);
+      }else{
+        await path2.updateData({BODY:message.body,TIMESTAMP:message.timestamp,PENDING:true});
+      }
+      final doc = await reference.get();
+      return fromDoc(doc);
+      
   }
+
+  Future<void> sendGroupMessage(String sender,Message message,Group group) async{
+      final data=toMap(message, true);
+     String docuId= await _firestore.collection(FirestorePaths.groupMessagePath(group.id)).add(data).then((data){
+        return data.documentID;
+      });
+     final target=  _firestore.collection(FirestorePaths.Path_RECENT).document(sender).collection('info').document(docuId);
+     final test=await target.get();
+     if(test.data==null||test.data.length==0){
+       await target.setData(toRecetGroupMap(message, group, true, group.id));
+     }else{
+       await target.updateData({BODY:message,TIMESTAMP:message.timestamp,PENDING:false});
+     }
+  }
+
+
 
   Stream<List<Message>> getMessagesStream(String userId,
       String targetId,
@@ -81,14 +97,6 @@ class MessageRepository {
    return  _firestore.collection(FirestorePaths.Path_RECENT).document(userId).collection('info').snapshots().map((querySnapshot){
       return querySnapshot.documents.map((document)=>recentFromDoc(document)).toList();
     });
-   
-//    .snapshots(includeMetadataChanges: true).map((querySnapshot) {
-//      return querySnapshot.
-//          .where((documentSnapshot) =>
-//          isValidDocument(documentSnapshot, userId))
-//          .map((documentSnapshot) => recentFromDoc(documentSnapshot))
-//          .toList();
-//    });
   }
 
   Future<void> RemoveRecentChat(String uid,String targetId) async{
@@ -219,7 +227,7 @@ class MessageRepository {
       TYPE: MessageTypeHelper.stringOf(message.messageType),
       TIMESTAMP: DateTime.now(),
       MEDIA:message.media.toList(),
-      PENDING:send==true?false:true,
+      PENDING:!send,
       MEDIA_STATUS:MediaStatusHelper.stringOf(message.mediaStatus)
     };
   }
@@ -233,6 +241,17 @@ class MessageRepository {
         IMG:user.imgUrl,
         ID:targetID
       };
+  }
+  static  toRecetGroupMap(Message message,Group group,bool send,String targetID){
+    return {
+      BODY:message.body,
+      USER_ID:message.authorId,
+      PENDING:send==true?false:true,
+      TYPE:message.messageType,
+      USERNAME:group.name,
+      IMG:group.hexColor,
+      ID:targetID
+    };
   }
 
   static bool isValidDocument(DocumentSnapshot documentSnapshot, [String userId = ""]) {

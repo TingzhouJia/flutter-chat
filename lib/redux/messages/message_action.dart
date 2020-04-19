@@ -20,6 +20,22 @@ class SendMessage {
     return "SendMessage{message: $message}";
   }
 }
+@immutable
+class SendGroupMessage {
+  final String message;
+  final MessageType type;
+  const SendGroupMessage(
+      this.message,
+      this.type
+      );
+}
+
+class SystemMessageDispatch{
+  List<String> userList;
+
+  SystemMessageDispatch(this.userList);
+
+}
 
 @immutable
 class UpdateAllMessages {

@@ -1,6 +1,8 @@
 
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
+import 'package:learnflutter/model/channel.dart';
+import 'package:learnflutter/model/group.dart';
 import 'package:learnflutter/model/message.dart';
 import 'package:learnflutter/model/recentMessage.dart';
 import 'package:learnflutter/model/user.dart';
@@ -21,7 +23,12 @@ part 'state.g.dart';
     User get currentTarget;
     @nullable
     BuiltList<Message> get currentChat;
-
+    @nullable
+    BuiltList<Channel> get groupList;
+    @nullable
+    Group get selectedGroup;
+    @nullable
+    BuiltList<Message> get selectedGroupChat;
     bool get loading;
     AppState._();
     factory AppState([void Function(AppStateBuilder) updates]) = _$AppState;

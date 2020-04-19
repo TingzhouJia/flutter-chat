@@ -60,6 +60,7 @@ class GroupRepository {
           return snapShot.documents.map((doc)=>fromChannelDoc(doc)).toList();
     });
   }
+
   static Channel fromChannelDoc(DocumentSnapshot document){
     return Channel((c)=>c
         ..id=document.documentID
@@ -70,8 +71,7 @@ class GroupRepository {
     );
   }
 
-  Stream<Group> getStreamForChannel(
-      String groupId, String channelId) {
+  Stream<Group> getStreamForChannel(String channelId) {
     return _firestore
         .document(FirestorePaths.groupPath( channelId))
         .snapshots()
@@ -111,8 +111,7 @@ class GroupRepository {
   }
 
 
-  Future<void> markChannelRead(
-      String groupId, String userId,bool choice) async {
+  Future<void> markChannelRead(String groupId, String userId,bool choice) async {
     final channelUsersPath =
     FirestorePaths.channelUsersPath(userId,groupId);
     // We're removing the indicator for the group then the channel.
@@ -124,8 +123,8 @@ class GroupRepository {
       return Future.error("Error marking channel as read");
     }
   }
-  Future<void> markChannelReceived(
-      String groupId, String userId,bool choice) async {
+
+  Future<void> markChannelReceived(String groupId, String userId,bool choice) async {
     final channelUsersPath =
     FirestorePaths.channelUsersPath(userId,groupId);
     // We're removing the indicator for the group then the channel.
@@ -201,11 +200,11 @@ class GroupRepository {
 
   }
 
-  Future<Channel> createChannel(Channel channel, List<String> members, String authorUid) async {
+  Future<Stream<Group>> createChannel(Channel channel, List<String> members, String authorUid) async {
     final data = toGroupMap(authorId: authorUid,group: channel,members: members);
     String docuId=await _firestore
         .collection(FirestorePaths.PATH_GROUPS).add(data).then((val){
-          return val.documentID;
+         return val.documentID;
     });
 
     await _firestore.collection(FirestorePaths.USER_GROUP).document(authorUid).collection('info').
@@ -217,6 +216,9 @@ class GroupRepository {
         'authorId':'SYSTEM','body':"$each is joined in group chat",'messageType':MessageType.SYSTEM,'pending':true,'timestamp':DateTime.now()
       });
     });
+   return  _firestore.collection(FirestorePaths.PATH_GROUPS).document(docuId).snapshots().asyncMap((data){
+     return fromDoc(data);
+   });
 
 
   }

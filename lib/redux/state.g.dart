@@ -20,6 +20,12 @@ class _$AppState extends AppState {
   @override
   final BuiltList<Message> currentChat;
   @override
+  final BuiltList<Channel> groupList;
+  @override
+  final Group selectedGroup;
+  @override
+  final BuiltList<Message> selectedGroupChat;
+  @override
   final bool loading;
 
   factory _$AppState([void Function(AppStateBuilder) updates]) =>
@@ -32,6 +38,9 @@ class _$AppState extends AppState {
       this.recentChatList,
       this.currentTarget,
       this.currentChat,
+      this.groupList,
+      this.selectedGroup,
+      this.selectedGroupChat,
       this.loading})
       : super._() {
     if (loading == null) {
@@ -56,6 +65,9 @@ class _$AppState extends AppState {
         recentChatList == other.recentChatList &&
         currentTarget == other.currentTarget &&
         currentChat == other.currentChat &&
+        groupList == other.groupList &&
+        selectedGroup == other.selectedGroup &&
+        selectedGroupChat == other.selectedGroupChat &&
         loading == other.loading;
   }
 
@@ -65,11 +77,19 @@ class _$AppState extends AppState {
         $jc(
             $jc(
                 $jc(
-                    $jc($jc($jc(0, user.hashCode), Friends.hashCode),
-                        FavorList.hashCode),
-                    recentChatList.hashCode),
-                currentTarget.hashCode),
-            currentChat.hashCode),
+                    $jc(
+                        $jc(
+                            $jc(
+                                $jc(
+                                    $jc($jc(0, user.hashCode),
+                                        Friends.hashCode),
+                                    FavorList.hashCode),
+                                recentChatList.hashCode),
+                            currentTarget.hashCode),
+                        currentChat.hashCode),
+                    groupList.hashCode),
+                selectedGroup.hashCode),
+            selectedGroupChat.hashCode),
         loading.hashCode));
   }
 
@@ -82,6 +102,9 @@ class _$AppState extends AppState {
           ..add('recentChatList', recentChatList)
           ..add('currentTarget', currentTarget)
           ..add('currentChat', currentChat)
+          ..add('groupList', groupList)
+          ..add('selectedGroup', selectedGroup)
+          ..add('selectedGroupChat', selectedGroupChat)
           ..add('loading', loading))
         .toString();
   }
@@ -120,6 +143,24 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
   set currentChat(ListBuilder<Message> currentChat) =>
       _$this._currentChat = currentChat;
 
+  ListBuilder<Channel> _groupList;
+  ListBuilder<Channel> get groupList =>
+      _$this._groupList ??= new ListBuilder<Channel>();
+  set groupList(ListBuilder<Channel> groupList) =>
+      _$this._groupList = groupList;
+
+  GroupBuilder _selectedGroup;
+  GroupBuilder get selectedGroup =>
+      _$this._selectedGroup ??= new GroupBuilder();
+  set selectedGroup(GroupBuilder selectedGroup) =>
+      _$this._selectedGroup = selectedGroup;
+
+  ListBuilder<Message> _selectedGroupChat;
+  ListBuilder<Message> get selectedGroupChat =>
+      _$this._selectedGroupChat ??= new ListBuilder<Message>();
+  set selectedGroupChat(ListBuilder<Message> selectedGroupChat) =>
+      _$this._selectedGroupChat = selectedGroupChat;
+
   bool _loading;
   bool get loading => _$this._loading;
   set loading(bool loading) => _$this._loading = loading;
@@ -134,6 +175,9 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
       _recentChatList = _$v.recentChatList?.toBuilder();
       _currentTarget = _$v.currentTarget?.toBuilder();
       _currentChat = _$v.currentChat?.toBuilder();
+      _groupList = _$v.groupList?.toBuilder();
+      _selectedGroup = _$v.selectedGroup?.toBuilder();
+      _selectedGroupChat = _$v.selectedGroupChat?.toBuilder();
       _loading = _$v.loading;
       _$v = null;
     }
@@ -165,6 +209,9 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
               recentChatList: _recentChatList?.build(),
               currentTarget: _currentTarget?.build(),
               currentChat: _currentChat?.build(),
+              groupList: _groupList?.build(),
+              selectedGroup: _selectedGroup?.build(),
+              selectedGroupChat: _selectedGroupChat?.build(),
               loading: loading);
     } catch (_) {
       String _$failedField;
@@ -181,6 +228,12 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
         _currentTarget?.build();
         _$failedField = 'currentChat';
         _currentChat?.build();
+        _$failedField = 'groupList';
+        _groupList?.build();
+        _$failedField = 'selectedGroup';
+        _selectedGroup?.build();
+        _$failedField = 'selectedGroupChat';
+        _selectedGroupChat?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'AppState', _$failedField, e.toString());

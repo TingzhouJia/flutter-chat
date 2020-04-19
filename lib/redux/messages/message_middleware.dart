@@ -25,7 +25,10 @@ List<Middleware<AppState>> createMessagesMiddleware(
         _setUnread(messagesRepository)),
     TypedMiddleware<AppState, SelectChat>(
         _listenMessages(messagesRepository)),
-
+    TypedMiddleware<AppState, SystemMessageDispatch>(
+        _groupDispatch(messagesRepository)),
+    TypedMiddleware<AppState, SendGroupMessage>(
+        _sendGroupMessages(messagesRepository)),
     TypedMiddleware<AppState, EmojiReaction>(
         _reactWithEmoji(messagesRepository)),
     TypedMiddleware<AppState, RemoveEmojiReaction>(
@@ -51,11 +54,54 @@ void Function(
       ..authorId = store.state.user.uid);
     try {
       await messageRepository.sendMessage(sender, receiver, message);
-//          .then(( Message a){
-//        recentMessage a=recentMessage((a)=>a
-//        ..authorId=a.authorId ..pending=a.pending ..userName=a.userName ..timestamp=a.timestamp ..messageType=a.messageType ..body=a.body ..imgUrl=sender.imgUrl);
-//        store.dispatch(UpdateRecentChat(a));
-//      });
+    } catch (e) {
+      print(e);
+    }
+  };
+}
+void Function(
+    Store<AppState> store,
+    SystemMessageDispatch action,
+    NextDispatcher next,
+    ) _groupDispatch(
+    MessageRepository messageRepository,
+    ) {
+  return (store, action, next) async {
+    next(action);
+    final sender = store.state.user;
+    action.userList.map((each) async{
+      final message = Message((m) => m
+        ..body = 'You are invited to Join group ${store.state.selectedGroup.name}'
+        ..timestamp=DateTime.now()
+        ..messageType=MessageType.SYSTEM
+        ..authorId = 'SYSTEM');
+      try {
+        await messageRepository.sendGroupMessage(each, message, store.state.selectedGroup);
+      } catch (e) {
+        print(e);
+      }
+    });
+
+
+  };
+}
+void Function(
+    Store<AppState> store,
+    SendGroupMessage action,
+    NextDispatcher next,
+    ) _sendGroupMessages(
+    MessageRepository messageRepository,
+    ) {
+  return (store, action, next) async {
+    next(action);
+    final sender = store.state.user;
+    final message = Message((m) => m
+      ..body = action.message
+      ..timestamp=DateTime.now()
+      ..messageType=action.type
+      ..authorId = store.state.user.uid);
+    try {
+      await messageRepository.sendGroupMessage(sender, message, store.state.selectedGroup);
     } catch (e) {
       print(e);
     }

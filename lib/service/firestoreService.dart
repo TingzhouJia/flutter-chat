@@ -18,9 +18,9 @@ class FirestorePaths {
 
 
 ////
-////  static String channelPath(String groupId, String channelId) {
-////    return "$PATH_GROUPS/$groupId/$PATH_CHANNELS/$channelId";
-////  }
+  static String groupMessagePath(String groupId,) {
+    return "$PATH_MESSAGES/group/$groupId";
+  }
 ////
   static String channelUsersPath(String userId, String groupId) {
     return "$USER_GROUP/$userId/info/$groupId";
