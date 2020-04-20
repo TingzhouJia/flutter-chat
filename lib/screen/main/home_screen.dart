@@ -113,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               ),
             ),
             title: Text(
-              'Chats',
+              vm.messageOnScreen==0?'Chats':'Chats(${vm.messageOnScreen})',
               style: TextStyle(
                   fontSize: 28.0,
                   fontWeight: FontWeight.bold,

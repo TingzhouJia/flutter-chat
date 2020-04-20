@@ -3,10 +3,13 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:learnflutter/model/user.dart';
 import 'package:learnflutter/model/message_model.dart';
 import 'package:learnflutter/redux/channel/channel_action.dart';
+import 'package:learnflutter/redux/messages/message_action.dart';
 import 'package:learnflutter/redux/state.dart';
 import 'package:learnflutter/screen/chat/ChatList.dart';
+import 'package:learnflutter/screen/chat/chat_view.dart';
 import 'package:learnflutter/screen/friends/friend_screen.dart';
 class ChatScreen extends StatefulWidget {
+
 
 
 
@@ -16,6 +19,7 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+
 
 
 
@@ -116,17 +120,16 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
     );
   }
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  _built(context,ChatScreenViewModel vm){
+    return  Scaffold(
 
       backgroundColor: Theme.of(context).primaryColor,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(50.0),
+        preferredSize: Size.fromHeight(40.0),
         child: AppBar(
           centerTitle: true,
 
-          title: Text('xx',style: TextStyle(fontSize: 28.0,fontWeight: FontWeight.bold,)),
+          title: Text(vm.me.name,style: TextStyle(fontSize: 25.0,fontWeight: FontWeight.bold, color: Color(0xff333333))),
           elevation: 0.0,
           actions: <Widget>[
             IconButton(
@@ -134,46 +137,53 @@ class _ChatScreenState extends State<ChatScreen> {
               iconSize: 30.0,
               color: Colors.black,
               onPressed: () {
-              Navigator.push(
-              context,
-              MaterialPageRoute(
-              builder: (_) => FriendScreen()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => FriendScreen()));
               },
             ),
           ],
         ),
       ),
       body:
- GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onTap: (){
-            FocusScope.of(context).requestFocus(FocusNode());
-            setState(() {
-              onUse=false;
-            });
-
-          },
-          child: Column(
-           // mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-                Flexible(
-                  child:  Container(
-                    margin: EdgeInsets.only(top: 20),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(topLeft: Radius.circular(30.0),topRight: Radius.circular(30.0))
-                    ),
-                    child: ChatList() ,
-                  ),
+      GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: (){
+          FocusScope.of(context).requestFocus(FocusNode());
+          setState(() {
+            onUse=false;
+          });
+        },
+        child: Column(
+          // mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Flexible(
+              child:  Container(
+                margin: EdgeInsets.only(top: 20),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(30.0),topRight: Radius.circular(30.0))
                 ),
+                child: ChatList() ,
+              ),
+            ),
 
 
-              _buildMessageComposer()
+            _buildMessageComposer()
 
-            ],
-          ),
+          ],
+        ),
 
       ),
+    );
+  }
+  @override
+  Widget build(BuildContext context) {
+    return StoreConnector<AppState,ChatScreenViewModel>(
+      converter: ChatScreenViewModel.fromStore(),
+      builder: (context,vm)=>_built(context, vm),
+      distinct: true,
     );
   }
 }

@@ -11,17 +11,24 @@ class _$HomeScreenViewModel extends HomeScreenViewModel {
   final User user;
   @override
   final BuiltList<User> favorContact;
+  @override
+  final int messageOnScreen;
 
   factory _$HomeScreenViewModel(
           [void Function(HomeScreenViewModelBuilder) updates]) =>
       (new HomeScreenViewModelBuilder()..update(updates)).build();
 
-  _$HomeScreenViewModel._({this.user, this.favorContact}) : super._() {
+  _$HomeScreenViewModel._({this.user, this.favorContact, this.messageOnScreen})
+      : super._() {
     if (user == null) {
       throw new BuiltValueNullFieldError('HomeScreenViewModel', 'user');
     }
     if (favorContact == null) {
       throw new BuiltValueNullFieldError('HomeScreenViewModel', 'favorContact');
+    }
+    if (messageOnScreen == null) {
+      throw new BuiltValueNullFieldError(
+          'HomeScreenViewModel', 'messageOnScreen');
     }
   }
 
@@ -39,19 +46,22 @@ class _$HomeScreenViewModel extends HomeScreenViewModel {
     if (identical(other, this)) return true;
     return other is HomeScreenViewModel &&
         user == other.user &&
-        favorContact == other.favorContact;
+        favorContact == other.favorContact &&
+        messageOnScreen == other.messageOnScreen;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, user.hashCode), favorContact.hashCode));
+    return $jf($jc($jc($jc(0, user.hashCode), favorContact.hashCode),
+        messageOnScreen.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('HomeScreenViewModel')
           ..add('user', user)
-          ..add('favorContact', favorContact))
+          ..add('favorContact', favorContact)
+          ..add('messageOnScreen', messageOnScreen))
         .toString();
   }
 }
@@ -70,12 +80,18 @@ class HomeScreenViewModelBuilder
   set favorContact(ListBuilder<User> favorContact) =>
       _$this._favorContact = favorContact;
 
+  int _messageOnScreen;
+  int get messageOnScreen => _$this._messageOnScreen;
+  set messageOnScreen(int messageOnScreen) =>
+      _$this._messageOnScreen = messageOnScreen;
+
   HomeScreenViewModelBuilder();
 
   HomeScreenViewModelBuilder get _$this {
     if (_$v != null) {
       _user = _$v.user?.toBuilder();
       _favorContact = _$v.favorContact?.toBuilder();
+      _messageOnScreen = _$v.messageOnScreen;
       _$v = null;
     }
     return this;
@@ -100,7 +116,9 @@ class HomeScreenViewModelBuilder
     try {
       _$result = _$v ??
           new _$HomeScreenViewModel._(
-              user: user.build(), favorContact: favorContact.build());
+              user: user.build(),
+              favorContact: favorContact.build(),
+              messageOnScreen: messageOnScreen);
     } catch (_) {
       String _$failedField;
       try {

@@ -34,11 +34,10 @@ abstract class ChatScreenViewModel
 
     return (Store<AppState> store)  {
 
-//      store.dispatch(SelectChat(store.state.currentTarget.uid));
       return ChatScreenViewModel((u) => u
-            ..loading=store.state.loading
-          ..messageList=store.state.loading?ListBuilder():ListBuilder(store.state.currentChat)
-          ..me=store.state.user.toBuilder()
+        ..loading=store.state.loading
+          ..messageList=store.state.currentChat==null?ListBuilder():ListBuilder(store.state.currentChat)
+          ..me=store.state.currentTarget.toBuilder()
       );
 
     };

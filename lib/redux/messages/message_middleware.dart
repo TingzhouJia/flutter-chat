@@ -23,8 +23,10 @@ List<Middleware<AppState>> createMessagesMiddleware(
         _deleteRecentChat(messagesRepository)),
     TypedMiddleware<AppState, SetUnread>(
         _setUnread(messagesRepository)),
-    TypedMiddleware<AppState, SelectChat>(
+    TypedMiddleware<AppState, SelectCurrentChat>(
         _listenMessages(messagesRepository)),
+    TypedMiddleware<AppState, LoadMoreMessage>(
+        _loadMoreMessages(messagesRepository)),
     TypedMiddleware<AppState, SelectGroupChat>(
         _selectGroupChat(messagesRepository)),
     TypedMiddleware<AppState, SystemMessageDispatch>(
@@ -166,36 +168,59 @@ void Function(
   };
 }
 
- Function(
+void Function(
     Store<AppState> store,
-    SelectChat action,
+    SelectCurrentChat action,
     NextDispatcher next,
     ) _listenMessages(
     MessageRepository messageRepository,
     )   {
-  return (store, action, next) async {
+  return (store, action, next){
     next(action);
     try {
       store.dispatch(StartLoading());
-      // Do not update subscription if there's already a valid subscription to it.
-      // This is necessary since we'll update the channel as well (e.g. when users join/leave etc).
-
-      // cancel previous message subscription
       messagesSubscription?.cancel();
-
       final author = store.state.user.uid;
-      final target = action.target;
+      final target = action.id;
       // ignore: cancel_subscriptions
-     messagesSubscription= messageRepository
+     messageRepository
           .getMessagesStream(
        author,target
       )
           .listen((data) {
-
         store.dispatch(UpdateAllMessages(data));
       });
     } catch (e) {
      print(e);
+    }
+  };
+}
+void Function(
+    Store<AppState> store,
+    LoadMoreMessage action,
+    NextDispatcher next,
+    ) _loadMoreMessages(
+    MessageRepository messageRepository,
+    )   {
+  return (store, action, next){
+    next(action);
+    try {
+      store.dispatch(StartLoading());
+
+      messagesSubscription?.cancel();
+
+      final author = store.state.user.uid;
+      final target = store.state.currentTarget.uid;
+      // ignore: cancel_subscriptions
+      messageRepository
+          .getMessagesStream(
+          author,target
+      )
+          .listen((data) {
+        store.dispatch(UpdateMoreMessage(data));
+      });
+    } catch (e) {
+      print(e);
     }
   };
 }

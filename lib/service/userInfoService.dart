@@ -118,18 +118,6 @@ class UserRepository {
     }
   }
 
-  // Sets a users locale on our backend.
-  // The locale is used to send localized notifications.
-//  Future<void> updateUserLocale(String locale) async {
-//    final firebaseUser = await _firebaseAuth.currentUser();
-//    if (firebaseUser != null) {
-//      final documentReference =
-//      _firestore.document(FirestorePaths.userPath(firebaseUser.uid));
-//      return documentReference.updateData({
-//        LOCALE: locale,
-//      });
-//    }
-//  }
   Stream<User> getUserStream(userId) {
     return _firestore
         .collection(FirestorePaths.PATH_USERS)
@@ -222,7 +210,6 @@ class UserRepository {
 
 
   static User fromDoc(DocumentSnapshot document) {
-
     return User((u) => u
       ..uid = document.documentID
       ..name = document[NAME]

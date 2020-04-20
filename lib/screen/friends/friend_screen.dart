@@ -273,17 +273,20 @@ class _FriendScreenState extends State<FriendScreen> {
                         borderRadius: BorderRadius.all(Radius.circular(5.0)),
                         border: Border.all(color: Color(0xffB0A9AA))
                     ),
-                    child:Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          "Start Chat",
-                          style: TextStyle(
-                              fontSize: 22.0,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.blueGrey),
-                        )
-                      ],
+                    child:GestureDetector(
+                      onTap:()=> Navigator.of(context).pop(),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            "Start Chat",
+                            style: TextStyle(
+                                fontSize: 22.0,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.blueGrey),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                   SizedBox(

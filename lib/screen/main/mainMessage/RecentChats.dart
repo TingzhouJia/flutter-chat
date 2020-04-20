@@ -2,10 +2,7 @@ import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:learnflutter/model/message_model.dart';
 import 'package:learnflutter/model/recentMessage.dart';
-import 'package:learnflutter/redux/action.dart';
-import 'package:learnflutter/redux/channel/channel_action.dart';
 import 'package:learnflutter/redux/messages/message_action.dart';
 import 'package:learnflutter/redux/state.dart';
 import 'package:learnflutter/redux/userRedux/user_action.dart';
@@ -71,6 +68,18 @@ class _RecentChatState extends State<RecentChat> {
         return null;
     }
   }
+
+  _getExactTime(DateTime time){
+    DateTime dob = DateTime.parse(time.toString());
+    final dur =  DateTime.now().difference(dob).inDays;
+    if(2<=dur&&dur<=7){
+      return DateFormat('EEEEE', ).format(time);
+    }else if(dur>7){
+      return DateFormat('yMMMMd', ).format(time);
+    }else{
+      return  DateFormat.jm().format(time);
+    }
+  }
   _buildView(context,RecentChatViewModel vm){
     recentList=vm.recentChatList.toList();
     return Expanded(
@@ -87,8 +96,7 @@ class _RecentChatState extends State<RecentChat> {
               itemCount: recentList.length,
               itemBuilder: (BuildContext context, int index) {
                 final recentMessage chat = recentList[index];
-                final time = new DateFormat.jm()
-                    .format(DateTime.parse(chat.timestamp.toString()));
+               final time = _getExactTime(chat.timestamp); //new DateFormat.jm().format(DateTime.parse(chat.timestamp.toString()));
                 return Slidable(
                   controller: slidableController,
                   actionPane: SlidableScrollActionPane(),
@@ -116,7 +124,7 @@ class _RecentChatState extends State<RecentChat> {
                                 offset: Offset(3.0, 3.0))
                           ]),
                       child: IconSlideAction(
-                        caption: chat.pending!=true?'Unseen':"Seen",
+                        caption: chat.pending!=true?'UnRead':"Seen",
 
                         icon: Icons.more_horiz,
                         onTap: () {
@@ -156,14 +164,9 @@ class _RecentChatState extends State<RecentChat> {
                   child: GestureDetector(
                     onTap: () {
                       if(curOpen==true){
-                        print(1);
                         Slidable.of(context)?.close();
                         return;
                       }
-
-
-
-
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -171,8 +174,9 @@ class _RecentChatState extends State<RecentChat> {
                                 )));
 
 
-                      StoreProvider.of<AppState>(context).dispatch(SelectChat(chat.id));
+                      StoreProvider.of<AppState>(context).dispatch(SelectCurrentChat(chat.id));
                       StoreProvider.of<AppState>(context).dispatch(UpdateCurrentTarget(chat.id));
+
 
 
                     },
@@ -200,7 +204,7 @@ class _RecentChatState extends State<RecentChat> {
                               CircleAvatar(
                                 radius: 35.0,
                                 backgroundImage: chat.imgUrl == ""
-                                    ? AssetImage('assets/system.jpg')
+                                    ? AssetImage('assets/system.jpeg')
                                     : NetworkImage(chat.imgUrl),
                               ),
                               SizedBox(

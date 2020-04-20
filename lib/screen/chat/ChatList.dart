@@ -15,7 +15,6 @@ import 'package:learnflutter/screen/chat/chat_view.dart';
 class ChatList extends StatelessWidget {
 
 
-
   _buildMessage(Message message, bool isMe,BuildContext context,User me,) {
     final time = new DateFormat.jm().format(DateTime.parse(message.timestamp.toString()));
     final msg= Container(
@@ -74,10 +73,7 @@ class ChatList extends StatelessWidget {
 
   _buildView(context,ChatScreenViewModel vm){
     return GestureDetector(
-      onTap: (){
-        var provider=StoreProvider.of<AppState>(context).state.currentTarget.uid;
-        StoreProvider.of<AppState>(context).dispatch(SelectChat(provider));
-      },
+
       child:ClipRRect(
 
         borderRadius: BorderRadius.only(

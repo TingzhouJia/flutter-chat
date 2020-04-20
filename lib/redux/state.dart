@@ -32,6 +32,8 @@ part 'state.g.dart';
     @nullable
     BuiltList<Message> get SystemMessageList;
     bool get loading;
+
+    int get messageOnScreen;
     AppState._();
     factory AppState([void Function(AppStateBuilder) updates]) = _$AppState;
 
@@ -39,6 +41,9 @@ part 'state.g.dart';
       ..FavorList=ListBuilder()
         ..Friends=ListBuilder()
       ..recentChatList=ListBuilder()
+       ..currentChat=ListBuilder()
+      ..selectedGroupChat=ListBuilder()
+      ..messageOnScreen=0
       ..loading=false
     );
     AppState clear() {

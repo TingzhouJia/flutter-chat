@@ -29,6 +29,8 @@ class _$AppState extends AppState {
   final BuiltList<Message> SystemMessageList;
   @override
   final bool loading;
+  @override
+  final int messageOnScreen;
 
   factory _$AppState([void Function(AppStateBuilder) updates]) =>
       (new AppStateBuilder()..update(updates)).build();
@@ -44,10 +46,14 @@ class _$AppState extends AppState {
       this.selectedGroup,
       this.selectedGroupChat,
       this.SystemMessageList,
-      this.loading})
+      this.loading,
+      this.messageOnScreen})
       : super._() {
     if (loading == null) {
       throw new BuiltValueNullFieldError('AppState', 'loading');
+    }
+    if (messageOnScreen == null) {
+      throw new BuiltValueNullFieldError('AppState', 'messageOnScreen');
     }
   }
 
@@ -72,7 +78,8 @@ class _$AppState extends AppState {
         selectedGroup == other.selectedGroup &&
         selectedGroupChat == other.selectedGroupChat &&
         SystemMessageList == other.SystemMessageList &&
-        loading == other.loading;
+        loading == other.loading &&
+        messageOnScreen == other.messageOnScreen;
   }
 
   @override
@@ -86,17 +93,19 @@ class _$AppState extends AppState {
                             $jc(
                                 $jc(
                                     $jc(
-                                        $jc($jc(0, user.hashCode),
-                                            Friends.hashCode),
-                                        FavorList.hashCode),
-                                    recentChatList.hashCode),
-                                currentTarget.hashCode),
-                            currentChat.hashCode),
-                        groupList.hashCode),
-                    selectedGroup.hashCode),
-                selectedGroupChat.hashCode),
-            SystemMessageList.hashCode),
-        loading.hashCode));
+                                        $jc(
+                                            $jc($jc(0, user.hashCode),
+                                                Friends.hashCode),
+                                            FavorList.hashCode),
+                                        recentChatList.hashCode),
+                                    currentTarget.hashCode),
+                                currentChat.hashCode),
+                            groupList.hashCode),
+                        selectedGroup.hashCode),
+                    selectedGroupChat.hashCode),
+                SystemMessageList.hashCode),
+            loading.hashCode),
+        messageOnScreen.hashCode));
   }
 
   @override
@@ -112,7 +121,8 @@ class _$AppState extends AppState {
           ..add('selectedGroup', selectedGroup)
           ..add('selectedGroupChat', selectedGroupChat)
           ..add('SystemMessageList', SystemMessageList)
-          ..add('loading', loading))
+          ..add('loading', loading)
+          ..add('messageOnScreen', messageOnScreen))
         .toString();
   }
 }
@@ -178,6 +188,11 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
   bool get loading => _$this._loading;
   set loading(bool loading) => _$this._loading = loading;
 
+  int _messageOnScreen;
+  int get messageOnScreen => _$this._messageOnScreen;
+  set messageOnScreen(int messageOnScreen) =>
+      _$this._messageOnScreen = messageOnScreen;
+
   AppStateBuilder();
 
   AppStateBuilder get _$this {
@@ -193,6 +208,7 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
       _selectedGroupChat = _$v.selectedGroupChat?.toBuilder();
       _SystemMessageList = _$v.SystemMessageList?.toBuilder();
       _loading = _$v.loading;
+      _messageOnScreen = _$v.messageOnScreen;
       _$v = null;
     }
     return this;
@@ -227,7 +243,8 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
               selectedGroup: _selectedGroup?.build(),
               selectedGroupChat: _selectedGroupChat?.build(),
               SystemMessageList: _SystemMessageList?.build(),
-              loading: loading);
+              loading: loading,
+              messageOnScreen: messageOnScreen);
     } catch (_) {
       String _$failedField;
       try {

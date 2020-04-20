@@ -4,6 +4,7 @@ import 'package:flutter/material.dart' hide Action;
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:learnflutter/redux/auth/auth_action.dart';
 import 'package:learnflutter/redux/auth/auth_middleware.dart';
+import 'package:learnflutter/redux/channel/channel_middleware.dart';
 import 'package:learnflutter/redux/messages/message_middleware.dart';
 import 'package:learnflutter/redux/middleware.dart';
 import 'package:learnflutter/redux/reducer.dart';
@@ -60,6 +61,7 @@ class _MyAppState extends State<MyApp> {
           ..addAll(createAuthMiddleware(userRepo, _navigatorKey))
           ..addAll(createUserMiddleware(userRepo))
           ..addAll(createMessagesMiddleware(messageRepo))
+          ..addAll(creategroupMiddleware(groupRepo, _navigatorKey))
     );
     new Future.delayed(Duration(seconds: 3),()  {
       print("Flutter即时通讯APP界面实现...");

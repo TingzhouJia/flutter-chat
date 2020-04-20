@@ -12,7 +12,7 @@ abstract class HomeScreenViewModel
     implements Built<HomeScreenViewModel, HomeScreenViewModelBuilder> {
   User get user;
   BuiltList<User> get favorContact;
-
+  int get messageOnScreen;
   HomeScreenViewModel._();
 
   factory HomeScreenViewModel(
@@ -28,6 +28,7 @@ abstract class HomeScreenViewModel
       return HomeScreenViewModel((u) => u
         ..user =store.state.user.toBuilder()
         ..favorContact=store.state.FavorList.toBuilder()
+          ..messageOnScreen=store.state.messageOnScreen
       );
 
     };

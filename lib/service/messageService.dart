@@ -26,7 +26,7 @@ class MessageRepository {
   static const IMG="userImage";
 
   final Firestore _firestore;
-
+  DocumentSnapshot start;
   MessageRepository(this._firestore);
 
   Future<Message> sendMessage(User sender, String receiver, Message message,) async {
@@ -76,22 +76,38 @@ class MessageRepository {
   Stream<List<Message>> getMessagesStream(String userId,
       String targetId,
       ) {
-    return _firestore
+    final content= _firestore
         .collection(FirestorePaths.PATH_MESSAGES).document(userId).collection(targetId)
         .orderBy(TIMESTAMP, descending: true)
+        .limit(15);
+    content.getDocuments().then((v){start=v.documents[v.documents.length-1];});
+    return content
         .snapshots(includeMetadataChanges: true)
-
         .map((querySnapshot) {
-
       return querySnapshot.documents
-//          .where((documentSnapshot) =>
-////          isValidDocument(documentSnapshot, userId))
           .map((documentSnapshot) {
-
         return fromDoc(documentSnapshot);
       }).toList();
     });
   }
+
+  Stream<List<Message>> loadMoreMessagesStream(String userId,String targetId){
+      final next=_firestore
+          .collection(FirestorePaths.PATH_MESSAGES).document(userId).collection(targetId)
+          .orderBy(TIMESTAMP, descending: true).startAfterDocument(start)
+          .limit(15);
+      next.getDocuments().then((v){start=v.documents[v.documents.length-1];});
+      return next
+          .snapshots(includeMetadataChanges: true)
+          .map((querySnapshot) {
+        return querySnapshot.documents
+            .map((documentSnapshot) {
+          return fromDoc(documentSnapshot);
+        }).toList();
+      });
+
+  }
+
   Stream<List<Message>> getGroupMessagesStream(String groupId,
 
       ) {
@@ -168,8 +184,7 @@ class MessageRepository {
 
   static Message fromDoc(DocumentSnapshot document) {
     final messageType = MessageTypeHelper.valueOf(document[TYPE]);
-    return Message((m) =>
-    m
+    return Message((m) => m
       ..id = document.documentID
       ..body = document[BODY]
       ..authorId = messageType == MessageType.SYSTEM ? null : document[AUTHOR]

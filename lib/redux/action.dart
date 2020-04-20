@@ -1,24 +1,31 @@
 import 'package:learnflutter/model/channel.dart';
+import 'package:learnflutter/model/message.dart';
 import 'package:learnflutter/model/recentMessage.dart';
 import 'package:learnflutter/model/user.dart';
 
 class ConnectToDataSource{}
 //get favorList
 class GetFavor{
-  List<User> favors;
+  final List<User> favors;
 
   GetFavor(this.favors);
 
 }
 class GetFriend{
-  List<User> friends;
+  final List<User> friends;
   GetFriend(this.friends);
 }
 
 class GetRecentChat{
-  List<recentMessage> recentChats;
+ final List<recentMessage> recentChats;
 
   GetRecentChat(this.recentChats);
+
+}
+class SetShownMessageOnScreen{
+  final int length;
+
+  SetShownMessageOnScreen(this.length);
 
 }
 
@@ -26,6 +33,12 @@ class GetGroup{
    final List<Channel> channels;
 
    GetGroup(this.channels);
+
+}
+class Getall{
+  final List<Message> messages;
+
+  Getall(this.messages);
 
 }
 class StartLoading{}

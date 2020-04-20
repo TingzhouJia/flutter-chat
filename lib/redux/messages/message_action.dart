@@ -51,6 +51,28 @@ class UpdateAllMessages {
   final List<Message> data;
 
   const UpdateAllMessages(this.data);
+  @override
+  String toString() {
+    // TODO: implement toString
+    return data.toString();
+  }
+}
+
+class SelectCurrentChat{
+  final String id;
+
+  SelectCurrentChat(this.id);
+
+}
+class LoadMoreMessage{
+
+}
+
+class UpdateMoreMessage{
+  final List<Message> data;
+
+  UpdateMoreMessage(this.data);
+
 }
 
 class UpdateRecentChat{
