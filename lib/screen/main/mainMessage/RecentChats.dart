@@ -168,8 +168,6 @@ class _RecentChatState extends State<RecentChat> {
                             context,
                             MaterialPageRoute(
                                 builder: (_) => ChatScreen(
-                                    username: chat.userName,
-                                    uid:chat.id
                                 )));
 
 
@@ -202,7 +200,7 @@ class _RecentChatState extends State<RecentChat> {
                               CircleAvatar(
                                 radius: 35.0,
                                 backgroundImage: chat.imgUrl == ""
-                                    ? AssetImage('assets/male1.jpg')
+                                    ? AssetImage('assets/system.jpg')
                                     : NetworkImage(chat.imgUrl),
                               ),
                               SizedBox(

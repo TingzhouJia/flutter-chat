@@ -52,23 +52,43 @@ class GroupRepository {
 //    });
 //  }
   Stream<List<Channel>> getGroupsStream(userId) {
+
     return _firestore
         .collection(FirestorePaths.PATH_GROUPS)
         .where(MEMBERS, arrayContains: userId)
         .snapshots()
-        .map((snapShot){
-          return snapShot.documents.map((doc)=>fromChannelDoc(doc)).toList();
+        .asyncMap((snapShot)   {
+           return  snapShot.documents.map((doc)  {
+            return fromChannelDoc(doc);
+          }).toList();
+    }).map((data){
+      return data.map((each){
+        getUserGroup(each.id, userId).listen((ele){
+          each.rebuild((c)=>c ..marked=ele[MARKREAD] ..received=ele[RECEIVED]);
+        });
+        return each;
+      }).toList();
+    });
+  }
+  Stream<Map> getUserGroup(String groupid,String uid) {
+    final channelUsersPath = FirestorePaths.channelUsersPath(uid,groupid);
+   return  _firestore.document(channelUsersPath).snapshots().map((each){
+      return {MARKREAD:each[MARKREAD],RECEIVED:each[RECEIVED]};
     });
   }
 
-  static Channel fromChannelDoc(DocumentSnapshot document){
+
+  static Channel fromChannelDoc(DocumentSnapshot document,  ){
+
     return Channel((c)=>c
         ..authorId=document[AUTHORID]
         ..id=document.documentID
-        ..visibility=document[VISIBILITY]
+        ..visibility=document[VISIBILITY]==true?ChannelVisibility.OPEN:ChannelVisibility.CLOSED
         ..hexColor=document[HEXCOLOR]
         ..description=document[DESCRIPTION]
         ..name=document[NAME]
+        ..received=true
+        ..marked=true
     );
   }
 

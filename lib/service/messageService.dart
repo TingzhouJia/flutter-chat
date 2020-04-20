@@ -184,6 +184,17 @@ class MessageRepository {
   }
 
   static recentMessage recentFromDoc(DocumentSnapshot document){
+    if(document.documentID=='system'){
+      return recentMessage((m)=>m
+
+            ..imgUrl=''
+            ..pending=true
+            ..body="Welcome to Light Chat"
+            ..timestamp=DateTime.now()
+            ..userName='LightChat assistant'
+            ..messageType=MessageType.SYSTEM
+      );
+    }
     final messageType = MessageTypeHelper.valueOf(document[TYPE]);
     return recentMessage(
         (m)=>m

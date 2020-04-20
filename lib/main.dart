@@ -15,6 +15,7 @@ import 'package:learnflutter/screen/loading_screen.dart';
 import 'package:learnflutter/screen/root_screen.dart';
 import 'package:learnflutter/screen/login/sign_screen.dart';
 import 'package:learnflutter/service/friendService.dart';
+import 'package:learnflutter/service/groupService.dart';
 import 'package:learnflutter/service/loginService.dart';
 import 'package:learnflutter/service/messageService.dart';
 import 'package:learnflutter/service/userInfoService.dart';
@@ -45,6 +46,7 @@ class _MyAppState extends State<MyApp> {
    final userRepo = UserRepository(FirebaseAuth.instance, _firestore);
    final friendRepo=new FriendRepository(Firestore.instance);
    final messageRepo=new MessageRepository(_firestore);
+   final groupRepo=new GroupRepository(_firestore);
   @override
   void initState() {
     // TODO: implement initState
@@ -54,7 +56,7 @@ class _MyAppState extends State<MyApp> {
     store=Store<AppState>(
         appReducer,
         initialState:AppState.init(),
-        middleware: createStoreMiddleware(friendRepo,messageRepo)
+        middleware: createStoreMiddleware(friendRepo,messageRepo,groupRepo)
           ..addAll(createAuthMiddleware(userRepo, _navigatorKey))
           ..addAll(createUserMiddleware(userRepo))
           ..addAll(createMessagesMiddleware(messageRepo))

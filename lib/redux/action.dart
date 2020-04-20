@@ -1,3 +1,4 @@
+import 'package:learnflutter/model/channel.dart';
 import 'package:learnflutter/model/recentMessage.dart';
 import 'package:learnflutter/model/user.dart';
 
@@ -18,6 +19,13 @@ class GetRecentChat{
   List<recentMessage> recentChats;
 
   GetRecentChat(this.recentChats);
+
+}
+
+class GetGroup{
+   final List<Channel> channels;
+
+   GetGroup(this.channels);
 
 }
 class StartLoading{}

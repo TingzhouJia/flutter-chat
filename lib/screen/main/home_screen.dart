@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:learnflutter/redux/state.dart';
 import 'package:learnflutter/screen/main/home_view.dart';
+import 'package:learnflutter/screen/main/mainGroup/mainGroup.dart';
 import 'package:learnflutter/screen/user/my_screen.dart';
 import 'package:learnflutter/service/loginService.dart';
 import 'package:learnflutter/service/userInfoService.dart';
@@ -165,11 +166,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                    children: <Widget>[
                      MessageScreen(),
                      Online(),
-                     Center(
-                         child: Container(
-                           decoration: BoxDecoration(color: Colors.green),
-                           child: Text("发现"),
-                         )),
+                     GroupPage(),
                      Requests()
                    ],
                  ),

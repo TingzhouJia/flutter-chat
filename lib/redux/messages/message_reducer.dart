@@ -13,7 +13,7 @@ final messageReducers = <AppState Function(AppState, dynamic)>[
 ];
 
 AppState _onMessageUpdated(AppState state, UpdateAllMessages action) {
-  return state.rebuild((a) => a ..currentChat = ListBuilder(action.data) ..loading=false);
+  return state.rebuild((a) => a ..currentChat=ListBuilder(action.data) ..loading=false);
 }
 AppState _onUpdateGroup(AppState state, UpdateAllGroupChat action) {
   return state.rebuild((a) => a ..selectedGroupChat = ListBuilder(action.data) ..loading=false);

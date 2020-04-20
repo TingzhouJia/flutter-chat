@@ -166,14 +166,14 @@ void Function(
   };
 }
 
-void Function(
+ Function(
     Store<AppState> store,
     SelectChat action,
     NextDispatcher next,
     ) _listenMessages(
     MessageRepository messageRepository,
-    ) {
-  return (store, action, next) {
+    )   {
+  return (store, action, next) async {
     next(action);
     try {
       store.dispatch(StartLoading());
@@ -186,7 +186,7 @@ void Function(
       final author = store.state.user.uid;
       final target = action.target;
       // ignore: cancel_subscriptions
-     messageRepository
+     messagesSubscription= messageRepository
           .getMessagesStream(
        author,target
       )

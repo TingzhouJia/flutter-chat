@@ -7,9 +7,7 @@ import 'package:learnflutter/redux/state.dart';
 import 'package:learnflutter/screen/chat/ChatList.dart';
 import 'package:learnflutter/screen/friends/friend_screen.dart';
 class ChatScreen extends StatefulWidget {
-  final String username;
-  final String uid;
-  ChatScreen({this.username,this.uid});
+
 
 
 
@@ -128,7 +126,7 @@ class _ChatScreenState extends State<ChatScreen> {
         child: AppBar(
           centerTitle: true,
 
-          title: Text(widget.username,style: TextStyle(fontSize: 28.0,fontWeight: FontWeight.bold,)),
+          title: Text('xx',style: TextStyle(fontSize: 28.0,fontWeight: FontWeight.bold,)),
           elevation: 0.0,
           actions: <Widget>[
             IconButton(
