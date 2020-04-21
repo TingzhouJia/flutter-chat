@@ -130,12 +130,23 @@ class _MyProfileState extends State<MyProfile> {
                                 overflow: Overflow.visible,
                                 alignment: Alignment.center,
                                 children: <Widget>[
-                                  CircleAvatar(
-                                    backgroundColor: Colors.white,
-                                    radius: 60.0,
-                                    backgroundImage: vm.user.imgUrl == ""
-                                        ? AssetImage("assets/male1.jpg")
-                                        : NetworkImage(vm.user.imgUrl),
+                                  GestureDetector(
+                                    onTap:(){
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (_) => MyAvatarPage(
+                                                imageFile: vm.user.imgUrl,
+
+                                              )));
+                    },
+                                    child: CircleAvatar(
+                                      backgroundColor: Colors.white,
+                                      radius: 60.0,
+                                      backgroundImage: vm.user.imgUrl == ""
+                                          ? AssetImage("assets/male1.jpg")
+                                          : NetworkImage(vm.user.imgUrl),
+                                    ),
                                   ),
                                   Positioned(
                                     bottom: 0,

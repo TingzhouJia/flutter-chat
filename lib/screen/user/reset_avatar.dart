@@ -10,10 +10,9 @@ import 'package:image_pickers/CropConfig.dart';
 import 'package:image_pickers/Media.dart';
 import 'package:image_pickers/UIConfig.dart';
 import 'package:learnflutter/redux/state.dart';
-import 'package:learnflutter/screen/user/my_screen.dart';
+
 import 'package:learnflutter/screen/user/reset_avatar_view.dart';
-import 'package:learnflutter/screen/user/user_reset_view.dart';
-import 'package:learnflutter/service/userInfoService.dart';
+
 
 class MyAvatarPage extends StatefulWidget {
   String imageFile;
@@ -56,25 +55,25 @@ class _MyAvatarPageState extends State<MyAvatarPage> {
   String dataImagePath = "";
   GalleryMode _galleryMode = GalleryMode.image;
 
-//  Future<void> selectImages() async {
-//
-//      _galleryMode = GalleryMode.image;
-//      _listImagePaths = await ImagePickers.pickerPaths(
-//        galleryMode: _galleryMode,
-//        selectCount: 8,
-//        showCamera: true,
-//        cropConfig :CropConfig(enableCrop: true,height: 1,width: 1),
-//        compressSize: 500,
-//        uiConfig: UIConfig(uiThemeColor:Theme.of(context).primaryColor),
-//      );
-//      _listImagePaths.forEach((media){
-//        print(media.path.toString());
-//      });
-//      setState(() {
-//
-//      });
-//
-//  }
+  Future<void> selectImages() async {
+
+      _galleryMode = GalleryMode.image;
+      _listImagePaths = await ImagePickers.pickerPaths(
+        galleryMode: _galleryMode,
+        selectCount: 8,
+        showCamera: true,
+        cropConfig :CropConfig(enableCrop: true,height: 1,width: 1),
+        compressSize: 500,
+        uiConfig: UIConfig(uiThemeColor:Theme.of(context).primaryColor),
+      );
+      _listImagePaths.forEach((media){
+        print(media.path.toString());
+      });
+      setState(() {
+
+      });
+
+  }
   void _settingModalBottomSheet(context) {
     showModalBottomSheet(
         context: context,
@@ -93,8 +92,9 @@ class _MyAvatarPageState extends State<MyAvatarPage> {
                       leading: new Icon(Icons.photo),
                       title: new Text('Set New Avatar From Gallery'),
                       onTap: () {
-                        _onImageButtonPressed(ImageSource.gallery,
-                            context: context);
+                        selectImages();
+//                        _onImageButtonPressed(ImageSource.gallery,
+//                            context: context);
                         Navigator.pop(context);
                         //selectImages();
                       }),

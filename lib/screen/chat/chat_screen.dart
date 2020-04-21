@@ -1,5 +1,8 @@
+
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:learnflutter/model/user.dart';
 import 'package:learnflutter/model/message_model.dart';
 import 'package:learnflutter/redux/channel/channel_action.dart';
@@ -20,15 +23,31 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
 
+  File _imageFile;
+  dynamic _pickImageError;
+  bool isVideo = false;
+//  VideoPlayerController _controller;
+  String _retrieveDataError;
+  void _onImageButtonPressed(ImageSource source, {BuildContext context}) async {
 
+    if (isVideo) {
+      final File file = await ImagePicker.pickVideo(source: source);
+      //await _playVideo(file);
+    } else {
+              File imageFile = await ImagePicker.pickImage(source: source,);
+              setState(() {
+                _imageFile=imageFile;
+              });
 
+    }
+  }
 
   bool onUse=false;
   _buildMessageComposer(){
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8.0),
-      height: 70.0,
-      color: Colors.white,
+      padding: EdgeInsets.symmetric(horizontal: 2.0),
+      height:  70.0,
+      color: Theme.of(context).primaryColor,
       child: Row(
 
         children: <Widget>[
@@ -38,16 +57,18 @@ class _ChatScreenState extends State<ChatScreen> {
            child: Row(
              children: <Widget>[
                IconButton(
-                 icon: Icon(Icons.photo_library),
+                 icon: Icon(Icons.photo_library,color: Colors.white,),
                  iconSize: 30.0,
-                 color: Colors.blue,
+                 color: Colors.white,
 
                ),
                IconButton(
-                 icon: Icon(Icons.photo_camera),
+                 icon: Icon(Icons.photo_camera,),
                  iconSize: 30.0,
-                 color: Colors.red,
+                 color: Colors.white,
+                 onPressed: (){
 
+                 },
                ),
                IconButton(
                  icon: Icon(Icons.phone),
@@ -76,21 +97,21 @@ class _ChatScreenState extends State<ChatScreen> {
             child: Container(
              alignment: Alignment.center,
               padding: EdgeInsets.symmetric(horizontal: 3.0),
-              height: 45,
+              height: 35,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(15.0)),
                 color: Color(0xfff3f8ff),
                 boxShadow: [BoxShadow(color: Colors.white70,blurRadius: 5.0)],
-                
               ),
               child: TextField(
-
               autocorrect: true,
                 onTap: (){setState(() {
                   onUse=true;
                 });},
+
                 textCapitalization: TextCapitalization.sentences,
-                decoration: InputDecoration.collapsed(
+                decoration: InputDecoration(
+                  border: InputBorder.none,
                     hintText: "Aa",
                     hintStyle: TextStyle(color: Colors.grey)
                 ),
@@ -122,14 +143,13 @@ class _ChatScreenState extends State<ChatScreen> {
   }
   _built(context,ChatScreenViewModel vm){
     return  Scaffold(
-
       backgroundColor: Theme.of(context).primaryColor,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(40.0),
         child: AppBar(
           centerTitle: true,
 
-          title: Text(vm.me.name,style: TextStyle(fontSize: 25.0,fontWeight: FontWeight.bold, color: Color(0xff333333))),
+          title: Text(vm.target.name,style: TextStyle(fontSize: 25.0,fontWeight: FontWeight.bold, color: Color(0xff333333))),
           elevation: 0.0,
           actions: <Widget>[
             IconButton(

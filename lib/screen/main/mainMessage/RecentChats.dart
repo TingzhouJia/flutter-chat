@@ -201,11 +201,11 @@ class _RecentChatState extends State<RecentChat> {
                         children: <Widget>[
                           Row(
                             children: <Widget>[
-                              CircleAvatar(
-                                radius: 35.0,
-                                backgroundImage: chat.imgUrl == ""
-                                    ? AssetImage('assets/system.jpeg')
-                                    : NetworkImage(chat.imgUrl),
+                              ClipOval(
+
+                                child: chat.imgUrl == ""
+                                    ? Image(image: AssetImage('assets/default_img.jpg'),fit: BoxFit.cover,width: 30.0,height: 30.0,)
+                                    :FadeInImage.assetNetwork(placeholder: 'assets/default_img.jpg', image: chat.imgUrl,width: 30.0,height: 30.0,fit: BoxFit.cover,),
                               ),
                               SizedBox(
                                 width: 10.0,

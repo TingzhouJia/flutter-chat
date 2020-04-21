@@ -20,7 +20,8 @@ abstract class ChatScreenViewModel
   BuiltList<Message> get messageList;
 
   User get me;
-
+  //target we are chat with
+  User get target;
   bool get loading;
   ChatScreenViewModel._();
 
@@ -37,7 +38,8 @@ abstract class ChatScreenViewModel
       return ChatScreenViewModel((u) => u
         ..loading=store.state.loading
           ..messageList=store.state.currentChat==null?ListBuilder():ListBuilder(store.state.currentChat)
-          ..me=store.state.currentTarget.toBuilder()
+          ..me=store.state.user.toBuilder()
+          ..target=store.state.currentTarget.toBuilder()
       );
 
     };

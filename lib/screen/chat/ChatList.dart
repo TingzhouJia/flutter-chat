@@ -14,60 +14,79 @@ import 'package:learnflutter/screen/chat/chat_view.dart';
 
 class ChatList extends StatelessWidget {
 
+  _buildLeftMessage(Message message,BuildContext context, User user){
 
-  _buildMessage(Message message, bool isMe,BuildContext context,User me,) {
+  }
+
+  _buildMessage(Message message, bool isMe,BuildContext context,User me,User target) {
     final time = new DateFormat.jm().format(DateTime.parse(message.timestamp.toString()));
+    final curwidth=MediaQuery.of(context).size.width;
     final msg= Container(
-      width: MediaQuery.of(context).size.width,
-      child: Row(
-        children: <Widget>[
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
+      width: curwidth,
+      decoration: BoxDecoration(
 
-              Text(time, style: TextStyle(color: Colors.blueGrey,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16.0),),
-              SizedBox(height: 8.0,),
-              Text(message.body, style: TextStyle(color: Colors.blueGrey,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16.0),)
-            ],
+      ),
+      child:!isMe? Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          CircleAvatar(
+            radius: 25.0,
+            backgroundImage: me.imgUrl==""?AssetImage('assets/default_img.jpg'):NetworkImage(me.imgUrl),
+          ),
+          SizedBox(
+            width: 5,
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 5.0),
+            decoration: BoxDecoration(
+                color:  Colors.white,
+                borderRadius:  BorderRadius.all(Radius.circular(15.0))
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(message.body, style: TextStyle(color: Colors.blueGrey,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16.0),)
+              ],
+            ),
           )
         ],
+      ):Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 5.0),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(15.0))
+                    
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(message.body, style: TextStyle(color: Colors.blueGrey,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16.0),)
+              ],
+            ),
+          ),
+          SizedBox(
+            width: 5,
+          ),
+        CircleAvatar(
+        radius: 25.0,
+        backgroundImage: me.imgUrl==""?AssetImage('assets/default_img.jpg'):NetworkImage(me.imgUrl),
+      )
+        ],
       ) ,
+      padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 15.0),
+//      margin: isMe
+//          ? EdgeInsets.only(top: 8.0, bottom: 8.0, right: 80.0)
+//          : EdgeInsets.only(top: 8.0, bottom: 8.0,right: 80.0),
 
-      padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 25.0),
-      margin: isMe
-          ? EdgeInsets.only(top: 8.0, bottom: 8.0, left: 80.0)
-          : EdgeInsets.only(top: 8.0, bottom: 8.0,),
-      decoration: BoxDecoration(
-          color: isMe ? Color(0xffffbaba) : Color(0xffffeadb),
-          borderRadius: isMe ? BorderRadius.only(
-              topLeft: Radius.circular(15.0),
-              bottomLeft: Radius.circular(15.0)) : BorderRadius.only(
-              topRight: Radius.circular(15.0),
-              bottomRight: Radius.circular(15.0))
-      ),
     );
-//    if(isMe){
-//      return msg;
-//    }
-//    return Row(
-//      children: <Widget>[
-//
-//       msg,
-//       !message.isLiked? IconButton(
-//          icon: message.isLiked?Icon(Icons.favorite):Icon(Icons.favorite_border),
-//
-//          iconSize: 30.0,
-//          color:message.isLiked?Theme.of(context).primaryColor: Colors.blueGrey,
-//          onPressed: (){
-//
-//          },
-//        ):SizedBox.shrink(),
-//      ],
-//    );
+
   return msg;
   }
 
@@ -86,8 +105,11 @@ class ChatList extends StatelessWidget {
                   image: DecorationImage(image: AssetImage('assets/loadingPage.jpeg'),repeat: ImageRepeat.noRepeat,fit: BoxFit.cover)
               ),
             ),
+
             Column(
+
               children: <Widget>[
+
                 Expanded(
                   child:  ListView.builder(
                       reverse: true,
@@ -96,7 +118,7 @@ class ChatList extends StatelessWidget {
                       itemBuilder: (BuildContext context, int index) {
                         final Message message = vm.messageList[index];
                         final bool isMe = message.authorId == vm.me.uid;
-                        return _buildMessage(message, isMe,context,vm.me,);
+                        return _buildMessage(message, isMe,context,vm.me,vm.target );
                       }),
                 )
               ],

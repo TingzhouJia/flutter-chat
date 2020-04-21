@@ -80,7 +80,12 @@ class MessageRepository {
         .collection(FirestorePaths.PATH_MESSAGES).document(userId).collection(targetId)
         .orderBy(TIMESTAMP, descending: true)
         .limit(15);
-    content.getDocuments().then((v){start=v.documents[v.documents.length-1];});
+    content.getDocuments().then((v){
+      if(v.documents.length>0){
+        start=v.documents[v.documents.length-1];
+      }
+
+    });
     return content
         .snapshots(includeMetadataChanges: true)
         .map((querySnapshot) {
@@ -96,7 +101,8 @@ class MessageRepository {
           .collection(FirestorePaths.PATH_MESSAGES).document(userId).collection(targetId)
           .orderBy(TIMESTAMP, descending: true).startAfterDocument(start)
           .limit(15);
-      next.getDocuments().then((v){start=v.documents[v.documents.length-1];});
+      next.getDocuments().then((v){
+        start=v.documents[v.documents.length-1];});
       return next
           .snapshots(includeMetadataChanges: true)
           .map((querySnapshot) {
