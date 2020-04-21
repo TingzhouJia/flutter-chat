@@ -204,8 +204,8 @@ class _RecentChatState extends State<RecentChat> {
                               ClipOval(
 
                                 child: chat.imgUrl == ""
-                                    ? Image(image: AssetImage('assets/default_img.jpg'),fit: BoxFit.cover,width: 30.0,height: 30.0,)
-                                    :FadeInImage.assetNetwork(placeholder: 'assets/default_img.jpg', image: chat.imgUrl,width: 30.0,height: 30.0,fit: BoxFit.cover,),
+                                    ? Image(image: AssetImage('assets/default_img.jpg'),fit: BoxFit.cover,width: 35.0,height: 35.0,)
+                                    :FadeInImage.assetNetwork(placeholder: 'assets/default_img.jpg', image: chat.imgUrl,width: 35.0,height: 35.0,fit: BoxFit.cover,),
                               ),
                               SizedBox(
                                 width: 10.0,

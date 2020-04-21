@@ -93,8 +93,8 @@ class _MyAvatarPageState extends State<MyAvatarPage> {
                       title: new Text('Set New Avatar From Gallery'),
                       onTap: () {
                         selectImages();
-//                        _onImageButtonPressed(ImageSource.gallery,
-//                            context: context);
+                        _onImageButtonPressed(ImageSource.gallery,
+                            context: context);
                         Navigator.pop(context);
                         //selectImages();
                       }),

@@ -1,12 +1,16 @@
+import 'dart:io';
+
 import 'package:built_collection/built_collection.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:learnflutter/model/group.dart';
 import 'package:learnflutter/model/message.dart';
 import 'package:learnflutter/model/reaction.dart';
 import 'package:learnflutter/model/recentMessage.dart';
 import 'package:learnflutter/model/user.dart';
-
+import 'package:path/path.dart' as Path;
 import 'firestoreService.dart';
 
 class MessageRepository {
@@ -24,13 +28,22 @@ class MessageRepository {
   static const USERNAME = "userName";
   static const MEDIA_STATUS = "mediaStatus";
   static const IMG="userImage";
-
+  final firebaseStorage=FirebaseStorage.instance;
   final Firestore _firestore;
   DocumentSnapshot start;
   MessageRepository(this._firestore);
 
   Future<Message> sendMessage(User sender, String receiver, Message message,) async {
-   
+      if(message.messageType==MessageType.USER){
+        List<String> mediaList;
+        message.media.map((item)async{
+          StorageReference result=await getPath(File(item));
+          result.getDownloadURL().then((url){
+            mediaList.add(url);
+          });
+        });
+        message.rebuild((a)=>a ..media=BuiltList(mediaList));
+      }
       //people receive it
       final data1 = toMap(message,true);
       final data2=toMap(message, false);
@@ -55,6 +68,13 @@ class MessageRepository {
       return fromDoc(doc);
       
   }
+  Future<StorageReference> getPath(File paths) async{
+    StorageReference storageReference=firebaseStorage.ref().child('avatar/${Path.basename(paths.path)}}');
+    StorageUploadTask uploadTask = storageReference.putFile(paths);
+    await uploadTask.onComplete;
+    return storageReference;
+  }
+
 
 
   Future<void> sendGroupMessage(String sender,Message message,Group group) async{
@@ -284,7 +304,7 @@ class MessageRepository {
       return {
           BODY:message.body,
           USER_ID:message.authorId,
-          PENDING:send==true?false:true,
+          PENDING:!send,
           TYPE:message.messageType,
         USERNAME:user.name,
         IMG:user.imgUrl,

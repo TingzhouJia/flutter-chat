@@ -1,10 +1,15 @@
 import 'package:built_collection/built_collection.dart';
+import 'package:learnflutter/model/message.dart';
+import 'package:learnflutter/model/recentMessage.dart';
+import 'package:learnflutter/screen/main/mainMessage/RecentChats.dart';
+import 'package:learnflutter/service/messageService.dart';
 import 'package:redux/redux.dart';
 import '../state.dart';
 import 'message_action.dart';
 
 final messageReducers = <AppState Function(AppState, dynamic)>[
   TypedReducer<AppState, UpdateAllMessages>(_onMessageUpdated),
+  TypedReducer<AppState, OnSendMessage>(_onMessageSend),
   TypedReducer<AppState, OnDeleteRecentChat>(_onRecentChatDelete),
   TypedReducer<AppState, OnSetUnread>(_onSetUnread),
   TypedReducer<AppState, UpdateRecentChat>(_onUpdateRecent),
@@ -14,6 +19,12 @@ final messageReducers = <AppState Function(AppState, dynamic)>[
 
 AppState _onMessageUpdated(AppState state, UpdateAllMessages action) {
   return state.rebuild((a) => a ..currentChat=ListBuilder(action.data) ..loading=false);
+}
+
+AppState _onMessageSend(AppState state, OnSendMessage action) {
+  ListBuilder<Message> newList=state.currentChat.rebuild((c)=>c ..add(action.message)).toBuilder();
+
+  return state.rebuild((a) => a ..currentChat=newList ..loading=false  );
 }
 AppState _onUpdateGroup(AppState state, UpdateAllGroupChat action) {
   return state.rebuild((a) => a ..selectedGroupChat = ListBuilder(action.data) ..loading=false);
@@ -32,10 +43,9 @@ AppState _onSetUnread(AppState state,OnSetUnread action){
   return state.rebuild((a)=>a ..recentChatList=ListBuilder(c));
 }
 AppState _onUpdateRecent(AppState state,UpdateRecentChat action){
-//  var newList=state.recentChatList.firstWhere((test){
-//    return test.authorId==action;
-//  });
-//  return state.rebuild((a)=>a, )
+  int a=state.recentChatList.indexWhere((c)=>c.id==state.currentTarget.uid);
+  return state.rebuild((c)=>c ..recentChatList.replaceRange(a, a+1, [action.data]));
+
 }
 AppState _onUpdateMoreMessage(AppState state, UpdateMoreMessage action) {
   final cur=state.currentChat.rebuild((c)=>c ..addAll(action.data));

@@ -3,6 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:image_pickers/CropConfig.dart';
+import 'package:image_pickers/Media.dart';
+import 'package:image_pickers/UIConfig.dart';
+import 'package:image_pickers/image_pickers.dart';
+import 'package:learnflutter/model/message.dart';
 import 'package:learnflutter/model/user.dart';
 import 'package:learnflutter/model/message_model.dart';
 import 'package:learnflutter/redux/channel/channel_action.dart';
@@ -22,24 +27,31 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  MessageType sendType;
+  List<Media> _listImagePaths = List();
 
-  File _imageFile;
-  dynamic _pickImageError;
-  bool isVideo = false;
-//  VideoPlayerController _controller;
-  String _retrieveDataError;
-  void _onImageButtonPressed(ImageSource source, {BuildContext context}) async {
+  String dataImagePath = "";
+  GalleryMode _galleryMode = GalleryMode.image;
 
-    if (isVideo) {
-      final File file = await ImagePicker.pickVideo(source: source);
-      //await _playVideo(file);
-    } else {
-              File imageFile = await ImagePicker.pickImage(source: source,);
-              setState(() {
-                _imageFile=imageFile;
-              });
+  Future<void> selectImages() async {
 
-    }
+    _galleryMode = GalleryMode.image;
+    _listImagePaths = await ImagePickers.pickerPaths(
+      galleryMode: _galleryMode,
+      selectCount: 8,
+      showCamera: true,
+      cropConfig :CropConfig(enableCrop: true,height: 1,width: 1),
+      compressSize: 500,
+      uiConfig: UIConfig(uiThemeColor:Theme.of(context).primaryColor),
+    );
+    List<String> a=_listImagePaths.map((media){
+     return media.path;
+    }).toList();
+    setState(() {
+        sendType=MessageType.MEDIA;
+    });
+
+    StoreProvider.of<AppState>(context).dispatch(SendMessage('',sendType,a));
   }
 
   bool onUse=false;
@@ -60,14 +72,19 @@ class _ChatScreenState extends State<ChatScreen> {
                  icon: Icon(Icons.photo_library,color: Colors.white,),
                  iconSize: 30.0,
                  color: Colors.white,
-
+                onPressed: (){
+                   selectImages();
+                },
                ),
                IconButton(
                  icon: Icon(Icons.photo_camera,),
                  iconSize: 30.0,
                  color: Colors.white,
                  onPressed: (){
-
+                   ImagePickers.openCamera().then((Media media){
+                     /// media 包含照片路径信息 Include photo path information
+                     _listImagePaths.add(media);
+                   });
                  },
                ),
                IconButton(

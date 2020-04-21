@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:learnflutter/model/message.dart';
 import 'package:learnflutter/model/recentMessage.dart';
@@ -6,12 +8,13 @@ import 'package:learnflutter/model/user.dart';
 @immutable
 class SendMessage {
   final String message;
-
+  final List<String> mediaList;
 
   final MessageType messageType;
   const SendMessage(
       this.message,
-      this.messageType
+      this.messageType,
+      this.mediaList
       );
 
   @override
@@ -19,6 +22,14 @@ class SendMessage {
     return "SendMessage{message: $message}";
   }
 }
+
+class OnSendMessage{
+  final Message message;
+
+  OnSendMessage(this.message);
+
+}
+
 @immutable
 class SendGroupMessage {
   final String message;

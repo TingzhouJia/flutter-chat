@@ -31,7 +31,7 @@ class ChatList extends StatelessWidget {
         children: <Widget>[
           CircleAvatar(
             radius: 25.0,
-            backgroundImage: me.imgUrl==""?AssetImage('assets/default_img.jpg'):NetworkImage(me.imgUrl),
+            backgroundImage: target.imgUrl==""?AssetImage('assets/default_img.jpg'):NetworkImage(target.imgUrl),
           ),
           SizedBox(
             width: 5,
