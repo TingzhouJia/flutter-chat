@@ -55,11 +55,13 @@ void Function(
       ..body = action.message
       ..timestamp=DateTime.now()
       ..messageType=action.messageType
+      ..reactions=MapBuilder()
       ..media=BuiltList(action.mediaList)
       ..authorId = store.state.user.uid);
     try {
 
         await messageRepository.sendMessage(sender, store.state.currentTarget.uid, message).then((Message content){
+          print(content);
             store.dispatch(OnSendMessage(content));
             store.dispatch(UpdateRecentChat(MessageRepository.toRecetMap(content, store.state.user, true, store.state.currentTarget.uid)));
         });

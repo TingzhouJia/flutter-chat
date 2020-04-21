@@ -18,13 +18,18 @@ final messageReducers = <AppState Function(AppState, dynamic)>[
 ];
 
 AppState _onMessageUpdated(AppState state, UpdateAllMessages action) {
-  return state.rebuild((a) => a ..currentChat=ListBuilder(action.data) ..loading=false);
+
+  return state.rebuild((a) => a ..currentChat=ListBuilder(action.data)  ..loading=false);
 }
 
 AppState _onMessageSend(AppState state, OnSendMessage action) {
+  recentMessage a=state.recentChatList.firstWhere((c)=>c.id==state.currentTarget.uid);
+  a.rebuild((c)=>c
+    ..messageType=action.message.messageType ..body=action.message.body);
+  int b=state.recentChatList.indexWhere((c)=>c.id==state.currentTarget.uid);
   ListBuilder<Message> newList=state.currentChat.rebuild((c)=>c ..add(action.message)).toBuilder();
-
-  return state.rebuild((a) => a ..currentChat=newList ..loading=false  );
+  BuiltList<recentMessage> rencent=state.recentChatList.rebuild((c)=>c ..replaceRange(b, b+1, [a]));
+  return state.rebuild((a) => a ..currentChat=newList ..recentChatList=ListBuilder(rencent)  ..loading=false  );
 }
 AppState _onUpdateGroup(AppState state, UpdateAllGroupChat action) {
   return state.rebuild((a) => a ..selectedGroupChat = ListBuilder(action.data) ..loading=false);

@@ -44,6 +44,7 @@ class _MyAvatarPageState extends State<MyAvatarPage> {
   void _onImageButtonPressed(ImageSource source, {BuildContext context}) async {
     try {
       _imageFile = await ImagePicker.pickImage(source: source);
+      print(_imageFile);
       setState(() {});
     } catch (e) {
       _pickImageError = e;
@@ -92,7 +93,7 @@ class _MyAvatarPageState extends State<MyAvatarPage> {
                       leading: new Icon(Icons.photo),
                       title: new Text('Set New Avatar From Gallery'),
                       onTap: () {
-                        selectImages();
+                        //selectImages();
                         _onImageButtonPressed(ImageSource.gallery,
                             context: context);
                         Navigator.pop(context);

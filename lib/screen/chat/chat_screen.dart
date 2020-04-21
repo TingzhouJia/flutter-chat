@@ -1,5 +1,5 @@
-
 import 'dart:io';
+import 'package:emoji_picker/emoji_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:image_picker/image_picker.dart';
@@ -16,157 +16,205 @@ import 'package:learnflutter/redux/state.dart';
 import 'package:learnflutter/screen/chat/ChatList.dart';
 import 'package:learnflutter/screen/chat/chat_view.dart';
 import 'package:learnflutter/screen/friends/friend_screen.dart';
+
 class ChatScreen extends StatefulWidget {
-
-
-
-
-
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
   MessageType sendType;
+  bool isShowEmoji=false;
   List<Media> _listImagePaths = List();
-
+  TextEditingController _textController = TextEditingController();
   String dataImagePath = "";
   GalleryMode _galleryMode = GalleryMode.image;
-
+  FocusNode node=FocusNode();
   Future<void> selectImages() async {
-
     _galleryMode = GalleryMode.image;
     _listImagePaths = await ImagePickers.pickerPaths(
       galleryMode: _galleryMode,
       selectCount: 8,
       showCamera: true,
-      cropConfig :CropConfig(enableCrop: true,height: 1,width: 1),
+      cropConfig: CropConfig(enableCrop: true, height: 1, width: 1),
       compressSize: 500,
-      uiConfig: UIConfig(uiThemeColor:Theme.of(context).primaryColor),
+      uiConfig: UIConfig(uiThemeColor: Theme.of(context).primaryColor),
     );
-    List<String> a=_listImagePaths.map((media){
-     return media.path;
+    List<String> a = _listImagePaths.map((media) {
+      return media.path;
     }).toList();
-    setState(() {
-        sendType=MessageType.MEDIA;
-    });
 
-    StoreProvider.of<AppState>(context).dispatch(SendMessage('',sendType,a));
+
+    StoreProvider.of<AppState>(context).dispatch(SendMessage('', MessageType.MEDIA, a));
   }
 
-  bool onUse=false;
-  _buildMessageComposer(){
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 2.0),
-      height:  70.0,
-      color: Theme.of(context).primaryColor,
-      child: Row(
+  sendMessage() {
+    final content=_textController.text.trim();
+    if(content.length==0){
 
-        children: <Widget>[
+      return;
+    }
+    StoreProvider.of<AppState>(context)
+        .dispatch(SendMessage(_textController.text, MessageType.USER, []));
+    _textController.clear();
+  }
+//  Widget buildSticker() {
+//    return
+//      EmojiPicker(
+//        rows: 3,
+//        columns: 7,
+//        buttonMode: ButtonMode.MATERIAL,
+//        recommendKeywords: ["racing", "horse"],
+//        numRecommended: 10,
+//        onEmojiSelected: (emoji, category) {
+//          _textController.text=emoji.emoji;
+//          print(emoji);
+//        },
+//
+//    );
+//
+//
+//  }
+  bool onUse = false;
 
-         Offstage(
-           offstage: onUse,
-           child: Row(
-             children: <Widget>[
-               IconButton(
-                 icon: Icon(Icons.photo_library,color: Colors.white,),
-                 iconSize: 30.0,
-                 color: Colors.white,
-                onPressed: (){
-                   selectImages();
-                },
-               ),
-               IconButton(
-                 icon: Icon(Icons.photo_camera,),
-                 iconSize: 30.0,
-                 color: Colors.white,
-                 onPressed: (){
-                   ImagePickers.openCamera().then((Media media){
-                     /// media 包含照片路径信息 Include photo path information
-                     _listImagePaths.add(media);
-                   });
-                 },
-               ),
-               IconButton(
-                 icon: Icon(Icons.phone),
-                 iconSize: 30.0,
-                 color: Colors.red,
-
-               ),
-             ],
-           ),
-         ),
-          Offstage(
-            offstage: !onUse,
-            child: IconButton(
-              icon: Icon(Icons.arrow_forward_ios),
-              iconSize: 30.0,
-              color: Colors.red,
-              onPressed: (){
-                setState(() {
-                  onUse=false;
-                });
-              },
-            ),
-          ),
-          Expanded(
-            
-            child: Container(
-             alignment: Alignment.center,
-              padding: EdgeInsets.symmetric(horizontal: 3.0),
-              height: 35,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                color: Color(0xfff3f8ff),
-                boxShadow: [BoxShadow(color: Colors.white70,blurRadius: 5.0)],
-              ),
-              child: TextField(
-              autocorrect: true,
-                onTap: (){setState(() {
-                  onUse=true;
-                });},
-
-                textCapitalization: TextCapitalization.sentences,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                    hintText: "Aa",
-                    hintStyle: TextStyle(color: Colors.grey)
+  _buildMessageComposer() {
+    return Stack(
+      children: <Widget>[
+//        isShowEmoji?buildSticker():Container(),
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 2.0),
+          height: 70.0,
+          color: Theme.of(context).primaryColor,
+          child: Row(
+            children: <Widget>[
+              Offstage(
+                offstage: onUse,
+                child: Row(
+                  children: <Widget>[
+                    IconButton(
+                      icon: Icon(
+                        Icons.photo_library,
+                        color: Colors.white,
+                      ),
+                      iconSize: 30.0,
+                      color: Colors.white,
+                      onPressed: () {
+                        selectImages();
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        Icons.photo_camera,
+                      ),
+                      iconSize: 30.0,
+                      color: Colors.white,
+                      onPressed: () {
+                        ImagePickers.openCamera().then((Media media) {
+                          /// media 包含照片路径信息 Include photo path information
+                          _listImagePaths.add(media);
+                        });
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        Icons.tag_faces,
+                        color: Colors.white,
+                      ),
+                      iconSize: 30.0,
+                      onPressed: () {
+                        FocusScope.of(context).unfocus();
+                        setState(() {
+                          isShowEmoji=!isShowEmoji;
+                        });
+                      },
+                    ),
+                  ],
                 ),
               ),
-            ),
-          )
-          ,
-          Offstage(
-            offstage: !onUse,
-            child: IconButton(
-              icon: Icon(Icons.send),
-              iconSize: 30.0,
-              color: Colors.red,
+              Offstage(
+                offstage: !onUse,
+                child: IconButton(
+                  icon: Icon(Icons.arrow_forward_ios),
+                  iconSize: 30.0,
+                  color: Colors.red,
+                  onPressed: () {
+                    setState(() {
+                      onUse = false;
+                    });
+                  },
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.symmetric(horizontal: 3.0),
+                  height: 35,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                    color: Color(0xfff3f8ff),
+                    boxShadow: [BoxShadow(color: Colors.white70, blurRadius: 5.0)],
+                  ),
+                  child: TextField(
+                    focusNode: node,
+                    controller: _textController,
+                    maxLines: 99,
+                    autocorrect: true,
+                    onTap: () {
+                      setState(() {
+                        isShowEmoji=false;
+                        onUse = true;
+                      });
+                    },
+                    textCapitalization: TextCapitalization.sentences,
+                    decoration: InputDecoration.collapsed(
+                      // border: InputBorder.none,
+                        hintText: "Aa",
+                        hintStyle: TextStyle(color: Colors.grey)),
+                  ),
+                ),
+              ),
 
-            ),
+              Offstage(
+                offstage: !onUse,
+                child: IconButton(
+                    icon: Icon(Icons.send),
+                    iconSize: 30.0,
+                    color: Colors.red,
+                    onPressed: () => sendMessage()),
+              ),
+              Offstage(
+                offstage: onUse,
+                child: IconButton(
+                  icon: Icon(Icons.thumb_up),
+                  iconSize: 30.0,
+                  color: Colors.red,
+                ),
+              )
+            ],
           ),
-          Offstage(
-            offstage: onUse,
-            child: IconButton(
-              icon: Icon(Icons.thumb_up),
-              iconSize: 30.0,
-              color: Colors.red,
+        ),
 
-            ),
-          )
-        ],
-      ),
+      ],
     );
+//      WillPopScope(
+//
+//      child: ,
+//      onWillPop: onBackPress,
+//    );
   }
-  _built(context,ChatScreenViewModel vm){
-    return  Scaffold(
+
+  _built(context, ChatScreenViewModel vm) {
+    return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(40.0),
         child: AppBar(
           centerTitle: true,
-
-          title: Text(vm.target.name,style: TextStyle(fontSize: 25.0,fontWeight: FontWeight.bold, color: Color(0xff333333))),
+          title: Text(vm.target.name,
+              style: TextStyle(
+                  fontSize: 25.0,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xff333333))),
           elevation: 0.0,
           actions: <Widget>[
             IconButton(
@@ -175,51 +223,46 @@ class _ChatScreenState extends State<ChatScreen> {
               color: Colors.black,
               onPressed: () {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => FriendScreen()));
+                    context, MaterialPageRoute(builder: (_) => FriendScreen()));
               },
             ),
           ],
         ),
       ),
-      body:
-      GestureDetector(
+      body: GestureDetector(
         behavior: HitTestBehavior.translucent,
-        onTap: (){
+        onTap: () {
           FocusScope.of(context).requestFocus(FocusNode());
           setState(() {
-            onUse=false;
+            onUse = false;
           });
         },
         child: Column(
           // mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Flexible(
-              child:  Container(
+              child: Container(
                 margin: EdgeInsets.only(top: 20),
                 decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(30.0),topRight: Radius.circular(30.0))
-                ),
-                child: ChatList() ,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30.0),
+                        topRight: Radius.circular(30.0))),
+                child: ChatList(),
               ),
             ),
-
-
             _buildMessageComposer()
-
           ],
         ),
-
       ),
     );
   }
+
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState,ChatScreenViewModel>(
+    return StoreConnector<AppState, ChatScreenViewModel>(
       converter: ChatScreenViewModel.fromStore(),
-      builder: (context,vm)=>_built(context, vm),
+      builder: (context, vm) => _built(context, vm),
       distinct: true,
     );
   }

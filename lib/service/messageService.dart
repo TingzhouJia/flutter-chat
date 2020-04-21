@@ -34,16 +34,17 @@ class MessageRepository {
   MessageRepository(this._firestore);
 
   Future<Message> sendMessage(User sender, String receiver, Message message,) async {
-      if(message.messageType==MessageType.USER){
-        List<String> mediaList;
-        message.media.map((item)async{
-          StorageReference result=await getPath(File(item));
-          result.getDownloadURL().then((url){
-            mediaList.add(url);
-          });
-        });
-        message.rebuild((a)=>a ..media=BuiltList(mediaList));
+
+      if(message.messageType==MessageType.MEDIA){
+        List<String> mediaList= await message.media.map((item) async {
+
+          return await getPath(File(item));
+        }).toList();
+
+
+        message.rebuild((a)=>a ..media=BuiltList(answer));
       }
+
       //people receive it
       final data1 = toMap(message,true);
       final data2=toMap(message, false);
@@ -68,12 +69,24 @@ class MessageRepository {
       return fromDoc(doc);
       
   }
-  Future<StorageReference> getPath(File paths) async{
-    StorageReference storageReference=firebaseStorage.ref().child('avatar/${Path.basename(paths.path)}}');
-    StorageUploadTask uploadTask = storageReference.putFile(paths);
-    await uploadTask.onComplete;
-    return storageReference;
-  }
+   String getPath(File paths) async{
+
+
+        StorageReference storageReference=firebaseStorage.ref().child('chat/${Path.basename(paths.path)}}');
+
+        StorageUploadTask uploadTask = storageReference.putFile(paths);
+
+        await uploadTask.onComplete;
+
+      return await  storageReference.getDownloadURL().then((){
+
+      });
+
+
+      }
+
+
+
 
 
 
@@ -278,6 +291,9 @@ class MessageRepository {
 
   static Map<String, dynamic> _reactionsToMap(
       BuiltMap<String, Reaction> reactions) {
+    if(reactions==null){
+      return Map();
+    }
     return reactions
         .map((k, v) =>
         MapEntry(k, {

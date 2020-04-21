@@ -202,13 +202,13 @@ class _RecentChatState extends State<RecentChat> {
                           Row(
                             children: <Widget>[
                               ClipOval(
-
                                 child: chat.imgUrl == ""
                                     ? Image(image: AssetImage('assets/default_img.jpg'),fit: BoxFit.cover,width: 35.0,height: 35.0,)
                                     :FadeInImage.assetNetwork(placeholder: 'assets/default_img.jpg', image: chat.imgUrl,width: 35.0,height: 35.0,fit: BoxFit.cover,),
                               ),
                               SizedBox(
                                 width: 10.0,
+                                height: 40.0,
                               ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -222,6 +222,7 @@ class _RecentChatState extends State<RecentChat> {
                                         fontSize: 15.0,
                                         fontWeight: FontWeight.bold),
                                   ),
+
                                   Container(
                                     width: MediaQuery.of(context).size.width *
                                         0.45,
@@ -240,7 +241,7 @@ class _RecentChatState extends State<RecentChat> {
                           ),
                           Column(
                             children: <Widget>[
-                              SizedBox(height: 5.0),
+                              SizedBox(height: 10.0),
                               Text(
                                 time,
                                 style: TextStyle(
@@ -249,7 +250,7 @@ class _RecentChatState extends State<RecentChat> {
                                     fontWeight: FontWeight.bold),
                               ),
                               SizedBox(
-                                height: 5.0,
+                                height: 10.0,
                               ),
                               getDuration(chat.timestamp.toString()) < 30
                                   ? Container(
