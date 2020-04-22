@@ -132,7 +132,7 @@ void Function(
   return (store, action, next) async {
     next(action);
     final senderId = store.state.user.uid;
-    final receiveId=action.receiverId;
+    final receiveId=store.state.currentTarget.uid;
     try {
       await messageRepository.deleteMessage(senderId, receiveId, action.messageId);
     } catch (e) {

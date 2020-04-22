@@ -220,8 +220,7 @@ class _ChatScreenState extends State<ChatScreen> {
               iconSize: 30.0,
               color: Colors.black,
               onPressed: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (_) => FriendScreen()));
+
               },
             ),
           ],

@@ -10,11 +10,50 @@ import 'package:learnflutter/model/message.dart';
 import 'package:intl/intl.dart';
 import 'package:learnflutter/model/user.dart';
 import 'package:learnflutter/redux/channel/channel_action.dart';
+import 'package:learnflutter/redux/messages/message_action.dart';
 import 'package:learnflutter/redux/state.dart';
 import 'package:learnflutter/screen/chat/chat_view.dart';
+import 'package:learnflutter/screen/friends/friend_screen.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class ChatList extends StatelessWidget {
+
+    _buildSnackBar(Message message,context){
+      return SnackBar(
+        elevation: 0.0,
+        backgroundColor: Colors.white,
+//        shape: RoundedRectangleBorder(
+//            borderRadius: BorderRadius.only(topLeft:Radius.circular(22),topRight:Radius.circular(22))),
+        content: Container(
+          padding: EdgeInsets.all(0),
+          margin: EdgeInsets.all(0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+
+             GestureDetector(
+               child:  Text(
+                 'Delete',style: TextStyle(color: Colors.black,fontSize: 20.0),
+               ),
+               onTap: (){
+
+                  StoreProvider.of<AppState>(context).dispatch(DeleteMessage(message.id));
+
+               },
+             ),
+              Text(
+                'Repost',style: TextStyle(color: Colors.black,fontSize: 20.0),
+              ),
+              Text(
+                'Copy',style: TextStyle(color: Colors.black,fontSize: 20.0),
+
+              )
+            ],
+          ),
+        ),
+      );
+    }
+
 
   _buildBody(Message message){
 
@@ -88,14 +127,24 @@ class ChatList extends StatelessWidget {
       child:!isMe? Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          CircleAvatar(
-            radius: 20.0,
-            backgroundImage: target.imgUrl==""?AssetImage('assets/default_img.jpg'):NetworkImage(target.imgUrl),
-          ),
+          GestureDetector(
+            child: CircleAvatar(
+              radius: 20.0,
+              backgroundImage: target.imgUrl==""?AssetImage('assets/default_img.jpg'):NetworkImage(target.imgUrl),
+            ),
+            onTap: ()=>  Navigator.push(
+                context, MaterialPageRoute(builder: (_) => FriendScreen())),
+          )
+          ,
           SizedBox(
             width: 5,
           ),
           GestureDetector(
+            onLongPress: ()async{
+      final snackBar=_buildSnackBar(message,context);
+      Scaffold.of(context).showSnackBar(snackBar);
+
+            },
             child: _buildBody(message),
           )
         ],
@@ -105,17 +154,9 @@ class ChatList extends StatelessWidget {
 
           GestureDetector(
             onLongPress: () async {
-             final snackBar= SnackBar(
-               elevation: 0.0,
-                backgroundColor: Colors.white,
 
-               shape: RoundedRectangleBorder(
-                   borderRadius: BorderRadius.only(topLeft:Radius.circular(22),topRight:Radius.circular(22))),
-                content:Container(
-                  height: 20.0,
-                  color: Colors.white,
-                ),
-              );
+
+             final snackBar=_buildSnackBar(message,context);
               Scaffold.of(context).showSnackBar(snackBar);
             },
             child: _buildBody(message),
@@ -160,7 +201,6 @@ class ChatList extends StatelessWidget {
                 Expanded(
                   child:  Scrollbar(
                     child: ListView.builder(
-
                         reverse: true,
                         padding: EdgeInsets.only(top: 15.0),
                         itemCount: vm.messageList.length,

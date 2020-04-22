@@ -132,8 +132,7 @@ class OnSetUnread{
 @immutable
 class DeleteMessage {
   final String messageId;
-  final String receiverId;
-  const DeleteMessage(this.messageId,this.receiverId);
+  const DeleteMessage(this.messageId);
 }
 
 @immutable
