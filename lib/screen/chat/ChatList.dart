@@ -1,6 +1,7 @@
 
 
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -16,13 +17,48 @@ import 'package:transparent_image/transparent_image.dart';
 class ChatList extends StatelessWidget {
 
   _buildBody(Message message){
+
     if(message.messageType==MessageType.USER){
-      return Text(message.body, style: TextStyle(color: Colors.blueGrey,
-          fontWeight: FontWeight.w600,
-          fontSize: 16.0),);
+      return  Container(
+        padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 5.0),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(15.0))
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(message.body, style: TextStyle(color: Colors.blueGrey,
+                fontWeight: FontWeight.w600,
+                fontSize: 16.0),)
+
+          ],
+        ),
+      );
     }else{
       if(message.media.length==1){
-        return FadeInImage.memoryNetwork(placeholder: kTransparentImage, image: message.media[0],height: 200, width: 200,);
+        return ClipRRect(
+           borderRadius: BorderRadius.circular(8.0),
+
+          child: Image.network(
+
+            message.media[0],
+            fit: BoxFit.cover, width: 200,height: 200,
+            loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+              if (loadingProgress == null)
+                return child;
+              return Center(
+                child: CircularProgressIndicator(
+                  value: loadingProgress.expectedTotalBytes != null
+                      ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
+                      : null,
+                ),
+              );
+            },
+          ),
+          //FadeInImage.assetNetwork(placeholder: 'assets/loadinggif.gif' , image: message.media[0],fit: BoxFit.cover, width: 200,height: 200,)
+        );
+
       }else{
         return(
             GridView.builder(
@@ -59,39 +95,30 @@ class ChatList extends StatelessWidget {
           SizedBox(
             width: 5,
           ),
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 5.0),
-            decoration: BoxDecoration(
-                color:  Colors.white,
-                borderRadius:  BorderRadius.all(Radius.circular(15.0))
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                _buildBody(message)
-              ],
-            ),
+          GestureDetector(
+            child: _buildBody(message),
           )
         ],
       ):Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 5.0),
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(15.0))
-                    
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-//                Text(message.body, style: TextStyle(color: Colors.blueGrey,
-//                    fontWeight: FontWeight.w600,
-//                    fontSize: 16.0),)
-              _buildBody(message)
-              ],
-            ),
+
+          GestureDetector(
+            onLongPress: () async {
+             final snackBar= SnackBar(
+               elevation: 0.0,
+                backgroundColor: Colors.white,
+
+               shape: RoundedRectangleBorder(
+                   borderRadius: BorderRadius.only(topLeft:Radius.circular(22),topRight:Radius.circular(22))),
+                content:Container(
+                  height: 20.0,
+                  color: Colors.white,
+                ),
+              );
+              Scaffold.of(context).showSnackBar(snackBar);
+            },
+            child: _buildBody(message),
           ),
           SizedBox(
             width: 5,
@@ -103,9 +130,7 @@ class ChatList extends StatelessWidget {
         ],
       ) ,
       padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 15.0),
-//      margin: isMe
-//          ? EdgeInsets.only(top: 8.0, bottom: 8.0, right: 80.0)
-//          : EdgeInsets.only(top: 8.0, bottom: 8.0,right: 80.0),
+
 
     );
 

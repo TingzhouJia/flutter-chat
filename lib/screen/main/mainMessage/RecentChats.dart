@@ -2,6 +2,7 @@ import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:learnflutter/model/message.dart';
 import 'package:learnflutter/model/recentMessage.dart';
 import 'package:learnflutter/redux/messages/message_action.dart';
 import 'package:learnflutter/redux/state.dart';
@@ -214,9 +215,7 @@ class _RecentChatState extends State<RecentChat> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
-                                    chat.authorId == widget.uid
-                                        ? "You"
-                                        : chat.userName,
+                                    chat.userName ,
                                     style: TextStyle(
                                         color: Color(0xff333333),
                                         fontSize: 15.0,
@@ -227,7 +226,7 @@ class _RecentChatState extends State<RecentChat> {
                                     width: MediaQuery.of(context).size.width *
                                         0.45,
                                     child: Text(
-                                      chat.body,
+                                      "${chat.authorId==widget.uid?"You: ":''}${chat.body}",
                                       style: TextStyle(
                                           fontSize: 15.0,
                                           fontWeight: FontWeight.w600,

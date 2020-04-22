@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:emoji_picker/emoji_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:image_picker/image_picker.dart';
@@ -48,33 +49,29 @@ class _ChatScreenState extends State<ChatScreen> {
     StoreProvider.of<AppState>(context).dispatch(SendMessage('', MessageType.MEDIA, a));
   }
 
-  sendMessage() {
+  final homeScaffoldKey=new GlobalKey<ScaffoldState>();
+  sendMessage() async {
     final content=_textController.text.trim();
     if(content.length==0){
-
+        await showCupertinoDialog(context: context,builder: (context){
+          return AlertDialog(
+              title: Text('Reminder'),
+            content: Text('You cannot send empty message!') ,
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Back'),
+                onPressed: ()=>Navigator.of(context).pop(),
+              )
+            ],
+          );
+        });
       return;
     }
     StoreProvider.of<AppState>(context)
         .dispatch(SendMessage(_textController.text, MessageType.USER, []));
     _textController.clear();
   }
-//  Widget buildSticker() {
-//    return
-//      EmojiPicker(
-//        rows: 3,
-//        columns: 7,
-//        buttonMode: ButtonMode.MATERIAL,
-//        recommendKeywords: ["racing", "horse"],
-//        numRecommended: 10,
-//        onEmojiSelected: (emoji, category) {
-//          _textController.text=emoji.emoji;
-//          print(emoji);
-//        },
-//
-//    );
-//
-//
-//  }
+
   bool onUse = false;
 
   _buildMessageComposer() {
@@ -205,6 +202,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   _built(context, ChatScreenViewModel vm) {
     return Scaffold(
+      key: homeScaffoldKey,
       backgroundColor: Theme.of(context).primaryColor,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(40.0),
@@ -232,6 +230,7 @@ class _ChatScreenState extends State<ChatScreen> {
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: () {
+          homeScaffoldKey.currentState.hideCurrentSnackBar();
           FocusScope.of(context).requestFocus(FocusNode());
           setState(() {
             onUse = false;

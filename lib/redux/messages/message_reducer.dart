@@ -25,9 +25,9 @@ AppState _onMessageUpdated(AppState state, UpdateAllMessages action) {
 AppState _onMessageSend(AppState state, OnSendMessage action) {
   recentMessage a=state.recentChatList.firstWhere((c)=>c.id==state.currentTarget.uid);
   a.rebuild((c)=>c
-    ..messageType=action.message.messageType ..body=action.message.body);
+    ..messageType=action.message.messageType ..body=action.message.body ..authorId=action.message.authorId);
   int b=state.recentChatList.indexWhere((c)=>c.id==state.currentTarget.uid);
-  ListBuilder<Message> newList=state.currentChat.rebuild((c)=>c ..add(action.message)).toBuilder();
+  ListBuilder<Message> newList=state.currentChat.rebuild((c)=>c ..add(action.message) ).toBuilder();
   BuiltList<recentMessage> rencent=state.recentChatList.rebuild((c)=>c ..replaceRange(b, b+1, [a]));
   return state.rebuild((a) => a ..currentChat=newList ..recentChatList=ListBuilder(rencent)  ..loading=false  );
 }

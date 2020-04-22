@@ -34,20 +34,29 @@ class MessageRepository {
   MessageRepository(this._firestore);
 
   Future<Message> sendMessage(User sender, String receiver, Message message,) async {
-
+      Message a=message.rebuild((c)=>c);
       if(message.messageType==MessageType.MEDIA){
-        List<String> mediaList= await message.media.map((item) async {
+        List<String> mediaList=message.media.toList();
+        List<String> newList=List();
+        StorageReference storageReference=firebaseStorage.ref().child('chat/${Path.basename(mediaList.first)}}');
+        StorageUploadTask uploadTask = storageReference.putFile(File(mediaList.first));
+        await uploadTask.onComplete;
+        String img;
+        await storageReference.getDownloadURL().then((fileURL) async{
 
-          return await getPath(File(item));
-        }).toList();
+          img=await fileURL;
+          print(img);
+          newList.add(img);
 
+        });
 
-        message.rebuild((a)=>a ..media=BuiltList(answer));
+      a =message.rebuild((c)=>c ..media=BuiltList(newList));
+        print(a);
       }
 
       //people receive it
-      final data1 = toMap(message,true);
-      final data2=toMap(message, false);
+      final data1 = toMap(a,true);
+      final data2=toMap(a, false);
       final reference = await _firestore.collection(FirestorePaths.PATH_MESSAGES).document(sender.uid).collection(receiver).add(data1);
       await _firestore.collection(FirestorePaths.PATH_MESSAGES).document(receiver).collection(sender.uid).add(data2);
       //update recent chat
@@ -63,27 +72,13 @@ class MessageRepository {
       if(target2.data==null||target2.data.length==0){
         await path2.setData(toRecetMap(message, sender,false,receiver));
       }else{
-        await path2.updateData({BODY:message.body,TIMESTAMP:message.timestamp,PENDING:true});
+        await path2.updateData({BODY:message.messageType==MessageType.USER?message.body:'[Photo/Vedio]',TIMESTAMP:message.timestamp,PENDING:true,USER_ID:message.authorId});
       }
       final doc = await reference.get();
       return fromDoc(doc);
       
   }
-   String getPath(File paths) async{
 
-
-        StorageReference storageReference=firebaseStorage.ref().child('chat/${Path.basename(paths.path)}}');
-
-        StorageUploadTask uploadTask = storageReference.putFile(paths);
-
-        await uploadTask.onComplete;
-
-      return await  storageReference.getDownloadURL().then((){
-
-      });
-
-
-      }
 
 
 
@@ -106,9 +101,7 @@ class MessageRepository {
 
 
 
-  Stream<List<Message>> getMessagesStream(String userId,
-      String targetId,
-      ) {
+  Stream<List<Message>> getMessagesStream(String userId, String targetId,) {
     final content= _firestore
         .collection(FirestorePaths.PATH_MESSAGES).document(userId).collection(targetId)
         .orderBy(TIMESTAMP, descending: true)
@@ -147,9 +140,7 @@ class MessageRepository {
 
   }
 
-  Stream<List<Message>> getGroupMessagesStream(String groupId,
-
-      ) {
+  Stream<List<Message>> getGroupMessagesStream(String groupId,) {
     return _firestore
         .collection(FirestorePaths.PATH_MESSAGES).document('group').collection(groupId)
         .orderBy(TIMESTAMP, descending: true)
@@ -240,7 +231,6 @@ class MessageRepository {
   static recentMessage recentFromDoc(DocumentSnapshot document){
     if(document.documentID=='system'){
       return recentMessage((m)=>m
-
             ..imgUrl=''
             ..pending=true
             ..body="Welcome to Light Chat"
@@ -317,6 +307,7 @@ class MessageRepository {
     };
   }
   static  toRecetMap(Message message,User user,bool send,String targetID){
+
       return {
           BODY:message.body,
           USER_ID:message.authorId,
