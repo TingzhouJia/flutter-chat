@@ -15,6 +15,7 @@ import 'package:learnflutter/redux/channel/channel_action.dart';
 import 'package:learnflutter/redux/messages/message_action.dart';
 import 'package:learnflutter/redux/state.dart';
 import 'package:learnflutter/screen/chat/ChatList.dart';
+import 'package:learnflutter/screen/chat/chatDetail.dart';
 import 'package:learnflutter/screen/chat/chat_view.dart';
 import 'package:learnflutter/screen/friends/friend_screen.dart';
 
@@ -220,7 +221,8 @@ class _ChatScreenState extends State<ChatScreen> {
               iconSize: 30.0,
               color: Colors.black,
               onPressed: () {
-
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (_) => ChatDetail()));
               },
             ),
           ],
