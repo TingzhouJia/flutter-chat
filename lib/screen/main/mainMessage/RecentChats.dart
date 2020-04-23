@@ -85,6 +85,7 @@ class _RecentChatState extends State<RecentChat> {
     recentList=vm.recentChatList.toList();
     return Expanded(
       child: Container(
+        padding: EdgeInsets.all(10.0),
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(

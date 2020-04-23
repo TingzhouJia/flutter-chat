@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:html';
 import 'dart:io';
 import 'dart:collection';
 import 'package:built_collection/built_collection.dart';
@@ -7,7 +8,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:learnflutter/model/friend.dart';
 import 'package:learnflutter/model/user.dart';
+import 'package:learnflutter/service/userInfoService.dart';
 import 'package:path/path.dart' as Path;
 
 import 'firestoreService.dart';
@@ -18,18 +21,19 @@ class FriendRepository {
   static const IMAGE = "imgUrl";
   static const UID = "uid";
 
-  // static const TOKEN = "token";
+   static const SETTOP = "setTop";
+  static const STRONGNOTIFI = "strongNotif";
   static const ADDRESS = "address";
   static const LASTONLINE = "lastOnline";
   static const DESCRIPTION = "description";
 
-//  static const UPDATEDGROUPS = "updatedGroups";
-//  static const JOINEDGROUPS = "joinedGroups";
+  static const BACKGROUND = "Image";
+  static const NOTIFICATION = "notification";
   static const STATUS = "status";
   static const GENDER = "gender";
+  static const NICKNAME = "nickName";
+   final firebaseStorage=FirebaseStorage.instance;
 
-  // final firebaseStorage=FirebaseStorage.instance;
-  // final FirebaseAuth _firebaseAuth;
   final Firestore _firestore;
 
   FriendRepository(this._firestore);
@@ -38,21 +42,48 @@ class FriendRepository {
   Stream<List<User>> getFavoriteStream( String userId) {
     return _firestore
         .collection(FirestorePaths.PATH_FAVOR)
-      .document(userId)
+        .document(userId)
         .snapshots()
         .asyncMap((DocumentSnapshot d) async{
-          List<dynamic> a=d.data['favorList'];
-          var aList = <User>[];
-          for (var groceryPath in a) {
-            aList.add(await _firestore.collection('user').document(groceryPath).get().then((value){
-              return get(value);
-            }));
-          }
+      List<dynamic> a=d.data['favorList'];
+      var aList = <User>[];
+      for (var groceryPath in a) {
+        aList.add(await _firestore.collection('user').document(groceryPath).get().then((value){
+          return get(value);
+        }));
+      }
 
-          return aList;
+      return aList;
     });
   }
 
+  Stream<List<Friend>> getFriendStream( String userId) {
+    List<Friend> listFriend;
+    return _firestore
+        .collection(FirestorePaths.PATH_FRIEND)
+        .document(userId).collection('info')
+        .snapshots().map((QuerySnapshot content) {
+            content.documents.map((DocumentSnapshot each) async{
+              await _firestore.collection('user').document(each.documentID).get().then((DocumentSnapshot data){
+                 listFriend.add(getFriendDoc(data, each));
+               });
+           });
+
+            return listFriend;
+     });
+
+  }
+
+  static Friend getFriendDoc(DocumentSnapshot user,DocumentSnapshot friend){
+    return Friend((c)=>c
+      ..user=UserRepository.fromDoc(user).toBuilder()
+        ..background=friend[BACKGROUND]
+        ..nickName=friend[NICKNAME]
+        ..setTop=friend[SETTOP]
+        ..notification=friend[NOTIFICATION]
+        ..strongNotification=friend[STRONGNOTIFI]
+    );
+  }
 
   static User get(document){
     return User((u) => u
