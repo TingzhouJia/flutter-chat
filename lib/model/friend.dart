@@ -28,3 +28,31 @@ abstract class Friend implements Built<Friend, FriendBuilder> {
   factory Friend([void Function(FriendBuilder) updates]) = _$Friend;
 }
 
+enum FriendSetting { NOTIFICATION, STRONG_NOTIFICATION,SET_TOP }
+
+class FriendHelper {
+  static String stringOf(FriendSetting visibility) {
+    switch (visibility) {
+      case FriendSetting.NOTIFICATION:
+        return "notification";
+      case FriendSetting.STRONG_NOTIFICATION:
+        return "strongNotif";
+      case FriendSetting.SET_TOP:
+        return "setTop";
+    }
+    return null;
+  }
+  static FriendSetting valueOf(String string) {
+    switch (string) {
+      case "notification":
+        return FriendSetting.NOTIFICATION;
+      case "strongNotif":
+        return FriendSetting.STRONG_NOTIFICATION;
+      case "setTop":
+        return FriendSetting.SET_TOP;
+
+    }
+    return null;
+  }
+}
+

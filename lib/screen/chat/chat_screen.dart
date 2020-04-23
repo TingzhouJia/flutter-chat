@@ -209,7 +209,7 @@ class _ChatScreenState extends State<ChatScreen> {
         preferredSize: Size.fromHeight(40.0),
         child: AppBar(
           centerTitle: true,
-          title: Text(vm.target.name,
+          title: Text(vm.target.user.name,
               style: TextStyle(
                   fontSize: 25.0,
                   fontWeight: FontWeight.bold,

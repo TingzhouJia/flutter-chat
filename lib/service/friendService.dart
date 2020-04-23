@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:html';
 import 'dart:io';
 import 'dart:collection';
 import 'package:built_collection/built_collection.dart';
@@ -58,21 +57,62 @@ class FriendRepository {
   }
 
   Stream<List<Friend>> getFriendStream( String userId) {
-    List<Friend> listFriend;
+
     return _firestore
         .collection(FirestorePaths.PATH_FRIEND)
-        .document(userId).collection('info')
+        .document(userId).collection('info').orderBy(NICKNAME,descending: true)
         .snapshots().map((QuerySnapshot content) {
-            content.documents.map((DocumentSnapshot each) async{
-              await _firestore.collection('user').document(each.documentID).get().then((DocumentSnapshot data){
-                 listFriend.add(getFriendDoc(data, each));
+            List<Friend> listFriend=new List();
+           content.documents.map((DocumentSnapshot each) {
+
+             return  _firestore.collection('user').document(each.documentID).snapshots().map((DocumentSnapshot data){
+                return (getFriendDoc(data, each));
+              }).listen((inn){
+              listFriend.add(inn);
                });
            });
-
-            return listFriend;
+           return listFriend;
      });
 
   }
+  Stream<Friend> getFriend(String uid,String targetId) {
+   Friend a;
+    return _firestore
+        .collection(FirestorePaths.PATH_FRIEND)
+        .document(uid).collection('info').document(targetId).snapshots().map((item){
+           _firestore.collection('user').document(item.documentID).snapshots().map(( DocumentSnapshot each){
+             return each;
+           }).listen((co){
+             a= getFriendDoc(co, item);
+          });
+           print(a);
+           return a;
+    });
+  }
+
+  Future<String> updateBackground( File imgUrl,String uid,String targteid) async{
+    StorageReference storageReference=firebaseStorage.ref().child('background/${Path.basename(imgUrl.path)}}');
+    StorageUploadTask uploadTask = storageReference.putFile(imgUrl);
+    await uploadTask.onComplete;
+    String img;
+    storageReference.getDownloadURL().then((fileURL) async{
+      final documentReference = _firestore.document(FirestorePaths.friendPath(uid, targteid));
+      await documentReference.updateData({BACKGROUND:fileURL});
+      img= fileURL;
+    });
+    return img;
+    // databaseReference.collection('user').document(userId).updateData();
+    // TODO: implement setUserAvatar
+
+  }
+
+  Future<void> updateNotification(FriendSetting setting,String uid,String targetId,bool result) async{
+    await _firestore.document(FirestorePaths.friendPath(uid, targetId)).updateData({FriendHelper.stringOf(setting):result});
+  }
+
+  Future<void>  updateNickName(String newName,String uid,String targetId) async{
+    await _firestore.document(FirestorePaths.friendPath(uid, targetId)).updateData({NICKNAME:newName});
+}
 
   static Friend getFriendDoc(DocumentSnapshot user,DocumentSnapshot friend){
     return Friend((c)=>c

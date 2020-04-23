@@ -8,7 +8,7 @@ part of 'friend_screen_view.dart';
 
 class _$FriendScreenViewModel extends FriendScreenViewModel {
   @override
-  final User friend;
+  final Friend friend;
 
   factory _$FriendScreenViewModel(
           [void Function(FriendScreenViewModelBuilder) updates]) =>
@@ -52,9 +52,9 @@ class FriendScreenViewModelBuilder
     implements Builder<FriendScreenViewModel, FriendScreenViewModelBuilder> {
   _$FriendScreenViewModel _$v;
 
-  UserBuilder _friend;
-  UserBuilder get friend => _$this._friend ??= new UserBuilder();
-  set friend(UserBuilder friend) => _$this._friend = friend;
+  FriendBuilder _friend;
+  FriendBuilder get friend => _$this._friend ??= new FriendBuilder();
+  set friend(FriendBuilder friend) => _$this._friend = friend;
 
   FriendScreenViewModelBuilder();
 

@@ -1,6 +1,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:learnflutter/model/channel.dart';
+import 'package:learnflutter/model/friend.dart';
 import 'package:learnflutter/model/message.dart';
 import 'package:learnflutter/model/recentMessage.dart';
 import 'package:learnflutter/model/user.dart';
@@ -40,6 +41,10 @@ void Function(
     friendRepository.getFavoriteStream(store.state.user.uid).listen((List<User> data){
       store.dispatch(GetFavor(data));
     });
+    friendRepository.getFriendStream(store.state.user.uid).listen((List<Friend> data){
+      store.dispatch(GetFriend(data));
+    });
+
     messageRepository.RecentChatStream(store.state.user.uid).listen((List<recentMessage>data){
       int lenfth=data.where((f)=>f.pending==true).length;
       store.dispatch(SetShownMessageOnScreen(lenfth));

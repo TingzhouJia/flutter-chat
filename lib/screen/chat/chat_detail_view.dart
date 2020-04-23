@@ -2,6 +2,7 @@ import 'dart:core';
 
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
+import 'package:learnflutter/model/friend.dart';
 import 'package:learnflutter/model/message.dart';
 import 'package:learnflutter/model/recentMessage.dart';
 import 'package:learnflutter/model/user.dart';
@@ -18,7 +19,7 @@ abstract class ChatDetailViewModel
 
   User get me;
   //target we are chat with
-  User get target;
+  Friend get target;
 
   ChatDetailViewModel._();
 

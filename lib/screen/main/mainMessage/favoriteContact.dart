@@ -4,6 +4,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:learnflutter/model/message_model.dart';
 import 'package:learnflutter/model/user.dart';
 import 'package:learnflutter/redux/channel/channel_action.dart';
+import 'package:learnflutter/redux/friend/friend_action.dart';
 import 'package:learnflutter/redux/state.dart';
 import 'package:learnflutter/redux/userRedux/user_action.dart';
 import 'package:learnflutter/screen/chat/chat_screen.dart';

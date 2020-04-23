@@ -12,7 +12,7 @@ class _$ChatScreenViewModel extends ChatScreenViewModel {
   @override
   final User me;
   @override
-  final User target;
+  final Friend target;
   @override
   final bool loading;
 
@@ -85,9 +85,9 @@ class ChatScreenViewModelBuilder
   UserBuilder get me => _$this._me ??= new UserBuilder();
   set me(UserBuilder me) => _$this._me = me;
 
-  UserBuilder _target;
-  UserBuilder get target => _$this._target ??= new UserBuilder();
-  set target(UserBuilder target) => _$this._target = target;
+  FriendBuilder _target;
+  FriendBuilder get target => _$this._target ??= new FriendBuilder();
+  set target(FriendBuilder target) => _$this._target = target;
 
   bool _loading;
   bool get loading => _$this._loading;

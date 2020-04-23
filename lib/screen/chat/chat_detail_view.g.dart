@@ -10,7 +10,7 @@ class _$ChatDetailViewModel extends ChatDetailViewModel {
   @override
   final User me;
   @override
-  final User target;
+  final Friend target;
 
   factory _$ChatDetailViewModel(
           [void Function(ChatDetailViewModelBuilder) updates]) =>
@@ -61,9 +61,9 @@ class ChatDetailViewModelBuilder
   UserBuilder get me => _$this._me ??= new UserBuilder();
   set me(UserBuilder me) => _$this._me = me;
 
-  UserBuilder _target;
-  UserBuilder get target => _$this._target ??= new UserBuilder();
-  set target(UserBuilder target) => _$this._target = target;
+  FriendBuilder _target;
+  FriendBuilder get target => _$this._target ??= new FriendBuilder();
+  set target(FriendBuilder target) => _$this._target = target;
 
   ChatDetailViewModelBuilder();
 

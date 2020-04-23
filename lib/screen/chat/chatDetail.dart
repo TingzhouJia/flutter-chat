@@ -49,7 +49,7 @@ class _ChatDetailState extends State<ChatDetail> {
                       children: <Widget>[
                         CircleAvatar(
                           radius: 25.0,
-                          backgroundImage:  vm.target.imgUrl==""?AssetImage('assets/default_img.jpg'):NetworkImage(vm.target.imgUrl),
+                          backgroundImage:  vm.target.user.imgUrl==""?AssetImage('assets/default_img.jpg'):NetworkImage(vm.target.user.imgUrl),
                         ),
                         SizedBox(
                           width: 20.0,
@@ -155,7 +155,7 @@ class _ChatDetailState extends State<ChatDetail> {
                                ],
                              ),
                              CupertinoSwitch(
-                               value: true,
+                               value: vm.target.notification,
                              )
                            ],
                          ),
@@ -185,7 +185,7 @@ class _ChatDetailState extends State<ChatDetail> {
                                 ],
                               ),
                               CupertinoSwitch(
-                                value: true,
+                                value: vm.target.strongNotification,
                               )
                             ],
                           ),
@@ -215,7 +215,7 @@ class _ChatDetailState extends State<ChatDetail> {
                                 ],
                               ),
                               CupertinoSwitch(
-                                value: true,
+                                value: vm.target.setTop,
                               )
                             ],
                           ),

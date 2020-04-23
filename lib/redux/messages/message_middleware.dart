@@ -60,7 +60,7 @@ void Function(
       ..authorId = store.state.user.uid);
     try {
 
-        await messageRepository.sendMessage(sender, store.state.currentTarget.uid, message).then((Message content){
+        await messageRepository.sendMessage(sender, store.state.currentTarget.user.uid, message).then((Message content){
 
             store.dispatch(OnSendMessage(content));
            // store.dispatch(UpdateRecentChat(MessageRepository.toRecetMap(content, store.state.user, true, store.state.currentTarget.uid)));
@@ -132,7 +132,7 @@ void Function(
   return (store, action, next) async {
     next(action);
     final senderId = store.state.user.uid;
-    final receiveId=store.state.currentTarget.uid;
+    final receiveId=store.state.currentTarget.user.uid;
     try {
       await messageRepository.deleteMessage(senderId, receiveId, action.messageId);
     } catch (e) {
@@ -220,7 +220,7 @@ void Function(
       messagesSubscription?.cancel();
 
       final author = store.state.user.uid;
-      final target = store.state.currentTarget.uid;
+      final target = store.state.currentTarget.user.uid;
       // ignore: cancel_subscriptions
       messageRepository
           .getMessagesStream(

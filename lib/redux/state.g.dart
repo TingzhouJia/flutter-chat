@@ -10,13 +10,13 @@ class _$AppState extends AppState {
   @override
   final User user;
   @override
-  final BuiltList<User> Friends;
+  final BuiltList<Friend> Friends;
   @override
   final BuiltList<User> FavorList;
   @override
   final BuiltList<recentMessage> recentChatList;
   @override
-  final User currentTarget;
+  final Friend currentTarget;
   @override
   final BuiltList<Message> currentChat;
   @override
@@ -134,9 +134,10 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
   UserBuilder get user => _$this._user ??= new UserBuilder();
   set user(UserBuilder user) => _$this._user = user;
 
-  ListBuilder<User> _Friends;
-  ListBuilder<User> get Friends => _$this._Friends ??= new ListBuilder<User>();
-  set Friends(ListBuilder<User> Friends) => _$this._Friends = Friends;
+  ListBuilder<Friend> _Friends;
+  ListBuilder<Friend> get Friends =>
+      _$this._Friends ??= new ListBuilder<Friend>();
+  set Friends(ListBuilder<Friend> Friends) => _$this._Friends = Friends;
 
   ListBuilder<User> _FavorList;
   ListBuilder<User> get FavorList =>
@@ -149,9 +150,10 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
   set recentChatList(ListBuilder<recentMessage> recentChatList) =>
       _$this._recentChatList = recentChatList;
 
-  UserBuilder _currentTarget;
-  UserBuilder get currentTarget => _$this._currentTarget ??= new UserBuilder();
-  set currentTarget(UserBuilder currentTarget) =>
+  FriendBuilder _currentTarget;
+  FriendBuilder get currentTarget =>
+      _$this._currentTarget ??= new FriendBuilder();
+  set currentTarget(FriendBuilder currentTarget) =>
       _$this._currentTarget = currentTarget;
 
   ListBuilder<Message> _currentChat;

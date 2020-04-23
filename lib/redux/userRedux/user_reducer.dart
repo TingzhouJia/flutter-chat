@@ -8,7 +8,6 @@ import '../state.dart';
 
 final userReducer=<AppState Function(AppState,dynamic)>[
     TypedReducer<AppState, OnUserUpdateAction>(_onUserUpdate),
-  TypedReducer<AppState, OnUpdateCurrentTarget>(_onTargetUpdate),
 ];
 
 
@@ -19,9 +18,5 @@ AppState _onUserUpdate(AppState state, OnUserUpdateAction action) {
     ..user = action.user.toBuilder()
   );
 }
-AppState _onTargetUpdate(AppState state,OnUpdateCurrentTarget action){
-  return state.rebuild((a)=>a
-  ..currentTarget=action.user.toBuilder()
-  );
-}
+
 

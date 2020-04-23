@@ -20,7 +20,6 @@ class OnlineList extends StatelessWidget {
                 topLeft: Radius.circular(20.0)),
             child: ListView.builder(
                 itemCount: onlineUsers.length,
-
                 itemBuilder: (BuildContext context, int index) {
                   User each=onlineUsers[index];
                   String lasttime=DateFormat("dd-MM-yyyy").format(each.lastOnline);

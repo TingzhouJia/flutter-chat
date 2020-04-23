@@ -207,7 +207,7 @@ class ChatList extends StatelessWidget {
                         itemBuilder: (BuildContext context, int index) {
                           final Message message = vm.messageList[index];
                           final bool isMe = message.authorId == vm.me.uid;
-                          return _buildMessage(message, isMe,context,vm.me,vm.target );
+                          return _buildMessage(message, isMe,context,vm.me,vm.target.user );
                         }),
                   ),
                 )

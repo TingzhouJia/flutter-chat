@@ -9,9 +9,7 @@ class FirestorePaths {
   static String groupPath(String groupId) {
     return "$PATH_GROUPS/$groupId";
   }
-  static String friendPath(String userId){
-    return "$PATH_FRIEND/$userId";
-  }
+
   static String favorPath(String userId){
     return "$PATH_FAVOR/$userId";
   }
@@ -46,5 +44,8 @@ class FirestorePaths {
 
   static String userPath(String userId) {
     return "$PATH_USERS/$userId";
+  }
+  static String friendPath(String userId,String targetid){
+    return "$PATH_FRIEND/$userId/info/$targetid";
   }
 }

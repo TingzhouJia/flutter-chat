@@ -53,7 +53,7 @@ class _FriendScreenState extends State<FriendScreen> {
           child: AppBar(
             elevation: 0.0,
             title:
-                !showToTopBtn ? Text('Firend Profile') : Text(vm.friend.name),
+                !showToTopBtn ? Text('Firend Profile') : Text(vm.friend.user.name),
           ),
           preferredSize: Size.fromHeight(40.0)),
       body: LayoutBuilder(
@@ -106,7 +106,7 @@ class _FriendScreenState extends State<FriendScreen> {
                                           padding: EdgeInsets.all(5.0),
                                           margin: EdgeInsets.only(top: 50),
                                           child: Text(
-                                            vm.friend.name,
+                                            vm.friend.user.name,
                                             style: TextStyle(
                                                 fontSize: 22.0,
                                                 fontWeight: FontWeight.bold,
@@ -135,7 +135,7 @@ class _FriendScreenState extends State<FriendScreen> {
                                                 children: <Widget>[
                                                   Expanded(
                                                     child: Text(
-                                                      vm.friend.description,
+                                                      vm.friend.user.description,
                                                       style: TextStyle(
                                                           fontSize: 22.0,
                                                           fontWeight:
@@ -182,11 +182,11 @@ class _FriendScreenState extends State<FriendScreen> {
                                             backgroundColor: Colors.white,
                                             radius: 60.0,
                                             backgroundImage:
-                                            vm.friend.imgUrl == ""
+                                            vm.friend.user.imgUrl == ""
                                                 ? AssetImage(
                                                 "assets/male1.jpg")
                                                 : NetworkImage(
-                                                vm.friend.imgUrl),
+                                                vm.friend.user.imgUrl),
                                           ),
                                         ),
                                       ],
@@ -248,7 +248,7 @@ class _FriendScreenState extends State<FriendScreen> {
                                       MainAxisAlignment.start,
                                       children: <Widget>[
                                         Text(
-                                         vm.friend.uid.substring(0,18),
+                                         vm.friend.user.uid.substring(0,18),
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
                                               fontSize: 20.0,
@@ -306,7 +306,7 @@ class _FriendScreenState extends State<FriendScreen> {
                                       MainAxisAlignment.start,
                                       children: <Widget>[
                                         Text(
-                                          _getGender(vm.friend.gender),
+                                          _getGender(vm.friend.user.gender),
                                           style: TextStyle(
                                               fontSize: 20.0,
                                               fontWeight: FontWeight.bold,
@@ -364,7 +364,7 @@ class _FriendScreenState extends State<FriendScreen> {
                                       children: <Widget>[
                                         Text(
                                           new DateFormat("yyyy-MM-dd ")
-                                              .format(vm.friend.birthday),
+                                              .format(vm.friend.user.birthday),
                                           style: TextStyle(
                                               fontSize: 20.0,
                                               fontWeight: FontWeight.bold,
@@ -421,7 +421,7 @@ class _FriendScreenState extends State<FriendScreen> {
                                       MainAxisAlignment.start,
                                       children: <Widget>[
                                         Text(
-                                          vm.friend.status,
+                                          vm.friend.user.status,
                                           style: TextStyle(
                                               fontSize: 20.0,
                                               fontWeight: FontWeight.bold,
@@ -479,7 +479,7 @@ class _FriendScreenState extends State<FriendScreen> {
                                       children: <Widget>[
                                         Expanded(
                                           child: Text(
-                                            vm.friend.address,
+                                            vm.friend.user.address,
                                             style: TextStyle(
                                                 fontSize: 20.0,
                                                 fontWeight: FontWeight.bold,

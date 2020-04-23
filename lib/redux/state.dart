@@ -2,6 +2,7 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:learnflutter/model/channel.dart';
+import 'package:learnflutter/model/friend.dart';
 import 'package:learnflutter/model/group.dart';
 import 'package:learnflutter/model/message.dart';
 import 'package:learnflutter/model/recentMessage.dart';
@@ -14,13 +15,13 @@ part 'state.g.dart';
     @nullable
     User get  user;
     @nullable
-    BuiltList<User> get Friends;
+    BuiltList<Friend> get Friends;
     @nullable
     BuiltList<User> get FavorList;
     @nullable
     BuiltList<recentMessage> get recentChatList;
     @nullable
-    User get currentTarget;
+    Friend get currentTarget;
     @nullable
     BuiltList<Message> get currentChat;
     @nullable

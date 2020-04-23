@@ -1,4 +1,5 @@
 import 'package:learnflutter/model/channel.dart';
+import 'package:learnflutter/model/friend.dart';
 import 'package:learnflutter/model/message.dart';
 import 'package:learnflutter/model/recentMessage.dart';
 import 'package:learnflutter/model/user.dart';
@@ -12,7 +13,7 @@ class GetFavor{
 
 }
 class GetFriend{
-  final List<User> friends;
+  final List<Friend> friends;
   GetFriend(this.friends);
 }
 

@@ -4,6 +4,7 @@ import 'dart:core';
 
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
+import 'package:learnflutter/model/friend.dart';
 import 'package:learnflutter/model/message.dart';
 import 'package:learnflutter/model/recentMessage.dart';
 import 'package:learnflutter/model/user.dart';
@@ -17,7 +18,7 @@ part 'friend_screen_view.g.dart';
 abstract class FriendScreenViewModel
     implements Built<FriendScreenViewModel, FriendScreenViewModelBuilder> {
 
-  User get friend;
+  Friend get friend;
 
   FriendScreenViewModel._();
 
