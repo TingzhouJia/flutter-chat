@@ -5,12 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:learnflutter/redux/state.dart';
 import 'package:learnflutter/screen/main/home_view.dart';
+import 'package:learnflutter/screen/main/mainFriend/mainFriend.dart';
 import 'package:learnflutter/screen/main/mainGroup/mainGroup.dart';
 import 'package:learnflutter/screen/user/my_screen.dart';
 import 'package:learnflutter/service/loginService.dart';
 import 'package:learnflutter/service/userInfoService.dart';
 import 'package:learnflutter/utils/bottomUpAnimation.dart';
-import 'package:learnflutter/widgets/OnlineList.dart';
+
 import 'package:learnflutter/screen/main/mainMessage/RecentChats.dart';
 import 'package:learnflutter/widgets/RequestFriends.dart';
 import 'package:learnflutter/widgets/SearchBar.dart';
@@ -44,21 +45,21 @@ class Requests extends StatelessWidget {
   }
 }
 
-class Online extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 500.0,
-      decoration: BoxDecoration(
-          color: Theme.of(context).accentColor,
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0))),
-      child: Column(
-        children: <Widget>[OnlineList()],
-      ),
-    );
-  }
-}
+//class Online extends StatelessWidget {
+//  @override
+//  Widget build(BuildContext context) {
+//    return Container(
+//      height: 500.0,
+//      decoration: BoxDecoration(
+//          color: Theme.of(context).accentColor,
+//          borderRadius: BorderRadius.only(
+//              topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0))),
+//      child: Column(
+//        children: <Widget>[MainFriend()],
+//      ),
+//    );
+//  }
+//}
 
 class TabTitle {
   String title;
@@ -165,7 +166,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                    controller: mTabController,
                    children: <Widget>[
                      MessageScreen(),
-                     Online(),
+                     MainFriend(),
                      GroupPage(),
                      Requests()
                    ],

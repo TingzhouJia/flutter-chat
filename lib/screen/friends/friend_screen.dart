@@ -577,6 +577,7 @@ class _FriendScreenState extends State<FriendScreen> {
           );
         },
       ),
+
     );
   }
 

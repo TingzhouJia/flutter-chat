@@ -35,16 +35,14 @@ class _GroupPageState extends State<GroupPage> {
                 itemBuilder: (BuildContext context, int index) {
                
                   Channel each=vm.currentGroups[index];
-                  print(int.parse(each.hexColor));
                   //String lasttime=DateFormat("dd-MM-yyyy").format(each.lastOnline);
                   return GestureDetector(
                     onTap: (){
-                      vm.loadMainGroup(each.id);
+
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (_) => ChatScreen(
-                                 
                               )));
                     },
                     child: Container(
@@ -119,6 +117,6 @@ class _GroupPageState extends State<GroupPage> {
         )
         ],
       ),
-    );;
+    );
   }
 }

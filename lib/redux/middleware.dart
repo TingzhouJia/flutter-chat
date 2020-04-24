@@ -41,6 +41,7 @@ void Function(
       store.dispatch(GetFavor(data));
     });
     userRepository.getFriendStream(store.state.user.uid).listen((List<User> data){
+
       store.dispatch(GetFriend(data));
     });
 

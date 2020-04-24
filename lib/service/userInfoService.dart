@@ -4,6 +4,7 @@ import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:learnflutter/model/user.dart';
 import 'package:path/path.dart' as Path;
 
@@ -206,17 +207,18 @@ class UserRepository {
   }
 
     Stream<List<User>> getFriendStream( String userId) {
-
+      var a=<User>[];
     return _firestore
         .collection(FirestorePaths.PATH_FRIEND)
-        .document(userId).collection('info').orderBy('nickName',descending: true)
+        .document(userId).collection('info').orderBy('nickName',descending: false)
         .snapshots().asyncMap((query) async{
-          var a=<User>[];
+
           for(DocumentSnapshot i in query.documents){
             a.add(await  _firestore.collection('user').document(i.documentID).get().then((value){
               return UserRepository.fromDoc(value);
             }));
           }
+
           return a;
     });
 
