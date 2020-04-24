@@ -6,7 +6,7 @@ import 'package:redux/redux.dart';
 import '../state.dart';
 import 'friend_action.dart';
 
-List<Middleware<AppState>> createUserMiddleware(
+List<Middleware<AppState>> createFriendMiddleware(
     FriendRepository friendRepository,
 
     ) {
@@ -30,9 +30,13 @@ void Function(
   return (store, action, next) {
     next(action);
     try {
-
       friendRepository.getFriend(store.state.user.uid,action.uid).listen((user) {
-            store.dispatch(OnUpdateCurrentTarget(user));
+
+        final a=store.state.Friends.firstWhere((c)=>c.uid==action.uid);
+
+        final c=user.rebuild((c)=>c ..user=a.toBuilder());
+
+        store.dispatch(OnUpdateCurrentTarget(c));
           });
     } catch (e){
       print("Failed to listen user");
@@ -57,11 +61,11 @@ void Function(
             store.dispatch(OnUpdateCurrentTarget(a));
             break;
           case FriendSetting.NOTIFICATION:
-            Friend a=store.state.currentTarget.rebuild((c)=>c ..setTop=action.result);
+            Friend a=store.state.currentTarget.rebuild((c)=>c ..notification=action.result);
             store.dispatch(OnUpdateCurrentTarget(a));
             break;
           case FriendSetting.STRONG_NOTIFICATION:
-            Friend a=store.state.currentTarget.rebuild((c)=>c ..setTop=action.result);
+            Friend a=store.state.currentTarget.rebuild((c)=>c ..strongNotification=action.result);
             store.dispatch(OnUpdateCurrentTarget(a));
             break;
         }
@@ -103,8 +107,6 @@ void Function(
   return (store, action, next) {
     next(action);
     try {
-
-
       friendRepository.updateBackground(action.file,store.state.user.uid,store.state.currentTarget.user.uid).then((data) {
         Friend user=store.state.currentTarget.rebuild((c)=>c ..background=data);
         store.dispatch(OnUpdateCurrentTarget(user));

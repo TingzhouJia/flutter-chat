@@ -11,6 +11,7 @@ final friendReducer=<AppState Function(AppState,dynamic)>[
 
 
 AppState _onTargetUpdate(AppState state,OnUpdateCurrentTarget action){
+
   return state.rebuild((a)=>a
     ..currentTarget=action.user.toBuilder()
   );

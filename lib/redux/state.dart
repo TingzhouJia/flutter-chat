@@ -15,7 +15,7 @@ part 'state.g.dart';
     @nullable
     User get  user;
     @nullable
-    BuiltList<Friend> get Friends;
+    BuiltList<User> get Friends;
     @nullable
     BuiltList<User> get FavorList;
     @nullable

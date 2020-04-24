@@ -10,7 +10,7 @@ class _$AppState extends AppState {
   @override
   final User user;
   @override
-  final BuiltList<Friend> Friends;
+  final BuiltList<User> Friends;
   @override
   final BuiltList<User> FavorList;
   @override
@@ -134,10 +134,9 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
   UserBuilder get user => _$this._user ??= new UserBuilder();
   set user(UserBuilder user) => _$this._user = user;
 
-  ListBuilder<Friend> _Friends;
-  ListBuilder<Friend> get Friends =>
-      _$this._Friends ??= new ListBuilder<Friend>();
-  set Friends(ListBuilder<Friend> Friends) => _$this._Friends = Friends;
+  ListBuilder<User> _Friends;
+  ListBuilder<User> get Friends => _$this._Friends ??= new ListBuilder<User>();
+  set Friends(ListBuilder<User> Friends) => _$this._Friends = Friends;
 
   ListBuilder<User> _FavorList;
   ListBuilder<User> get FavorList =>

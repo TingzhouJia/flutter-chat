@@ -134,6 +134,15 @@ class DeleteMessage {
   final String messageId;
   const DeleteMessage(this.messageId);
 }
+@immutable
+class DeleteAllMessage {
+
+  DeleteAllMessage();
+}
+class OnDeleteAll{
+
+  OnDeleteAll();
+}
 
 @immutable
 class EmojiReaction {

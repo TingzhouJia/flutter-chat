@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:learnflutter/model/friend.dart';
+import 'package:learnflutter/redux/friend/friend_action.dart';
+import 'package:learnflutter/redux/messages/message_action.dart';
 import 'package:learnflutter/redux/state.dart';
 import 'package:learnflutter/screen/chat/chat_detail_view.dart';
 
@@ -10,8 +13,15 @@ class ChatDetail extends StatefulWidget {
 }
 
 class _ChatDetailState extends State<ChatDetail> {
-  bool _notification=true;
+  bool notification;
+  bool strong_notification;
+  bool setTop;
+
+
   _buildView(context, ChatDetailViewModel vm){
+    notification=vm.target.notification;
+    strong_notification=vm.target.strongNotification;
+    setTop=vm.target.setTop;
     return Scaffold(
       backgroundColor:Theme.of(context).primaryColor,
       appBar:AppBar(
@@ -149,13 +159,17 @@ class _ChatDetailState extends State<ChatDetail> {
                                  ),
 
                                  ),
-                                 Text(
+                                 notification?Text(
                                      'Receive messages but not notified'
-                                 )
+                                 ):SizedBox(width: 0,)
                                ],
                              ),
                              CupertinoSwitch(
-                               value: vm.target.notification,
+                               value: notification,
+                               onChanged: (_){
+                                StoreProvider.of<AppState>(context).dispatch(UpdateSetting(FriendSetting.NOTIFICATION,!notification));
+
+                               },
                              )
                            ],
                          ),
@@ -179,13 +193,17 @@ class _ChatDetailState extends State<ChatDetail> {
                                   ),
 
                                   ),
-                                  Text(
+                                  strong_notification?Text(
                                       'Receive messages and remind by email'
-                                  )
+                                  ):SizedBox(width: 0,)
                                 ],
                               ),
                               CupertinoSwitch(
-                                value: vm.target.strongNotification,
+                                value: strong_notification,
+                                onChanged: (_){
+                                  StoreProvider.of<AppState>(context).dispatch(UpdateSetting(FriendSetting.STRONG_NOTIFICATION,!strong_notification));
+
+                                },
                               )
                             ],
                           ),
@@ -209,13 +227,16 @@ class _ChatDetailState extends State<ChatDetail> {
                                   ),
 
                                   ),
-                                  Text(
+                                  setTop?Text(
                                       'Always show message on recent chat '
-                                  )
+                                  ):SizedBox(width: 0,)
                                 ],
                               ),
                               CupertinoSwitch(
-                                value: vm.target.setTop,
+                                value: setTop,
+                                onChanged: (_){
+                                  StoreProvider.of<AppState>(context).dispatch(UpdateSetting(FriendSetting.SET_TOP,!setTop));
+                                },
                               )
                             ],
                           ),
@@ -286,13 +307,35 @@ class _ChatDetailState extends State<ChatDetail> {
                           //BoxShadow(color: Colors.grey, blurRadius:5.0,offset: Offset(-20.0,-10.0))
                         ]
                     ),
-                    child:Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[ Text(
-                        'Clean Up Chat Rcord',
-                        style: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold,color: Colors.redAccent),
+                    child:GestureDetector(
+                      onTap: (){
+                        showCupertinoDialog(context: context, builder: (context){
+                            return CupertinoAlertDialog(
+                              content: Text('Are you sure to delete all records'),
+                              actions: <Widget>[
+                                FlatButton(
+                                  child: Text('Cancel'),
+                                  onPressed: ()=>Navigator.of(context).pop(),
+                                ),
+                                FlatButton(
+                                  child: Text('Delete'),
+                                  onPressed: (){
+                                    StoreProvider.of(context).dispatch(DeleteAllMessage());
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                        });
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[ Text(
+                          'Clean Up Chat Rcord',
+                          style: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold,color: Colors.redAccent),
 
-                      )],
+                        )],
+                      ),
                     ),
                   ),
                   Container(

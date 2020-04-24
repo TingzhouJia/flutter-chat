@@ -31,9 +31,6 @@ class _$Friend extends Friend {
       this.setTop,
       this.nickName})
       : super._() {
-    if (user == null) {
-      throw new BuiltValueNullFieldError('Friend', 'user');
-    }
     if (background == null) {
       throw new BuiltValueNullFieldError('Friend', 'background');
     }
@@ -157,7 +154,7 @@ class FriendBuilder implements Builder<Friend, FriendBuilder> {
     try {
       _$result = _$v ??
           new _$Friend._(
-              user: user.build(),
+              user: _user?.build(),
               background: background,
               notification: notification,
               strongNotification: strongNotification,
@@ -167,7 +164,7 @@ class FriendBuilder implements Builder<Friend, FriendBuilder> {
       String _$failedField;
       try {
         _$failedField = 'user';
-        user.build();
+        _user?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'Friend', _$failedField, e.toString());

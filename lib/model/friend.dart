@@ -8,6 +8,7 @@ import 'package:learnflutter/model/user.dart';
 part 'friend.g.dart';
 
 abstract class Friend implements Built<Friend, FriendBuilder> {
+  @nullable
   User get user;
 
   String get background;

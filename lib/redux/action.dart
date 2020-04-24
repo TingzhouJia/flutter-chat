@@ -13,7 +13,7 @@ class GetFavor{
 
 }
 class GetFriend{
-  final List<Friend> friends;
+  final List<User> friends;
   GetFriend(this.friends);
 }
 

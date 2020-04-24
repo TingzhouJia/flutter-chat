@@ -20,6 +20,8 @@ List<Middleware<AppState>> createMessagesMiddleware(
     TypedMiddleware<AppState, SendMessage>(_sendMessage(messagesRepository)),
     TypedMiddleware<AppState, DeleteMessage>(
         _deleteMessage(messagesRepository)),
+    TypedMiddleware<AppState, DeleteAllMessage>(
+        _deleteAllMessage(messagesRepository)),
     TypedMiddleware<AppState, DeleteRecentChat>(
         _deleteRecentChat(messagesRepository)),
     TypedMiddleware<AppState, SetUnread>(
@@ -95,6 +97,24 @@ void Function(
           print(e);
         }
       });
+
+
+  };
+}
+void Function(
+    Store<AppState> store,
+    DeleteAllMessage action,
+    NextDispatcher next,
+    ) _deleteAllMessage(
+    MessageRepository messageRepository,
+    ) {
+  return (store, action, next) async {
+    next(action);
+
+
+    messageRepository.deleteAllMessage(store.state.user.uid, store.state.currentTarget.user.uid).then((_){
+      store.dispatch(OnDeleteAll());
+    });
 
 
   };

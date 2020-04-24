@@ -81,7 +81,13 @@ class MessageRepository {
 
 
 
-
+  Future<void> deleteAllMessage(String uid,String targetid) async{
+    
+   await _firestore.collection(FirestorePaths.PATH_MESSAGES).document(uid).collection(targetid).getDocuments().then((data){
+      data.documents.removeRange(0, data.documents.length-1);
+    });
+   await RemoveRecentChat(uid, targetid);
+  }
 
 
 

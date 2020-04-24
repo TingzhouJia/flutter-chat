@@ -12,6 +12,7 @@ final messageReducers = <AppState Function(AppState, dynamic)>[
   TypedReducer<AppState, OnSendMessage>(_onMessageSend),
   TypedReducer<AppState, OnDeleteRecentChat>(_onRecentChatDelete),
   TypedReducer<AppState, OnSetUnread>(_onSetUnread),
+  TypedReducer<AppState, OnDeleteAll>(_onDeleteAll),
   TypedReducer<AppState, UpdateRecentChat>(_onUpdateRecent),
   TypedReducer<AppState, UpdateAllGroupChat>(_onUpdateGroup),
   TypedReducer<AppState, UpdateMoreMessage>(_onUpdateMoreMessage),
@@ -20,6 +21,10 @@ final messageReducers = <AppState Function(AppState, dynamic)>[
 AppState _onMessageUpdated(AppState state, UpdateAllMessages action) {
 
   return state.rebuild((a) => a ..currentChat=ListBuilder(action.data)  ..loading=false);
+}
+AppState _onDeleteAll(AppState state, OnDeleteAll action) {
+
+  return state.rebuild((a) => a ..currentChat=ListBuilder()  ..loading=false);
 }
 
 AppState _onMessageSend(AppState state, OnSendMessage action) {

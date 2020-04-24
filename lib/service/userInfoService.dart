@@ -205,7 +205,23 @@ class UserRepository {
     });
   }
 
+    Stream<List<User>> getFriendStream( String userId) {
 
+    return _firestore
+        .collection(FirestorePaths.PATH_FRIEND)
+        .document(userId).collection('info').orderBy('nickName',descending: true)
+        .snapshots().asyncMap((query) async{
+          var a=<User>[];
+          for(DocumentSnapshot i in query.documents){
+            a.add(await  _firestore.collection('user').document(i.documentID).get().then((value){
+              return UserRepository.fromDoc(value);
+            }));
+          }
+          return a;
+    });
+
+
+  }
 
 
 

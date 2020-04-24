@@ -31,7 +31,6 @@ final appReducer=combineReducers<AppState>([
 }
 
 AppState _onFriendList(AppState state,GetFriend action){
-   print(action.friends);
   return state.rebuild((a)=>a
     ..Friends=ListBuilder(action.friends)
   );

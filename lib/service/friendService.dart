@@ -48,7 +48,7 @@ class FriendRepository {
       var aList = <User>[];
       for (var groceryPath in a) {
         aList.add(await _firestore.collection('user').document(groceryPath).get().then((value){
-          return get(value);
+          return UserRepository.fromDoc(value);
         }));
       }
 
@@ -56,38 +56,11 @@ class FriendRepository {
     });
   }
 
-  Stream<List<Friend>> getFriendStream( String userId) {
 
-    return _firestore
-        .collection(FirestorePaths.PATH_FRIEND)
-        .document(userId).collection('info').orderBy(NICKNAME,descending: true)
-        .snapshots().map((QuerySnapshot content) {
-            List<Friend> listFriend=new List();
-           content.documents.map((DocumentSnapshot each) {
-
-             return  _firestore.collection('user').document(each.documentID).snapshots().map((DocumentSnapshot data){
-                return (getFriendDoc(data, each));
-              }).listen((inn){
-              listFriend.add(inn);
-               });
-           });
-           return listFriend;
-     });
-
-  }
-  Stream<Friend> getFriend(String uid,String targetId) {
-   Friend a;
-    return _firestore
-        .collection(FirestorePaths.PATH_FRIEND)
-        .document(uid).collection('info').document(targetId).snapshots().map((item){
-           _firestore.collection('user').document(item.documentID).snapshots().map(( DocumentSnapshot each){
-             return each;
-           }).listen((co){
-             a= getFriendDoc(co, item);
-          });
-           print(a);
-           return a;
-    });
+  Stream<Friend> getFriend(String uid,String targetId)  {
+      return _firestore.document(FirestorePaths.friendPath(uid, targetId)).snapshots().map((data){
+        return getFriendDoc(data);
+      });
   }
 
   Future<String> updateBackground( File imgUrl,String uid,String targteid) async{
@@ -114,9 +87,9 @@ class FriendRepository {
     await _firestore.document(FirestorePaths.friendPath(uid, targetId)).updateData({NICKNAME:newName});
 }
 
-  static Friend getFriendDoc(DocumentSnapshot user,DocumentSnapshot friend){
+  static Friend getFriendDoc(DocumentSnapshot friend){
     return Friend((c)=>c
-      ..user=UserRepository.fromDoc(user).toBuilder()
+      //..user=UserRepository.fromDoc(user).toBuilder()
         ..background=friend[BACKGROUND]
         ..nickName=friend[NICKNAME]
         ..setTop=friend[SETTOP]
