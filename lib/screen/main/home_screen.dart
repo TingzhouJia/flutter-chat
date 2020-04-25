@@ -90,10 +90,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     return DefaultTabController(
       length: tabList.length,
       child: Scaffold(
-
         backgroundColor: Theme.of(context).primaryColor,
         appBar: PreferredSize(
           child: AppBar(
+
+            automaticallyImplyLeading: true,
+            centerTitle: true,
+            titleSpacing: 0.0,
             leading: GestureDetector(
               onTap: () {
                 jumpToProfile(
@@ -103,20 +106,19 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     context);
               },
               child: Padding(
-                padding: EdgeInsets.only(left: 10),
+                padding: EdgeInsets.only(left: 15.0),
                 child: ClipOval(
-
-
                   child: vm.user.imgUrl == ""
                       ? Image(image: AssetImage('assets/default_img.jpg'),)
                       : FadeInImage.assetNetwork(placeholder:'assets/default_img.jpg' ,image: vm.user.imgUrl, width:35.0,height: 35.0 ,fit: BoxFit.cover,),
+
                 ),
               ),
             ),
             title: Text(
               vm.messageOnScreen==0?'Chats':'Chats(${vm.messageOnScreen})',
               style: TextStyle(
-                  fontSize: 28.0,
+                  fontSize: 25.0,
                   fontWeight: FontWeight.bold,
                   color: Colors.white),
             ),
@@ -127,7 +129,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 iconSize: 30.0,
                 color: Colors.white,
                 onPressed: (){
-
                 } ,
               ),
             ],
@@ -142,7 +143,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
          child:  Column(
              children: <Widget>[
                Container(
-                 height: 70.0,
+                 height: 65.0,
+                 padding: EdgeInsets.zero,
                  color: Theme.of(context).primaryColor,
                  child: TabBar(
                      labelColor: Colors.white,

@@ -267,7 +267,7 @@ class _ChatDetailState extends State<ChatDetail> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Text('Setup current background image', style: TextStyle(fontSize: 18.0,fontWeight: FontWeight.bold),),
+                            Text('Setup background image', style: TextStyle(fontSize: 18.0,fontWeight: FontWeight.bold),),
                             Container(
                               decoration: BoxDecoration(
                                   color: Colors.white,

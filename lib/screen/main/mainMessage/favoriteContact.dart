@@ -31,15 +31,13 @@ class FavoriteContact extends StatelessWidget {
                   iconSize: 30.0,
                   color: Colors.blueGrey,
                   onPressed: (){
-
                   },
-
                 )
               ],
             ),
           ),
           Container(
-            height: 120,
+            height: 100,
             child: ListView.builder(
                 padding: EdgeInsets.only(left: 10.0),
                 scrollDirection: Axis.horizontal,
@@ -60,7 +58,7 @@ class FavoriteContact extends StatelessWidget {
                         child: Column(
                           children: <Widget>[
                             CircleAvatar(
-                                radius: 35.0,
+                                radius: 30.0,
                                 backgroundImage: favorOne.imgUrl==""? AssetImage('assets/male1.jpg')
                                     : NetworkImage(favorOne.imgUrl)),
                             Text(
@@ -71,8 +69,6 @@ class FavoriteContact extends StatelessWidget {
                                   fontWeight: FontWeight.w600
                               ),
                             ),
-
-
 
                           ],
                         ),
