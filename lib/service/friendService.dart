@@ -8,6 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:learnflutter/model/friend.dart';
+import 'package:learnflutter/model/message.dart';
 import 'package:learnflutter/model/user.dart';
 import 'package:learnflutter/service/userInfoService.dart';
 import 'package:path/path.dart' as Path;
@@ -98,6 +99,35 @@ class FriendRepository {
     );
   }
 
+  Future<void> recommendToFriends(List<String> toList,Friend target,User sender) async{
+    toList.map((user) async{
+      final data3={
+        'body':target.user.uid,'messageType':MessageType.RECOMMEND,'pending':false,
+        'authorId':sender.uid,'timestamp':DateTime.now()
+      };
+      final recentpath=_firestore.collection(FirestorePaths.Path_RECENT).document(sender.uid).collection("info").document(user);
+      final path2=_firestore.collection(FirestorePaths.Path_RECENT).document(user).collection("info").document(sender.uid);
+      final targte= await recentpath.get();
+      final target2=await path2.get();
+      if(targte.data==null||targte.data.length == 0){
+        await recentpath.setData({'body':'You have recommend a friend ','messageType':MessageType.RECOMMEND,'pending':false,
+          'userId':sender.uid,'userName':user,'timestamp':DateTime.now()});
+      }else{
+        await recentpath.updateData({'body':'You have recommend a friend ','messageType':MessageType.RECOMMEND,'pending':false,
+          'userId':sender.uid,'userName':user,'timestamp':DateTime.now()});
+      }
+      if(target2.data==null||target2.data.length==0){
+        await path2.setData({'body':'You have been receive a recommendation from ${sender.name}','messageType':MessageType.RECOMMEND,'pending':true,
+          'userId':sender.uid,'userName':user,'timestamp':DateTime.now()});
+      }else{
+        await path2.updateData({'body':'You have been receive a recommendation from ${sender.name}','messageType':MessageType.RECOMMEND,'pending':true,
+          'userId':sender.uid,'userName':user,'timestamp':DateTime.now()});
+      }
+      await _firestore.collection(FirestorePaths.messagePath(user, sender.uid)).add(data3);
+      await _firestore.collection(FirestorePaths.messagePath(sender.uid,user)).add(data3);
+    });
+  }
+
   static User get(document){
     return User((u) => u
       ..uid = document.documentID
@@ -112,6 +142,14 @@ class FriendRepository {
     );
   }
 
+  Future<void> deleteFriend(String uid,String targteid){
+    final a=_firestore.document(FirestorePaths.RecentPath(uid));
+    if(a.get()==null){
+      a.delete();
+    }
+    _firestore.document(FirestorePaths.friendPath(uid, targteid)).delete();
+    _firestore.document(FirestorePaths.friendPath(targteid, uid)).delete();
+  }
 //
 //  Future<Channel> documentToChannel(
 //      String groupId,

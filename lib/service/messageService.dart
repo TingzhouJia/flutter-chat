@@ -60,23 +60,27 @@ class MessageRepository {
       final reference = await _firestore.collection(FirestorePaths.PATH_MESSAGES).document(sender.uid).collection(receiver).add(data1);
       await _firestore.collection(FirestorePaths.PATH_MESSAGES).document(receiver).collection(sender.uid).add(data2);
       //update recent chat
-      final recentpath=_firestore.collection(FirestorePaths.Path_RECENT).document(sender.uid).collection("info").document(receiver);
-      final path2=_firestore.collection(FirestorePaths.Path_RECENT).document(receiver).collection("info").document(sender.uid);
-      final targte= await recentpath.get();
-      final target2=await path2.get();
-      if(targte.data==null||targte.data.length == 0){
-        await recentpath.setData(toRecetMap(message,sender,true,receiver));
-      }else{
-        await recentpath.updateData({BODY:message.body,TIMESTAMP:message.timestamp,PENDING:false});
-      }
-      if(target2.data==null||target2.data.length==0){
-        await path2.setData(toRecetMap(message, sender,false,receiver));
-      }else{
-        await path2.updateData({BODY:message.messageType==MessageType.USER?message.body:'[Photo/Vedio]',TIMESTAMP:message.timestamp,PENDING:true,USER_ID:message.authorId});
-      }
+      await UpdateRecentChat(sender, receiver, message);
       final doc = await reference.get();
       return fromDoc(doc);
       
+  }
+
+   Future<void>  UpdateRecentChat(User sender, String receiver, Message message,) async{
+    final recentpath=_firestore.collection(FirestorePaths.Path_RECENT).document(sender.uid).collection("info").document(receiver);
+    final path2=_firestore.collection(FirestorePaths.Path_RECENT).document(receiver).collection("info").document(sender.uid);
+    final targte= await recentpath.get();
+    final target2=await path2.get();
+    if(targte.data==null||targte.data.length == 0){
+      await recentpath.setData(toRecetMap(message,sender,true,receiver));
+    }else{
+      await recentpath.updateData({BODY:message.body,TIMESTAMP:message.timestamp,PENDING:false});
+    }
+    if(target2.data==null||target2.data.length==0){
+      await path2.setData(toRecetMap(message, sender,false,receiver));
+    }else{
+      await path2.updateData({BODY:message.messageType==MessageType.USER?message.body:'[Photo/Vedio]',TIMESTAMP:message.timestamp,PENDING:true,USER_ID:message.authorId});
+    }
   }
 
 

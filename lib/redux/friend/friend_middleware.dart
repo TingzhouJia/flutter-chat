@@ -13,6 +13,8 @@ List<Middleware<AppState>> createFriendMiddleware(
   return [
 
     TypedMiddleware<AppState, UpdateCurrentTarget>(_listenToCurrentTarget(friendRepository)),
+    TypedMiddleware<AppState, DeleteFriend>(_deleteFriend(friendRepository)),
+    TypedMiddleware<AppState, RecommendTo>(_recommendToFriend(friendRepository)),
     TypedMiddleware<AppState, UpdateSetting>(_updateSetting(friendRepository)),
     TypedMiddleware<AppState, UpdateNickname>(_updateNickname(friendRepository)),
     TypedMiddleware<AppState, UpdateFriendBackGround>(_updateBackground(friendRepository)),
@@ -45,16 +47,39 @@ void Function(
 }
 void Function(
     Store<AppState> store,
-    UpdateSetting action,
+    DeleteFriend action,
     NextDispatcher next,
-    ) _updateSetting(
+    ) _deleteFriend(
     FriendRepository friendRepository,
     ) {
   return (store, action, next) {
     next(action);
     try {
+//      friendRepository.getFriend(store.state.user.uid,action.uid).listen((user) {
+//
+//        final a=store.state.Friends.firstWhere((c)=>c.uid==action.uid);
+//
+//        final c=user.rebuild((c)=>c ..user=a.toBuilder());
+//
+//        store.dispatch(OnUpdateCurrentTarget(c));
+//      });
+    } catch (e){
+      print("Failed to listen user");
+    }
+  };
+}
+void Function(
+    Store<AppState> store,
+    UpdateSetting action,
+    NextDispatcher next,
+    ) _updateSetting(
+    FriendRepository friendRepository,
+    ) {
+  return (store, action, next)async {
+    next(action);
+    try {
 
-      friendRepository.updateNotification(action.set, store.state.user.uid, store.state.currentTarget.user.uid, action.result).then((_){
+     await friendRepository.updateNotification(action.set, store.state.user.uid, store.state.currentTarget.user.uid, action.result).then((_){
         switch(action.set){
           case FriendSetting.SET_TOP:
             Friend a=store.state.currentTarget.rebuild((c)=>c ..setTop=action.result);
@@ -83,12 +108,12 @@ void Function(
     ) _updateNickname(
     FriendRepository friendRepository,
     ) {
-  return (store, action, next) {
+  return (store, action, next) async{
     next(action);
     try {
 
 
-      friendRepository.updateNickName(action.nickname,store.state.user.uid,store.state.currentTarget.user.uid).then((_) {
+    await  friendRepository.updateNickName(action.nickname,store.state.user.uid,store.state.currentTarget.user.uid).then((_) {
         Friend user=store.state.currentTarget.rebuild((c)=>c ..nickName=action.nickname);
         store.dispatch(OnUpdateCurrentTarget(user));
       });
@@ -104,13 +129,29 @@ void Function(
     ) _updateBackground(
     FriendRepository friendRepository,
     ) {
-  return (store, action, next) {
+  return (store, action, next) async {
     next(action);
     try {
-      friendRepository.updateBackground(action.file,store.state.user.uid,store.state.currentTarget.user.uid).then((data) {
+     await friendRepository.updateBackground(action.file,store.state.user.uid,store.state.currentTarget.user.uid).then((data) {
         Friend user=store.state.currentTarget.rebuild((c)=>c ..background=data);
         store.dispatch(OnUpdateCurrentTarget(user));
       });
+    } catch (e){
+      print("Failed to listen user");
+    }
+  };
+}
+void Function(
+    Store<AppState> store,
+    RecommendTo action,
+    NextDispatcher next,
+    ) _recommendToFriend(
+    FriendRepository friendRepository,
+    ) {
+  return (store, action, next) async {
+    next(action);
+    try {
+      await friendRepository.recommendToFriends(action.sendTo, store.state.currentTarget, store.state.user);
     } catch (e){
       print("Failed to listen user");
     }

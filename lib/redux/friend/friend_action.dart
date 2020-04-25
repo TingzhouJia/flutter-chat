@@ -43,3 +43,10 @@ class DeleteFriend{
 
   DeleteFriend();
 }
+
+class RecommendTo{
+  List<String> sendTo;
+
+  RecommendTo(this.sendTo);
+
+}

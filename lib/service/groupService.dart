@@ -198,25 +198,42 @@ class GroupRepository {
   }
 
   Future<void> inviteToChannel({
-    String groupId,
-    String groupName,
+ Group group,
     List<String> members,
     String invitingUsername,
   }) async {
     members.map((user) async{
-        final data = {'body':'You have been invited by $invitingUsername to join $groupName}','messageType':MessageType.SYSTEM,'pending':true,
-          'userId':user,'userName':'SYSTEM','timestamp':DateTime.now()
+        final data3={
+          'body':'${group.id}','messageType':MessageType.INVITATION,'pending':false, 'name':group.name,
+          'authorId':invitingUsername,'timestamp':DateTime.now()
         };
-        await _firestore
-            .document(FirestorePaths.RecentPath(user))
-            .collection('info').document('system').updateData(data);
-        await _firestore.collection(FirestorePaths.messagePath(user, 'system')).add(data);
+        final recentpath=_firestore.collection(FirestorePaths.Path_RECENT).document(invitingUsername).collection("info").document(user);
+        final path2=_firestore.collection(FirestorePaths.Path_RECENT).document(user).collection("info").document(invitingUsername);
+        final targte= await recentpath.get();
+        final target2=await path2.get();
+        if(targte.data==null||targte.data.length == 0){
+          await recentpath.setData({'body':'You have been invited by $invitingUsername to join groupchat ${group.name}','messageType':MessageType.INVITATION,'pending':false,
+            'userId':user,'userName':'SYSTEM','timestamp':DateTime.now()});
+        }else{
+          await recentpath.updateData({'body':'You have been invited by $invitingUsername to join groupchat ${group.name}','messageType':MessageType.INVITATION,'pending':false,
+          'userId':user,'userName':'SYSTEM','timestamp':DateTime.now()});
+        }
+        if(target2.data==null||target2.data.length==0){
+          await path2.setData({'body':'You have been invited by $invitingUsername to join groupchat ${group.name}','messageType':MessageType.INVITATION,'pending':true,
+            'userId':user,'userName':'SYSTEM','timestamp':DateTime.now()});
+        }else{
+          await path2.updateData({'body':'You have been invited by $invitingUsername to join groupchat ${group.name}','messageType':MessageType.INVITATION,'pending':true,
+            'userId':user,'userName':'SYSTEM','timestamp':DateTime.now()});
+        }
+
+        await _firestore.collection(FirestorePaths.messagePath(user, invitingUsername)).add(data3);
+        await _firestore.collection(FirestorePaths.messagePath(invitingUsername,user)).add(data3);
       });
 
-      _firestore.document(FirestorePaths.groupPath(groupId)).snapshots().map((each) {
+      _firestore.document(FirestorePaths.groupPath(group.id)).snapshots().map((each) {
         return each[INVITEDMEMBERS];
       }).listen((data) async{
-       await  _firestore.document(FirestorePaths.groupPath(groupId)).updateData({INVITEDMEMBERS:data.addAll(members)});
+       await  _firestore.document(FirestorePaths.groupPath(group.id)).updateData({INVITEDMEMBERS:data.addAll(members)});
       });
 
   }

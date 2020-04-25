@@ -76,8 +76,8 @@ abstract class MessageBuilder implements Builder<Message, MessageBuilder> {
   factory MessageBuilder() = _$MessageBuilder;
   MessageBuilder._();
 }
-
-enum MessageType { SYSTEM, RSVP, USER, MEDIA }
+//RSVP means card to recommend
+enum MessageType { SYSTEM, RSVP, USER, MEDIA,GROUP,INVITATION,RECOMMEND}
 
 class MessageTypeHelper {
   static String stringOf(MessageType messageType) {
@@ -88,6 +88,12 @@ class MessageTypeHelper {
         return "RSVP";
       case MessageType.MEDIA:
         return "MEDIA";
+
+      case MessageType.INVITATION:
+        return "INVITATION";
+
+      case MessageType.RECOMMEND:
+        return "RECOMMEND";
       default:
         return "USER";
     }
@@ -101,6 +107,10 @@ class MessageTypeHelper {
         return MessageType.RSVP;
       case "MEDIA":
         return MessageType.MEDIA;
+      case "INVITATION":
+        return MessageType.INVITATION;
+      case "RECOMMEND":
+        return MessageType.RECOMMEND;
       default:
         return MessageType.USER;
     }

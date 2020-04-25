@@ -109,25 +109,6 @@ class _MainFriendState extends State<MainFriend> {
             children: _WordsWidget,
           ),
         ),
-//        onVerticalDragUpdate: (DragUpdateDetails details) {
-//          if (_selectedIndex != GetIndex(context, details.globalPosition)) {
-//            _selectedIndex = GetIndex(context, details.globalPosition);
-//
-//            jump(INDEX_WORDS[_selectedIndex]);
-//          } //重复点击添加容错处理
-//        },
-//        //按下
-//        onVerticalDragDown: (DragDownDetails details) {
-//          //print(details.globalPosition);
-//
-//
-//         jump(
-//              INDEX_WORDS[GetIndex(context, details.globalPosition)]);
-//        },
-//
-//        onVerticalDragEnd: (DragEndDetails details) {
-//
-//        },
       ),
     );
   }
@@ -350,29 +331,18 @@ const INDEX_WORDS = [
   'Z'
 ];
 
-//class IndexBar extends StatefulWidget {
-//  final void Function(String string) indexBarCallBack;
-//  final void Function(String string) indexBCallBack;
-//  const IndexBar({Key key, this.indexBarCallBack,this.indexBCallBack}) : super(key: key);
+
 //
-//  @override
-//  _IndexBarState createState() => _IndexBarState();
+//int GetIndex(BuildContext context, Offset globalPosition) {
+//  RenderBox box = context.findRenderObject();
+//  double y = box.globalToLocal(globalPosition).dy;
+//  //每一个Item的高度
+//  var ItemHeight = 60.0;
+//
+//  //clamp 防止越界
+//  int index = (y ~/ ItemHeight).clamp(0, INDEX_WORDS.length - 1);
+//  return index;
+//  print(' index = $index  ,${INDEX_WORDS[index]}');
 //}
 
-int GetIndex(BuildContext context, Offset globalPosition) {
-  RenderBox box = context.findRenderObject();
-  double y = box.globalToLocal(globalPosition).dy;
-  //每一个Item的高度
-  var ItemHeight = 60.0;
 
-  //clamp 防止越界
-  int index = (y ~/ ItemHeight).clamp(0, INDEX_WORDS.length - 1);
-  return index;
-  print(' index = $index  ,${INDEX_WORDS[index]}');
-}
-
-//class _IndexBarState extends State<IndexBar> {
-//
-//  @override
-//
-//}

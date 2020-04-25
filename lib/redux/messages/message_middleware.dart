@@ -32,8 +32,8 @@ List<Middleware<AppState>> createMessagesMiddleware(
         _loadMoreMessages(messagesRepository)),
     TypedMiddleware<AppState, SelectGroupChat>(
         _selectGroupChat(messagesRepository)),
-    TypedMiddleware<AppState, SystemMessageDispatch>(
-        _groupDispatch(messagesRepository)),
+//    TypedMiddleware<AppState, SystemMessageDispatch>(
+//        _groupDispatch(messagesRepository)),
     TypedMiddleware<AppState, SendGroupMessage>(
         _sendGroupMessages(messagesRepository)),
     TypedMiddleware<AppState, EmojiReaction>(
@@ -74,33 +74,32 @@ void Function(
     }
   };
 }
-void Function(
-    Store<AppState> store,
-    SystemMessageDispatch action,
-    NextDispatcher next,
-    ) _groupDispatch(
-    MessageRepository messageRepository,
-    ) {
-  return (store, action, next) async {
-    next(action);
-
-
-      action.userList.map((each) async{
-        final message = Message((m) => m
-          ..body = 'You are invited to Join group ${store.state.selectedGroup.name}'
-          ..timestamp=DateTime.now()
-          ..messageType=MessageType.SYSTEM
-          ..authorId = 'SYSTEM');
-        try {
-          await messageRepository.sendGroupMessage(each, message, store.state.selectedGroup);
-        } catch (e) {
-          print(e);
-        }
-      });
-
-
-  };
-}
+//void Function(
+//    Store<AppState> store,
+//    SystemMessageDispatch action,
+//    NextDispatcher next,
+//    ) _groupDispatch(
+//    MessageRepository messageRepository,
+//    ) {
+//  return (store, action, next) async {
+//    next(action);
+//
+//      action.userList.map((each) async{
+//        final message = Message((m) => m
+//          ..body = 'You are invited to Join group ${store.state.selectedGroup.name}'
+//          ..timestamp=DateTime.now()
+//          ..messageType=MessageType.SYSTEM
+//          ..authorId = 'SYSTEM');
+//        try {
+//          await messageRepository.sendGroupMessage(each, message, store.state.selectedGroup);
+//        } catch (e) {
+//          print(e);
+//        }
+//      });
+//
+//
+//  };
+//}
 void Function(
     Store<AppState> store,
     DeleteAllMessage action,

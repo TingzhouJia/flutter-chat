@@ -6,6 +6,9 @@ import 'package:learnflutter/redux/friend/friend_action.dart';
 import 'package:learnflutter/redux/messages/message_action.dart';
 import 'package:learnflutter/redux/state.dart';
 import 'package:learnflutter/screen/chat/chat_detail_view.dart';
+import 'package:learnflutter/screen/friends/friend_select.dart';
+import 'package:learnflutter/utils/bottomUpAnimation.dart';
+import 'package:learnflutter/utils/helper.dart';
 
 class ChatDetail extends StatefulWidget {
   @override
@@ -78,7 +81,11 @@ class _ChatDetailState extends State<ChatDetail> {
                             iconSize: 25.0,
                             icon: Icon(Icons.add),
                             onPressed: (){
-
+                              jumpToProfile(
+                                      (BuildContext context, Animation animation,
+                                      Animation secondaryAnimation) =>
+                                      FriendSelect(SYSTEM_DISPATCH.GROUP),
+                                  context);
                             },
                           ),
                         )

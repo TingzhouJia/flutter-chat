@@ -94,18 +94,7 @@ class _FriendManipulationState extends State<FriendManipulation> {
                                         fontWeight: FontWeight.w500,
                                         fontSize: 18.0),
                                   ),
-                                  Row(
-                                    children: <Widget>[
-                                      Text(vm.friend.nickName,
-                                          style: TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 18.0)),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Icon(Icons.keyboard_arrow_right,size: 30.0,color: Colors.grey,)
-                                    ],
-                                  )
+                                  Icon(Icons.keyboard_arrow_right,size: 30.0,color: Colors.grey,)
                                 ],
                               ),
                             ),
@@ -127,18 +116,7 @@ class _FriendManipulationState extends State<FriendManipulation> {
                                         fontWeight: FontWeight.w500,
                                         fontSize: 18.0),
                                   ),
-                                  Row(
-                                    children: <Widget>[
-                                      Text(vm.friend.nickName,
-                                          style: TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 18.0)),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Icon(Icons.keyboard_arrow_right,size: 30.0,color: Colors.grey,)
-                                    ],
-                                  )
+                                  Icon(Icons.keyboard_arrow_right,size: 30.0,color: Colors.grey,)
                                 ],
                               ),
                             ),
@@ -270,6 +248,20 @@ class _FriendManipulationState extends State<FriendManipulation> {
                                                onTap: () {
                                                  //StoreProvider.of(context).dispatch()
                                                  Navigator.pop(context);
+                                                 showCupertinoDialog(context: context, builder: (context){
+                                                   return Dialog(
+                                                    shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.all(Radius.circular(32.0))),
+                                                    child: Container(
+                                                      height: 40.0,
+                                                      width: 40,
+                                                      child: Text('Loading'),
+                                                    ),
+                                                   );
+                                                 });
+                                                 Future.delayed(Duration(seconds: 2),(){
+                                                   Navigator.pop(context);
+                                                 });
                                                },
                                              ),
                                              ListTile(
