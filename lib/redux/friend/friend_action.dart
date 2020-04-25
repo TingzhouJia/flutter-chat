@@ -39,3 +39,7 @@ class OnUpdateFriend{
   OnUpdateFriend(this.friend);
 
 }
+class DeleteFriend{
+
+  DeleteFriend();
+}
