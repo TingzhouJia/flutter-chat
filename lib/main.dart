@@ -79,7 +79,6 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return StoreProvider(
       store: store,
-
       child:  MaterialApp(
         title: 'Flutter Chat UI',
         debugShowCheckedModeBanner: false,

@@ -110,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 child: ClipOval(
                   child: vm.user.imgUrl == ""
                       ? Image(image: AssetImage('assets/default_img.jpg'),)
-                      : FadeInImage.assetNetwork(placeholder:'assets/default_img.jpg' ,image: vm.user.imgUrl, width:35.0,height: 35.0 ,fit: BoxFit.cover,),
+                      : FadeInImage.assetNetwork(placeholder:'assets/default_img.jpg' ,image: vm.user.imgUrl ,fit: BoxFit.cover,),
 
                 ),
               ),

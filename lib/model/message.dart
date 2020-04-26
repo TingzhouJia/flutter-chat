@@ -4,6 +4,7 @@ import 'package:built_collection/built_collection.dart';
 //// ignore: prefer_double_quotes
 import 'package:built_value/built_value.dart';
 import 'package:learnflutter/model/reaction.dart';
+import 'package:learnflutter/model/recommendInvitation.dart';
 
 part 'message.g.dart';
 
@@ -24,6 +25,9 @@ abstract class Message implements Built<Message, MessageBuilder> {
   bool get pending;
 
   DateTime get timestamp;
+
+  @nullable
+  RecoInvi get recommendationInvitation;
 
   @nullable
   BuiltList<String> get media;
@@ -62,6 +66,9 @@ abstract class MessageBuilder implements Builder<Message, MessageBuilder> {
   MapBuilder<String, Reaction> reactions;
 
   MessageType messageType = MessageType.USER;
+
+  @nullable
+  RecoInviBuilder recommendationInvitation;
 
   bool pending = false;
   @nullable

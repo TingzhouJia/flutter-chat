@@ -22,6 +22,8 @@ class _$Message extends Message {
   @override
   final DateTime timestamp;
   @override
+  final RecoInvi recommendationInvitation;
+  @override
   final BuiltList<String> media;
   @override
   final MediaStatus mediaStatus;
@@ -37,6 +39,7 @@ class _$Message extends Message {
       this.messageType,
       this.pending,
       this.timestamp,
+      this.recommendationInvitation,
       this.media,
       this.mediaStatus})
       : super._() {
@@ -72,6 +75,7 @@ class _$Message extends Message {
         messageType == other.messageType &&
         pending == other.pending &&
         timestamp == other.timestamp &&
+        recommendationInvitation == other.recommendationInvitation &&
         media == other.media &&
         mediaStatus == other.mediaStatus;
   }
@@ -84,12 +88,14 @@ class _$Message extends Message {
                 $jc(
                     $jc(
                         $jc(
-                            $jc($jc($jc(0, id.hashCode), authorId.hashCode),
-                                body.hashCode),
-                            reactions.hashCode),
-                        messageType.hashCode),
-                    pending.hashCode),
-                timestamp.hashCode),
+                            $jc(
+                                $jc($jc($jc(0, id.hashCode), authorId.hashCode),
+                                    body.hashCode),
+                                reactions.hashCode),
+                            messageType.hashCode),
+                        pending.hashCode),
+                    timestamp.hashCode),
+                recommendationInvitation.hashCode),
             media.hashCode),
         mediaStatus.hashCode));
   }
@@ -104,6 +110,7 @@ class _$Message extends Message {
           ..add('messageType', messageType)
           ..add('pending', pending)
           ..add('timestamp', timestamp)
+          ..add('recommendationInvitation', recommendationInvitation)
           ..add('media', media)
           ..add('mediaStatus', mediaStatus))
         .toString();
@@ -198,6 +205,18 @@ class _$MessageBuilder extends MessageBuilder {
   }
 
   @override
+  RecoInviBuilder get recommendationInvitation {
+    _$this;
+    return super.recommendationInvitation ??= new RecoInviBuilder();
+  }
+
+  @override
+  set recommendationInvitation(RecoInviBuilder recommendationInvitation) {
+    _$this;
+    super.recommendationInvitation = recommendationInvitation;
+  }
+
+  @override
   BuiltList<String> get media {
     _$this;
     return super.media;
@@ -232,6 +251,8 @@ class _$MessageBuilder extends MessageBuilder {
       super.messageType = _$v.messageType;
       super.pending = _$v.pending;
       super.timestamp = _$v.timestamp;
+      super.recommendationInvitation =
+          _$v.recommendationInvitation?.toBuilder();
       super.media = _$v.media;
       super.mediaStatus = _$v.mediaStatus;
       _$v = null;
@@ -265,6 +286,7 @@ class _$MessageBuilder extends MessageBuilder {
               messageType: messageType,
               pending: pending,
               timestamp: timestamp,
+              recommendationInvitation: super.recommendationInvitation?.build(),
               media: media,
               mediaStatus: mediaStatus);
     } catch (_) {
@@ -272,6 +294,9 @@ class _$MessageBuilder extends MessageBuilder {
       try {
         _$failedField = 'reactions';
         super.reactions?.build();
+
+        _$failedField = 'recommendationInvitation';
+        super.recommendationInvitation?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'Message', _$failedField, e.toString());

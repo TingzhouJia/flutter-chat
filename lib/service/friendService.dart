@@ -102,8 +102,8 @@ class FriendRepository {
   Future<void> recommendToFriends(List<String> toList,Friend target,User sender) async{
     toList.map((user) async{
       final data3={
-        'body':target.user.uid,'messageType':MessageType.RECOMMEND,'pending':false,
-        'authorId':sender.uid,'timestamp':DateTime.now()
+        'imgUrl':target.user.imgUrl,'messageType':MessageType.RECOMMEND,'pending':false,'targetId':target.user.uid,
+        'authorId':sender.uid,'timestamp':DateTime.now(),'targetName':target.user.name,
       };
       final recentpath=_firestore.collection(FirestorePaths.Path_RECENT).document(sender.uid).collection("info").document(user);
       final path2=_firestore.collection(FirestorePaths.Path_RECENT).document(user).collection("info").document(sender.uid);
@@ -142,13 +142,19 @@ class FriendRepository {
     );
   }
 
-  Future<void> deleteFriend(String uid,String targteid){
+  Future<void> deleteFriend(String uid,String targteid,String targetName){
     final a=_firestore.document(FirestorePaths.RecentPath(uid));
     if(a.get()==null){
       a.delete();
     }
+    final data={
+      'authorId':'SYSTEM','body':'Your relationship with $targetName (id:$targteid ) have been relieved',
+      'userId':targteid,'messageType':MessageType.SYSTEM,'pending':true,'userImage':"",'userName':'system','timestamp':DateTime.now(),
+    };
     _firestore.document(FirestorePaths.friendPath(uid, targteid)).delete();
     _firestore.document(FirestorePaths.friendPath(targteid, uid)).delete();
+    _firestore.collection(FirestorePaths.RecentPath(targteid)).document('system').updateData(data);
+    _firestore.collection(FirestorePaths.PATH_MESSAGES).document(targteid).collection('system').add(data);
   }
 //
 //  Future<Channel> documentToChannel(

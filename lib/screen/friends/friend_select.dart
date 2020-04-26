@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:learnflutter/redux/channel/channel_action.dart';
 import 'package:learnflutter/redux/friend/friend_action.dart';
 import 'package:learnflutter/redux/state.dart';
+import 'package:learnflutter/screen/group/group_screen.dart';
 import 'package:learnflutter/screen/main/mainFriend/mainFriend_view.dart';
 import 'package:learnflutter/utils/helper.dart';
 
@@ -33,7 +35,15 @@ class _FriendSelectState extends State<FriendSelect> {
   final Map _groupMap = {};
   ScrollController _scrollController;
   List target = new List();
-
+  final spinkit = SpinKitFadingCircle(
+    itemBuilder: (BuildContext context,int index) {
+      return DecoratedBox(
+        decoration: BoxDecoration(
+            color: Colors.black
+        ),
+      );
+    },
+  );
   void initState() {
     for (int i = 0; i < 100; i++) {
       a.add(tester("", "good", '${INDEX_WORDS[i % 26]}bb',
@@ -130,10 +140,15 @@ class _FriendSelectState extends State<FriendSelect> {
       appBar: AppBar(
         elevation: 0.0,
         automaticallyImplyLeading: false,
-        leading: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[Text('Cancel')],
+        leading: GestureDetector(
+          onTap: (){
+            Navigator.of(context).pop();
+          },
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[Text('Cancel')],
+          ),
         ),
         centerTitle: true,
         titleSpacing: 0.0,
@@ -147,11 +162,36 @@ class _FriendSelectState extends State<FriendSelect> {
 
                onTap: (){
                  if(widget.target==SYSTEM_DISPATCH.RECOMMEND){
-                   List a=target.map((i)=>i.uid).toList();
-                   StoreProvider.of(context).dispatch(RecommendTo(a));
+                   //List a=target.map((i)=>i.uid).toList();
+                  // StoreProvider.of(context).dispatch(RecommendTo(a));
                  }else{
-                   List a=target.map((i)=>i.user.uid).toList();
-                   StoreProvider.of(context).dispatch(InviteToChannelAction(a));
+                  // List a=target.map((i)=>i.user.uid).toList();
+                 //  StoreProvider.of(context).dispatch(InviteToChannelAction(a));
+
+                   showCupertinoDialog(
+                     context: context,builder: (context){
+                       return Material(
+                         type: MaterialType.transparency,
+                         child: Container(
+                           child: Column(
+                             mainAxisAlignment: MainAxisAlignment.center,
+                             children: <Widget>[
+                               Text('Loading...',style: TextStyle(fontSize: 16.0,)),
+                               spinkit
+                             ],
+                           ),
+                         ),
+                       );
+                   }
+                   );
+                   Future.delayed(Duration(seconds: 2),(){
+                     Navigator.pop(context);
+                     Navigator.push(
+                         context,
+                         MaterialPageRoute(
+                             builder: (_) => GroupScreen(
+                             )));
+                   });
                  }
                },
                child:  Container(

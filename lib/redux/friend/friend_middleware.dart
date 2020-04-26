@@ -1,5 +1,6 @@
 
 import 'package:learnflutter/model/friend.dart';
+import 'package:learnflutter/redux/messages/message_action.dart';
 import 'package:learnflutter/service/friendService.dart';
 import 'package:redux/redux.dart';
 
@@ -52,9 +53,11 @@ void Function(
     ) _deleteFriend(
     FriendRepository friendRepository,
     ) {
-  return (store, action, next) {
+  return (store, action, next)async {
     next(action);
     try {
+      await store.dispatch(DeleteAllMessage());
+      await friendRepository.deleteFriend(store.state.user.uid, store.state.currentTarget.user.uid, store.state.currentTarget.nickName);
 //      friendRepository.getFriend(store.state.user.uid,action.uid).listen((user) {
 //
 //        final a=store.state.Friends.firstWhere((c)=>c.uid==action.uid);

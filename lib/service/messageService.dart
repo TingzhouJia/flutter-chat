@@ -9,6 +9,7 @@ import 'package:learnflutter/model/group.dart';
 import 'package:learnflutter/model/message.dart';
 import 'package:learnflutter/model/reaction.dart';
 import 'package:learnflutter/model/recentMessage.dart';
+import 'package:learnflutter/model/recommendInvitation.dart';
 import 'package:learnflutter/model/user.dart';
 import 'package:path/path.dart' as Path;
 import 'firestoreService.dart';
@@ -74,7 +75,7 @@ class MessageRepository {
     if(targte.data==null||targte.data.length == 0){
       await recentpath.setData(toRecetMap(message,sender,true,receiver));
     }else{
-      await recentpath.updateData({BODY:message.body,TIMESTAMP:message.timestamp,PENDING:false});
+      await recentpath.updateData({BODY:message.body,TIMESTAMP:message.timestamp,PENDING:false, USER_ID:sender.uid});
     }
     if(target2.data==null||target2.data.length==0){
       await path2.setData(toRecetMap(message, sender,false,receiver));
@@ -222,9 +223,23 @@ class MessageRepository {
         .document(path)
         .delete();
   }
-
+  //when type is recommendation and invitation : mediaStatus is used for record id of targeting
   static Message fromDoc(DocumentSnapshot document) {
     final messageType = MessageTypeHelper.valueOf(document[TYPE]);
+    if(messageType==MessageType.INVITATION||messageType==MessageType.RECOMMEND){
+      RecoInvi a=RecoInvi((a)=>a ..imgUrl=document['imgUrl'] ..name=document['targetName'] ..targetId=document['targetId']);
+      return Message((m) => m
+        ..id = document.documentID
+        ..body = document[BODY]
+        ..authorId = messageType == MessageType.SYSTEM ? null : document[AUTHOR]
+        ..messageType = messageType
+        ..recommendationInvitation=a.toBuilder()
+        ..timestamp = DateTime.parse(document[TIMESTAMP].toDate().toString())
+        ..pending = document.metadata.hasPendingWrites
+      );
+
+
+    }
     return Message((m) => m
       ..id = document.documentID
       ..body = document[BODY]
@@ -232,11 +247,12 @@ class MessageRepository {
       ..reactions = _parseReactions(document)
       ..messageType = messageType
       ..media = ListBuilder<String>(document[MEDIA] ?? []).build()
-      ..mediaStatus = MediaStatusHelper.valueOf(document[MEDIA_STATUS])
+      ..mediaStatus = (messageType==MessageType.RECOMMEND||messageType==MessageType.INVITATION)?document[MEDIA_STATUS]:MediaStatusHelper.valueOf(document[MEDIA_STATUS])
 //DateTime.fromMillisecondsSinceEpoch(
 //          int.tryParse(document[TIMESTAMP]) ?? 0)
       ..timestamp = DateTime.parse(document[TIMESTAMP].toDate().toString())
       ..pending = document.metadata.hasPendingWrites);
+
   }
 
   static recentMessage recentFromDoc(DocumentSnapshot document){
