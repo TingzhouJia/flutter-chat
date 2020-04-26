@@ -363,9 +363,6 @@ class MessageRepository {
       case MessageType.SYSTEM:
         return true;
         break;
-      case MessageType.RSVP:
-        return true;
-        break;
       case MessageType.USER:
         return _hasValidAuthor(documentSnapshot);
         break;

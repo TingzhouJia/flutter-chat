@@ -35,7 +35,7 @@ class _FriendSelectState extends State<FriendSelect> {
   final Map _groupMap = {};
   ScrollController _scrollController;
   List target = new List();
-  final spinkit = SpinKitFadingCircle(
+  static final spinkit = SpinKitFadingCircle(
     itemBuilder: (BuildContext context,int index) {
       return DecoratedBox(
         decoration: BoxDecoration(

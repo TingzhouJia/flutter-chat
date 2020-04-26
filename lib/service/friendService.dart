@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:learnflutter/model/friend.dart';
 import 'package:learnflutter/model/message.dart';
+import 'package:learnflutter/model/stranger.dart';
 import 'package:learnflutter/model/user.dart';
 import 'package:learnflutter/service/userInfoService.dart';
 import 'package:path/path.dart' as Path;
@@ -56,7 +57,11 @@ class FriendRepository {
       return aList;
     });
   }
-
+  Stream<Stranger> getStranger(String uid){
+    return _firestore.document(FirestorePaths.userPath(uid)).snapshots().map((snap){
+      return getStrangerDoc(snap);
+    });
+  }
 
   Stream<Friend> getFriend(String uid,String targetId)  {
       return _firestore.document(FirestorePaths.friendPath(uid, targetId)).snapshots().map((data){
@@ -90,12 +95,23 @@ class FriendRepository {
 
   static Friend getFriendDoc(DocumentSnapshot friend){
     return Friend((c)=>c
-      //..user=UserRepository.fromDoc(user).toBuilder()
+
         ..background=friend[BACKGROUND]
         ..nickName=friend[NICKNAME]
         ..setTop=friend[SETTOP]
         ..notification=friend[NOTIFICATION]
         ..strongNotification=friend[STRONGNOTIFI]
+    );
+  }
+  static Stranger getStrangerDoc(DocumentSnapshot stranger){
+    return Stranger((c)=>c
+        ..uid=stranger.documentID
+        ..name=stranger[NAME]
+        ..imgUrl=stranger['imgUrl']
+        ..description=stranger[DESCRIPTION]
+        ..gender=stranger[GENDER]
+        ..address=stranger[ADDRESS]
+        ..birthday=DateTime.parse(stranger[BIRTHDAY].toDate().toString())
     );
   }
 

@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:learnflutter/model/friend.dart';
+import 'package:learnflutter/model/stranger.dart';
 
 class UpdateCurrentTarget{
   final String uid;
@@ -48,5 +49,19 @@ class RecommendTo{
   List<String> sendTo;
 
   RecommendTo(this.sendTo);
+
+}
+
+class GetStranger{
+  String id;
+
+  GetStranger(this.id);
+
+}
+
+class UpdateStranger{
+  Stranger stranger;
+
+  UpdateStranger(this.stranger);
 
 }

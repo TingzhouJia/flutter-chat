@@ -15,9 +15,11 @@ import 'package:learnflutter/redux/channel/channel_action.dart';
 import 'package:learnflutter/redux/messages/message_action.dart';
 import 'package:learnflutter/redux/state.dart';
 import 'package:learnflutter/screen/chat/ChatList.dart';
+import 'package:learnflutter/screen/chat/callRoom.dart';
 import 'package:learnflutter/screen/chat/chatDetail.dart';
 import 'package:learnflutter/screen/chat/chat_view.dart';
 import 'package:learnflutter/screen/friends/friend_screen.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class ChatScreen extends StatefulWidget {
   @override
@@ -74,8 +76,27 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   bool onUse = false;
+  Future<void> _handleCameraAndMic() async {
+    await PermissionHandler().requestPermissions(
+      [PermissionGroup.camera, PermissionGroup.microphone],
+    );
+  }
 
-  _buildMessageComposer() {
+
+Future<void> onJoin(id) async {
+  // update input validation
+
+  await _handleCameraAndMic();
+  // push video page with given channel name
+  await Navigator.push(
+      context,
+      MaterialPageRoute(
+      builder: (context) => CallPage(
+    roomId:id
+  ),
+  ));
+}
+  _buildMessageComposer(ChatScreenViewModel vm) {
     return Stack(
       children: <Widget>[
 //        isShowEmoji?buildSticker():Container(),
@@ -182,10 +203,16 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
               Offstage(
                 offstage: onUse,
-                child: IconButton(
-                  icon: Icon(Icons.thumb_up),
-                  iconSize: 30.0,
-                  color: Colors.red,
+                child: GestureDetector(
+                  onTap:() {
+                    onJoin(vm.target.user.uid);
+                    StoreProvider.of(context).dispatch(SendMessage('',MessageType.VIDEO,[]));
+                  },
+                  child: IconButton(
+                    icon: Icon(Icons.phone),
+                    iconSize: 30.0,
+                    color: Colors.red,
+                  ),
                 ),
               )
             ],
@@ -251,7 +278,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 child: ChatList(),
               ),
             ),
-            _buildMessageComposer()
+            _buildMessageComposer(vm)
           ],
         ),
       ),

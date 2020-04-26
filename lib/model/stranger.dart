@@ -18,6 +18,7 @@ abstract class Stranger implements Built<Stranger, StrangerBuilder> {
   String get  imgUrl;
 
   String get description;
+
   int get gender;
   @nullable
   String get address;

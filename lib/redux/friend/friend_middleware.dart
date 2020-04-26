@@ -12,7 +12,7 @@ List<Middleware<AppState>> createFriendMiddleware(
 
     ) {
   return [
-
+    TypedMiddleware<AppState, GetStranger>(_listenToStranger(friendRepository)),
     TypedMiddleware<AppState, UpdateCurrentTarget>(_listenToCurrentTarget(friendRepository)),
     TypedMiddleware<AppState, DeleteFriend>(_deleteFriend(friendRepository)),
     TypedMiddleware<AppState, RecommendTo>(_recommendToFriend(friendRepository)),
@@ -41,6 +41,27 @@ void Function(
 
         store.dispatch(OnUpdateCurrentTarget(c));
           });
+    } catch (e){
+      print("Failed to listen user");
+    }
+  };
+}
+
+void Function(
+    Store<AppState> store,
+    GetStranger action,
+    NextDispatcher next,
+    ) _listenToStranger(
+    FriendRepository friendRepository,
+    ) {
+  return (store, action, next) {
+    next(action);
+    try {
+      friendRepository.getStranger(action.id).listen((stranger) {
+
+
+        store.dispatch(UpdateStranger(stranger));
+      });
     } catch (e){
       print("Failed to listen user");
     }

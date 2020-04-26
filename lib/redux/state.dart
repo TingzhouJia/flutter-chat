@@ -6,6 +6,7 @@ import 'package:learnflutter/model/friend.dart';
 import 'package:learnflutter/model/group.dart';
 import 'package:learnflutter/model/message.dart';
 import 'package:learnflutter/model/recentMessage.dart';
+import 'package:learnflutter/model/stranger.dart';
 import 'package:learnflutter/model/user.dart';
 
 
@@ -32,6 +33,10 @@ part 'state.g.dart';
     BuiltList<Message> get selectedGroupChat;
     @nullable
     BuiltList<Message> get SystemMessageList;
+    @nullable
+    Stranger get stranger;
+    @nullable
+    Channel get strangeChannel;
     bool get loading;
 
     int get messageOnScreen;

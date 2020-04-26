@@ -169,6 +169,8 @@ class _RecentChatState extends State<RecentChat> {
                         Slidable.of(context)?.close();
                         return;
                       }
+                      StoreProvider.of<AppState>(context).dispatch(SelectCurrentChat(chat.id));
+                      StoreProvider.of<AppState>(context).dispatch(UpdateCurrentTarget(chat.id));
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -176,8 +178,7 @@ class _RecentChatState extends State<RecentChat> {
                                 )));
 
 
-                      StoreProvider.of<AppState>(context).dispatch(SelectCurrentChat(chat.id));
-                      StoreProvider.of<AppState>(context).dispatch(UpdateCurrentTarget(chat.id));
+
 
 
 
