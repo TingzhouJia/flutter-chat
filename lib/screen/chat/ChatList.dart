@@ -14,6 +14,7 @@ import 'package:learnflutter/redux/messages/message_action.dart';
 import 'package:learnflutter/redux/state.dart';
 import 'package:learnflutter/screen/chat/chat_view.dart';
 import 'package:learnflutter/screen/friends/friend_screen.dart';
+import 'package:learnflutter/screen/friends/strangerScreen.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class ChatList extends StatelessWidget {
@@ -55,7 +56,7 @@ class ChatList extends StatelessWidget {
     }
 
 
-  _buildBody(Message message){
+  _buildBody(Message message,context){
       switch(message.messageType){
 
         case MessageType.USER:
@@ -117,47 +118,50 @@ class ChatList extends StatelessWidget {
           break;
         case MessageType.RECOMMEND:
           final a=message.recommendationInvitation;
-          return Container(
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(15.0))
-              ),
+          return GestureDetector(
+            onTap: (){
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (_) => StrangerScreen()));
+            },
+            child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(15.0))
+                ),
 
-            padding: EdgeInsets.symmetric(horizontal: 10.0,vertical: 10.0),
-              child: Row(
-                children: <Widget>[
-                  Column(
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Container(
-                            constraints: BoxConstraints(minWidth: 200),
-                            decoration: BoxDecoration(
-                                border: Border(bottom: BorderSide(color: Colors.grey))
-                            ),
-                            child: Text('A Recommended Friend',style: TextStyle(
+                child:  Column(
+                  children: <Widget>[
+                    Container(
+                        padding: EdgeInsets.symmetric(vertical: 5.0,horizontal: 15.0),
+                        decoration: BoxDecoration(
+
+                            border: Border(bottom: BorderSide(color: Colors.grey))
+                        ),
+                        child:Row(
+                          children: <Widget>[
+                            Text('A Recommended Friend',style: TextStyle(
                                 fontSize: 10.0,fontWeight: FontWeight.bold
                             ),),
-                          )
+                          ],
+                        )
+                    )
+                    ,
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: 10.0),
+                      child:
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          ClipOval(
+                            child:a.imgUrl==""?Image.asset('assets/default_img.jpg',width: 40.0,height: 40.0,): FadeInImage.assetNetwork(placeholder: 'assets/default_img.jpg', image: a.imgUrl,width: 40.0,height: 40.0,),
+                          ),
+                          Text(a.name)
                         ],
                       ),
-                      Container(
-                        padding: EdgeInsets.symmetric(vertical: 10.0),
-                        child:
-                        Row(
-
-                          children: <Widget>[
-                            ClipOval(
-                              child:a.imgUrl==""?Image.asset('assets/default_img.jpg',width: 40.0,height: 40.0,): FadeInImage.assetNetwork(placeholder: 'assets/default_img.jpg', image: a.imgUrl,width: 40.0,height: 40.0,),
-                            ),
-                            Text(a.name)
-                          ],
-                        ),
-                      )
-                    ],
-                  )
-                ],
-              ),
+                    )
+                  ],
+                )
+            ),
           );
         default:
           return null;
@@ -198,7 +202,7 @@ class ChatList extends StatelessWidget {
               },
               child: ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: 230.0),
-                child: _buildBody(message),
+                child: _buildBody(message,context),
               ),
             )
           ],
@@ -213,7 +217,7 @@ class ChatList extends StatelessWidget {
               },
               child:ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: 230.0),
-                child: _buildBody(message),
+                child: _buildBody(message,context),
               ),
             ),
             SizedBox(

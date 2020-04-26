@@ -16,6 +16,14 @@ class GetFriend{
   final List<User> friends;
   GetFriend(this.friends);
 }
+enum CleanType{ GROUP,TARGET,CHAT,GROUP_CHAT}
+class Clean{
+  final CleanType type;
+
+  Clean(this.type);
+
+}
+
 
 class GetRecentChat{
  final List<recentMessage> recentChats;
