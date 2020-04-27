@@ -30,7 +30,7 @@ README.md
 .pub-cache/
 .pub/
 /build/
-
+/lib/utils/agoraConfig.dart
 # Web related
 lib/generated_plugin_registrant.dart
 
