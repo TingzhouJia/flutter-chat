@@ -1,5 +1,6 @@
 
 import 'package:learnflutter/model/friend.dart';
+import 'package:learnflutter/model/user.dart';
 import 'package:learnflutter/redux/messages/message_action.dart';
 import 'package:learnflutter/service/friendService.dart';
 import 'package:redux/redux.dart';
@@ -13,6 +14,7 @@ List<Middleware<AppState>> createFriendMiddleware(
     ) {
   return [
     TypedMiddleware<AppState, GetStranger>(_listenToStranger(friendRepository)),
+    TypedMiddleware<AppState, AddFriend>(_addFriend(friendRepository)),
     TypedMiddleware<AppState, UpdateCurrentTarget>(_listenToCurrentTarget(friendRepository)),
     TypedMiddleware<AppState, DeleteFriend>(_deleteFriend(friendRepository)),
     TypedMiddleware<AppState, RecommendTo>(_recommendToFriend(friendRepository)),
@@ -41,6 +43,24 @@ void Function(
 
         store.dispatch(OnUpdateCurrentTarget(c));
           });
+    } catch (e){
+      print("Failed to listen user");
+    }
+  };
+}
+void Function(
+    Store<AppState> store,
+    AddFriend action,
+    NextDispatcher next,
+    ) _addFriend(
+    FriendRepository friendRepository,
+    ) {
+  return (store, action, next) {
+    next(action);
+    try {
+      friendRepository.addFriend(store.state.user.uid, action.id).then(((Friend a){
+          store.dispatch(OnUpdateCurrentTarget(a));
+      }));
     } catch (e){
       print("Failed to listen user");
     }

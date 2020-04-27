@@ -65,3 +65,10 @@ class UpdateStranger{
   UpdateStranger(this.stranger);
 
 }
+
+class AddFriend{
+  String id;
+
+  AddFriend(this.id);
+
+}

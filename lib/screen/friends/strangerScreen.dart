@@ -367,11 +367,16 @@ class _StrangerScreenState extends State<StrangerScreen>{
                                             //BoxShadow(color: Colors.grey, blurRadius:5.0,offset: Offset(-20.0,-10.0))
                                           ]),
                                       //padding:EdgeInsets.symmetric(vertical: 10.0),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: <Widget>[
-                                          Text('Add to Friend List',style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),)
-                                        ],
+                                      child: GestureDetector(
+                                        onTap: (){
+
+                                        },
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            Text('Add to Friend List',style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),)
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ],

@@ -172,30 +172,21 @@ class FriendRepository {
     _firestore.collection(FirestorePaths.RecentPath(targteid)).document('system').updateData(data);
     _firestore.collection(FirestorePaths.PATH_MESSAGES).document(targteid).collection('system').add(data);
   }
-//
-//  Future<Channel> documentToChannel(
-//      String groupId,
-//      String userId,
-//      DocumentSnapshot document,
-//      ) async {
-//    final snapshot = await document.reference.collection(USERS).getDocuments();
-//    final usersDocuments = snapshot.documents;
-//
-//    final users = usersDocuments.map((data) => channelUserFromDoc(data));
-//
-//    final userDocument = usersDocuments
-//        .firstWhere((doc) => doc.documentID == userId, orElse: () => null);
-//
-//    final hasUpdates =
-//    (userDocument == null || userDocument.data[HASUPDATES] == null)
-//        ? false
-//        : userDocument.data[HASUPDATES];
-//
-//    return fromDocWithUsers(
-//        doc: document,
-//        users: BuiltList<ChannelUser>.of(users),
-//        hasUpdates: hasUpdates);
-//  }
+
+
+  Future<Friend> addFriend(String uid,String targetId) async{
+      User a;
+      return await _firestore.document(FirestorePaths.userPath(targetId)).get().then((snap) async {
+        a=UserRepository.fromDoc(snap);
+        await _firestore.collection(FirestorePaths.PATH_FRIEND).document(uid).collection('info').document(targetId).setData({
+          'Image':"",'nickName':a.name,'notification':false,'setTop':false,'strongNotif':false
+        });
+        Friend b=Friend((c)=>c ..nickName=a.name ..user=a.toBuilder() ..setTop=false ..strongNotification=false ..background="" ..notification=false);
+        return b;
+
+      });
+
+  }
 
 
 
