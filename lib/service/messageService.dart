@@ -321,6 +321,7 @@ class MessageRepository {
         .toMap();
   }
 
+
   static toMap(Message message,bool send) {
     return {
       BODY: message.body,

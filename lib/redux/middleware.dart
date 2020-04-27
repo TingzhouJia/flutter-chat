@@ -44,6 +44,9 @@ void Function(
 
       store.dispatch(GetFriend(data));
     });
+    friendRepository.getRequestStream(store.state.user.uid).listen((data){
+      store.dispatch(GetRequests(data));
+    });
 
     messageRepository.RecentChatStream(store.state.user.uid).listen((List<recentMessage>data){
       int lenfth=data.where((f)=>f.pending==true).length;

@@ -32,6 +32,8 @@ class _$AppState extends AppState {
   @override
   final Channel strangeChannel;
   @override
+  final BuiltList<Stranger> requestList;
+  @override
   final bool loading;
   @override
   final int messageOnScreen;
@@ -52,6 +54,7 @@ class _$AppState extends AppState {
       this.SystemMessageList,
       this.stranger,
       this.strangeChannel,
+      this.requestList,
       this.loading,
       this.messageOnScreen})
       : super._() {
@@ -86,6 +89,7 @@ class _$AppState extends AppState {
         SystemMessageList == other.SystemMessageList &&
         stranger == other.stranger &&
         strangeChannel == other.strangeChannel &&
+        requestList == other.requestList &&
         loading == other.loading &&
         messageOnScreen == other.messageOnScreen;
   }
@@ -104,18 +108,22 @@ class _$AppState extends AppState {
                                         $jc(
                                             $jc(
                                                 $jc(
-                                                    $jc($jc(0, user.hashCode),
-                                                        Friends.hashCode),
-                                                    FavorList.hashCode),
-                                                recentChatList.hashCode),
-                                            currentTarget.hashCode),
-                                        currentChat.hashCode),
-                                    groupList.hashCode),
-                                selectedGroup.hashCode),
-                            selectedGroupChat.hashCode),
-                        SystemMessageList.hashCode),
-                    stranger.hashCode),
-                strangeChannel.hashCode),
+                                                    $jc(
+                                                        $jc(
+                                                            $jc(0,
+                                                                user.hashCode),
+                                                            Friends.hashCode),
+                                                        FavorList.hashCode),
+                                                    recentChatList.hashCode),
+                                                currentTarget.hashCode),
+                                            currentChat.hashCode),
+                                        groupList.hashCode),
+                                    selectedGroup.hashCode),
+                                selectedGroupChat.hashCode),
+                            SystemMessageList.hashCode),
+                        stranger.hashCode),
+                    strangeChannel.hashCode),
+                requestList.hashCode),
             loading.hashCode),
         messageOnScreen.hashCode));
   }
@@ -135,6 +143,7 @@ class _$AppState extends AppState {
           ..add('SystemMessageList', SystemMessageList)
           ..add('stranger', stranger)
           ..add('strangeChannel', strangeChannel)
+          ..add('requestList', requestList)
           ..add('loading', loading)
           ..add('messageOnScreen', messageOnScreen))
         .toString();
@@ -209,6 +218,12 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
   set strangeChannel(ChannelBuilder strangeChannel) =>
       _$this._strangeChannel = strangeChannel;
 
+  ListBuilder<Stranger> _requestList;
+  ListBuilder<Stranger> get requestList =>
+      _$this._requestList ??= new ListBuilder<Stranger>();
+  set requestList(ListBuilder<Stranger> requestList) =>
+      _$this._requestList = requestList;
+
   bool _loading;
   bool get loading => _$this._loading;
   set loading(bool loading) => _$this._loading = loading;
@@ -234,6 +249,7 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
       _SystemMessageList = _$v.SystemMessageList?.toBuilder();
       _stranger = _$v.stranger?.toBuilder();
       _strangeChannel = _$v.strangeChannel?.toBuilder();
+      _requestList = _$v.requestList?.toBuilder();
       _loading = _$v.loading;
       _messageOnScreen = _$v.messageOnScreen;
       _$v = null;
@@ -272,6 +288,7 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
               SystemMessageList: _SystemMessageList?.build(),
               stranger: _stranger?.build(),
               strangeChannel: _strangeChannel?.build(),
+              requestList: _requestList?.build(),
               loading: loading,
               messageOnScreen: messageOnScreen);
     } catch (_) {
@@ -301,6 +318,8 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
         _stranger?.build();
         _$failedField = 'strangeChannel';
         _strangeChannel?.build();
+        _$failedField = 'requestList';
+        _requestList?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'AppState', _$failedField, e.toString());

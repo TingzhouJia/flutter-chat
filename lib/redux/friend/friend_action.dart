@@ -68,7 +68,33 @@ class UpdateStranger{
 
 class AddFriend{
   String id;
+  String remarks;
+  AddFriend(this.id,this.remarks);
 
-  AddFriend(this.id);
+}
+
+class AgreeAddFriend{
+  String uid;
+
+  AgreeAddFriend(this.uid);
+
+}
+class RefuseAddFriend{
+  String uid;
+
+  RefuseAddFriend(this.uid);
+
+}
+
+class OnAddFriend{
+  Friend a;
+
+  OnAddFriend(this.a);
+
+}
+class OnchangeRequest{
+  String id;
+
+  OnchangeRequest(this.id);
 
 }

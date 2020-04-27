@@ -74,6 +74,7 @@ abstract class MessageBuilder implements Builder<Message, MessageBuilder> {
   @nullable
   BuiltList<String> media;
 //
+  @nullable
   MediaStatus mediaStatus = MediaStatus.ERROR;
 //
 //  double mediaAspectRatio = 1.0;

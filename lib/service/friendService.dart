@@ -11,6 +11,7 @@ import 'package:learnflutter/model/friend.dart';
 import 'package:learnflutter/model/message.dart';
 import 'package:learnflutter/model/stranger.dart';
 import 'package:learnflutter/model/user.dart';
+import 'package:learnflutter/service/messageService.dart';
 import 'package:learnflutter/service/userInfoService.dart';
 import 'package:path/path.dart' as Path;
 
@@ -57,6 +58,20 @@ class FriendRepository {
       return aList;
     });
   }
+
+  Stream<List<Stranger>> getRequestStream(String userId){
+    return _firestore.collection('request').document(userId).collection('requests').snapshots().asyncMap((query) async{
+      List<Stranger> list=new List();
+      for(DocumentSnapshot a in query.documents){
+        list.add(await _firestore.document(FirestorePaths.userPath(a.documentID)).get().then((data){
+          return getStrangerDoc(data);
+        }));
+      }
+      return list;
+
+    });
+  }
+
   Stream<Stranger> getStranger(String uid){
     return _firestore.document(FirestorePaths.userPath(uid)).snapshots().map((snap){
       return getStrangerDoc(snap);
@@ -103,6 +118,7 @@ class FriendRepository {
         ..strongNotification=friend[STRONGNOTIFI]
     );
   }
+
   static Stranger getStrangerDoc(DocumentSnapshot stranger){
     return Stranger((c)=>c
         ..uid=stranger.documentID
@@ -170,22 +186,57 @@ class FriendRepository {
     _firestore.document(FirestorePaths.friendPath(uid, targteid)).delete();
     _firestore.document(FirestorePaths.friendPath(targteid, uid)).delete();
     _firestore.collection(FirestorePaths.RecentPath(targteid)).document('system').updateData(data);
-    _firestore.collection(FirestorePaths.PATH_MESSAGES).document(targteid).collection('system').add(data);
+   return  _firestore.collection(FirestorePaths.PATH_MESSAGES).document(targteid).collection('system').add(data);
+
   }
 
+  //target is someone want to add uid
+  Future<Friend> agreeFriend(String uid,String targetId,String imgUrl) async{
 
-  Future<Friend> addFriend(String uid,String targetId) async{
-      User a;
-      return await _firestore.document(FirestorePaths.userPath(targetId)).get().then((snap) async {
-        a=UserRepository.fromDoc(snap);
-        await _firestore.collection(FirestorePaths.PATH_FRIEND).document(uid).collection('info').document(targetId).setData({
-          'Image':"",'nickName':a.name,'notification':false,'setTop':false,'strongNotif':false
-        });
-        Friend b=Friend((c)=>c ..nickName=a.name ..user=a.toBuilder() ..setTop=false ..strongNotification=false ..background="" ..notification=false);
-        return b;
+       await _firestore.document(FirestorePaths.requestpath(uid,targetId)).get().then((snap)async{
 
-      });
+         await _firestore.collection(FirestorePaths.PATH_FRIEND).document(targetId).collection('info').document(uid).setData({
+           'Image':"",'nickName':snap[NICKNAME],'notification':snap[NOTIFICATION],'setTop':snap[SETTOP],'strongNotif':snap[STRONGNOTIFI]
+         });
+         await _firestore.collection(FirestorePaths.messagePath(targetId, uid)).add({
+           'authorId':"",'body':'say hello to your new friend','timestamp':DateTime.now(),'messageType':'SYSTEM','pending':true
+         });
+         await _firestore.collection(FirestorePaths.Path_RECENT).document(targetId).collection('info').document(uid).setData({
+           'Id':uid,'body':'say hello to your new friend','timestamp':DateTime.now(),'messageType':'SYSTEM','pending':true,'userId':"",
+           'userImage':imgUrl,'userName':snap[NICKNAME]
+         });
+       });
 
+
+     return  await _firestore.document(FirestorePaths.userPath(targetId)).get().then((snap) async {
+         User a=UserRepository.fromDoc(snap);
+         await _firestore.collection(FirestorePaths.PATH_FRIEND).document(uid).collection('info').document(targetId).setData({
+           'Image':"",'nickName':a.name,'notification':false,'setTop':false,'strongNotif':false
+         });
+         await _firestore.collection(FirestorePaths.Path_RECENT).document(uid).collection('info').document(targetId).setData({
+           'Id':targetId,'body':'say hello to your new friend','timestamp':DateTime.now(),'messageType':'SYSTEM','pending':true,'userId':"",
+           'userImage':a.imgUrl,'userName':a.name
+         });
+         Friend b=Friend((c)=>c ..nickName=a.name ..user=a.toBuilder() ..setTop=false ..strongNotification=false ..background="" ..notification=false);
+         return b;
+       });
+
+
+  }
+
+  Future<void> refuseFriend(String uid,String targetId)async{
+      await _firestore.collection('request').document(uid).collection('requests').document(targetId).delete();
+  }
+
+  Future<void> addFriend(String uid,String target,String remarks,String message) async{
+    await _firestore.collection('request').document(target).collection('requests').document(uid).setData({'remark':remarks,'message':message});
+    await _firestore.collection('message').document(uid).collection('system').add({
+      'body':'You have sent your request to uid $target','authorId':'SYSTEM','messageType':'SYSTEM','pending':true,'timestamp':DateTime.now()
+    });
+    await _firestore.collection(FirestorePaths.RecentPath(uid)).document('system').setData({
+      'userImage':"",'userId':"",'pending':true,'messageType':'SYSTEM','userName':target,
+      'body':"You have sent your request to",'timestamp':DateTime.now()
+    });
   }
 
 

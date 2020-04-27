@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:intl/intl.dart';
 import 'package:learnflutter/redux/state.dart';
+import 'package:learnflutter/screen/friends/sendRequest.dart';
 import 'package:learnflutter/screen/friends/stranger_view.dart';
 
 class StrangerScreen extends StatefulWidget {
@@ -369,7 +370,12 @@ class _StrangerScreenState extends State<StrangerScreen>{
                                       //padding:EdgeInsets.symmetric(vertical: 10.0),
                                       child: GestureDetector(
                                         onTap: (){
-
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) => SendRequest(
+                                                    vm.target
+                                                  )));
                                         },
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment.center,

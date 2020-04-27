@@ -15,7 +15,7 @@ final appReducer=combineReducers<AppState>([
   TypedReducer<AppState, GetRecentChat>(_onRecentChatList),
   TypedReducer<AppState, SetShownMessageOnScreen>(_onsetMessageOnScreen),
   TypedReducer<AppState, GetFriend>(_onFriendList),
-
+  TypedReducer<AppState, GetRequests>(_onRequestList),
   TypedReducer<AppState, StartLoading>(_onLoading),
   TypedReducer<AppState, EndLoading>(_endLoading),
   ...userReducer,
@@ -24,10 +24,16 @@ final appReducer=combineReducers<AppState>([
   ...channelReducers,
   ...friendReducer
 ]);
- AppState _onUserList(AppState state,GetFavor action){
-    return state.rebuild((a)=>a
+AppState _onUserList(AppState state,GetFavor action){
+  return state.rebuild((a)=>a
     ..FavorList=ListBuilder(action.favors)
-    );
+  );
+}
+
+AppState _onRequestList(AppState state,GetRequests action){
+  return state.rebuild((a)=>a
+   ..requestList=ListBuilder(action.lists)
+  );
 }
 
 AppState _onFriendList(AppState state,GetFriend action){

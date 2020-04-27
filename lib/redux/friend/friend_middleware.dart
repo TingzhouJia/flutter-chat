@@ -22,7 +22,8 @@ List<Middleware<AppState>> createFriendMiddleware(
     TypedMiddleware<AppState, UpdateSetting>(_updateSetting(friendRepository)),
     TypedMiddleware<AppState, UpdateNickname>(_updateNickname(friendRepository)),
     TypedMiddleware<AppState, UpdateFriendBackGround>(_updateBackground(friendRepository)),
-
+    TypedMiddleware<AppState, AgreeAddFriend>(agreeAdd(friendRepository)),
+    TypedMiddleware<AppState, RefuseAddFriend>(_refuseFriend(friendRepository)),
   ];
 }
 
@@ -49,6 +50,47 @@ void Function(
     }
   };
 }
+
+void Function(
+    Store<AppState> store,
+    AgreeAddFriend action,
+    NextDispatcher next,
+    ) agreeAdd(
+    FriendRepository friendRepository,
+    ) {
+  return (store, action, next) async {
+    next(action);
+    try {
+      await friendRepository.agreeFriend(store.state.user.uid, action.uid).then((data){
+          store.dispatch(OnAddFriend(data));
+          store.dispatch(OnchangeRequest(action.uid));
+      });
+
+    } catch (e){
+      print("Failed to listen user");
+    }
+  };
+}
+
+void Function(
+    Store<AppState> store,
+    RefuseAddFriend action,
+    NextDispatcher next,
+    ) _refuseFriend(
+    FriendRepository friendRepository,
+    ) {
+  return (store, action, next) {
+    next(action);
+    try {
+      friendRepository.refuseFriend(store.state.user.uid, action.uid).then((_){
+        store.dispatch(OnchangeRequest(action.uid));
+      });
+
+    } catch (e){
+      print("Failed to listen user");
+    }
+  };
+}
 void Function(
     Store<AppState> store,
     AddFriend action,
@@ -59,9 +101,7 @@ void Function(
   return (store, action, next) {
     next(action);
     try {
-      friendRepository.addFriend(store.state.user.uid, action.id).then(((Friend a){
-
-      }));
+        friendRepository.addFriend(store.state.user.uid, action.id,action.remarks);
     } catch (e){
       print("Failed to listen user");
     }

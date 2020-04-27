@@ -37,6 +37,8 @@ part 'state.g.dart';
     Stranger get stranger;
     @nullable
     Channel get strangeChannel;
+    @nullable
+    BuiltList<Stranger> get requestList;
     bool get loading;
 
     int get messageOnScreen;
