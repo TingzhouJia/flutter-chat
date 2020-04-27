@@ -1,5 +1,6 @@
 
 import 'package:learnflutter/model/friend.dart';
+import 'package:learnflutter/model/message.dart';
 import 'package:learnflutter/model/user.dart';
 import 'package:learnflutter/redux/messages/message_action.dart';
 import 'package:learnflutter/service/friendService.dart';
@@ -59,7 +60,7 @@ void Function(
     next(action);
     try {
       friendRepository.addFriend(store.state.user.uid, action.id).then(((Friend a){
-          store.dispatch(OnUpdateCurrentTarget(a));
+
       }));
     } catch (e){
       print("Failed to listen user");
