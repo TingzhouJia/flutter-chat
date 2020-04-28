@@ -16,11 +16,17 @@ class SendRequest extends StatefulWidget {
 
 class _SendRequestState extends State<SendRequest> {
   TextEditingController _controller;
+  TextEditingController _remarkController;
+  bool notif=false;
+  bool setTop=false;
+  bool strongNotif=false;
   @override
   void initState() {
+    _controller=new TextEditingController();
+    _remarkController=new TextEditingController();
     // TODO: implement initState
     super.initState();
-    _controller=new TextEditingController();
+
   }
   @override
   Widget build(BuildContext context) {
@@ -36,7 +42,9 @@ class _SendRequestState extends State<SendRequest> {
         actions: <Widget>[
           GestureDetector(
           onTap: (){
-              StoreProvider.of<AppState>(context).dispatch(AddFriend(widget.target.uid,_controller.text));
+
+              //StoreProvider.of<AppState>(context).dispatch(AddFriend(widget.target.uid,_remarkController.text,_controller.text,notif,strongNotif,setTop));
+              Navigator.of(context).pop();
               },
             child: Row(
               children: <Widget>[
@@ -48,7 +56,6 @@ class _SendRequestState extends State<SendRequest> {
                         ,
                       color: Color(0xff1aad19),
                     ),
-
                     child: Text('Send',style: TextStyle(color: Colors.white),)
                 )
               ],
@@ -104,7 +111,7 @@ class _SendRequestState extends State<SendRequest> {
                                    crossAxisAlignment: CrossAxisAlignment.start,
 
                                     children: <Widget>[
-                                      Text('Send message in request',style: TextStyle(color: Colors.grey,fontSize: 17.0),),
+                                      Text('Send message in request',style: TextStyle(color: Colors.grey,fontSize: 14.0),),
                                       SizedBox(height: 10.0,),
                                       Container(
                                         padding: EdgeInsets.all(10.0),
@@ -127,15 +134,13 @@ class _SendRequestState extends State<SendRequest> {
                                             ]),
                                         child:  Container(
                                           height: 100.0,
-                                          padding: EdgeInsets.only(top: 5.0, left: 20.0),
+                                          //padding: EdgeInsets.only( left: 0.0),
                                           child: TextField(
                                             onTap: (){
-
                                             },
                                             maxLines: 5,
                                             controller: _controller,
                                             onChanged: (value){
-
 
                                             },
 
@@ -160,10 +165,10 @@ class _SendRequestState extends State<SendRequest> {
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: <Widget>[
-                                      Text('Set remarks for friend',style: TextStyle(color: Colors.grey,fontSize: 17.0),),
+                                      Text('Set remarks for friend',style: TextStyle(color: Colors.grey,fontSize: 14.0),),
                                       SizedBox(height: 10.0,),
                                       Container(
-                                        padding: EdgeInsets.all(10.0),
+                                        padding: EdgeInsets.all(2.0),
                                         decoration: BoxDecoration(
                                             color: Color(0xfff1f1f1),
                                             borderRadius: BorderRadius.all(
@@ -182,29 +187,139 @@ class _SendRequestState extends State<SendRequest> {
                                               //BoxShadow(color: Colors.grey, blurRadius:5.0,offset: Offset(-20.0,-10.0))
                                             ]),
                                         child:  Container(
-                                          height: 100.0,
-                                          padding: EdgeInsets.only(top: 5.0, left: 20.0),
+                                          height: 40.0,
+                                          padding: EdgeInsets.only( left: 20.0),
                                           child: TextField(
                                             onTap: (){
 
                                             },
-                                            maxLines: 5,
-                                            controller: _controller,
+                                            maxLines: 1,
+                                            controller: _remarkController,
                                             onChanged: (value){
-
-
                                             },
-
                                             textAlign: TextAlign.justify,
                                             decoration: InputDecoration(
-                                                contentPadding: EdgeInsets.all(2.0),
+                                                //contentPadding: EdgeInsets.all(2.0),
                                                 hintStyle: TextStyle(
                                                   color: Colors.grey,
                                                 ),
                                                 border: InputBorder.none,
-                                                hintText: 'I am ${StoreProvider.of<AppState>(context).state.user.name}'
+                                                hintText: '${widget.target.name}'
                                             ),
                                           ),
+                                        ),
+                                      ),
+
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      SizedBox(height: 10.0,),
+                                      Text('Chat detail',style: TextStyle(color: Colors.grey,fontSize: 14.0),),
+                                      Container(
+                                        padding:EdgeInsets.symmetric(vertical: 5.0),
+                                        child:  Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                Text(
+                                                  'Notification',style: TextStyle(
+                                                    fontSize: 18.0,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Color(0xff0c0b0f)
+                                                ),
+
+                                                ),
+                                                notif?ConstrainedBox(
+                                                  constraints: BoxConstraints(maxWidth: 250),
+                                                  child: Text(
+                                                    'Receive messages but not notified',
+                                                  ),
+                                                ):SizedBox(width: 0,)
+                                              ],
+                                            ),
+                                            CupertinoSwitch(
+                                              value: notif,
+                                              onChanged: (_){
+                                                setState(() {
+                                                  notif=!notif;
+                                                });
+
+                                              },
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        padding:EdgeInsets.symmetric(vertical: 5.0),
+                                        child:  Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                Text(
+                                                  'Strong Notification',style: TextStyle(
+                                                    fontSize: 18.0,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Color(0xff0c0b0f)
+                                                ),
+
+                                                ),
+                                                strongNotif?Text(
+                                                    'Receive messages and remind by email'
+                                                ):SizedBox(width: 0,)
+                                              ],
+                                            ),
+                                            CupertinoSwitch(
+                                              value: strongNotif,
+                                              onChanged: (_){
+                                               setState(() {
+                                                 strongNotif=!strongNotif;
+                                               });
+                                              },
+                                            )
+                                          ],
+                                        ),
+
+                                      ),
+                                      Container(
+                                        padding:EdgeInsets.symmetric(vertical: 5.0),
+                                        child:  Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                Text(
+                                                  'Set-Top',style: TextStyle(
+                                                    fontSize: 18.0,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Color(0xff0c0b0f)
+                                                ),
+
+                                                ),
+                                                setTop?Text(
+                                                    'Always show message on recent chat '
+                                                ):SizedBox(width: 0,)
+                                              ],
+                                            ),
+                                            CupertinoSwitch(
+                                              value: setTop,
+                                              onChanged: (_){
+                                                setState(() {
+                                                  setTop=!setTop;
+                                                });
+                                              },
+                                            )
+                                          ],
                                         ),
                                       ),
 

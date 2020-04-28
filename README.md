@@ -1,6 +1,11 @@
 # Light Chat
-This is a chat app made by Flutter.
+This is a chat app made by flutter without fancy ui design but most of features for chat app are implemented.
+- This app needs unit test :scream: :scream: :scream:
 
+###Technology Stack
+- [flutter](https://flutter.dev/)
+- [flutter_redux](https://pub.dev/packages/flutter_redux)
+- [Firebase](https://github.com/FirebaseExtended/flutterfire)
 
 
 ### Main Feature
@@ -14,6 +19,11 @@ This is a chat app made by Flutter.
 - [x] create group and join group
 - [x] React to messages with emoji.
 
+
+![image](http://github.com/TingzhouJia/flutter_chat/raw/master/images/snapshots.png)
+
+
+
 ### Project Structure
 This is a Flutter mobile app targeting Android and iOS.
 - The code for the Flutter app is contained in the folder lib.
@@ -23,6 +33,29 @@ This is a Flutter mobile app targeting Android and iOS.
 - service folder contains Query from Firestore
 
 
+### How to try it
+1. download flutter sdk and 1.12.13+hotfix.9 is the version for this app:
+```bash
+$ flutter doctor
+```
+2. git clone it
+```bash
+$ git clone https://github.com/TingzhouJia/flutter-chat.git
+```
+3. register your [firebase](https://firebase.google.com/) account and setup firestore database
+
+|  collection   |  document  |
+|  :----:  | :----:  |
+| favorUser  | userId |
+| friends  | userId |
+| group  | groupId |
+| message  | userId/ groupId |
+| recentChat  | userId |
+| request  | userId |
+| user  | userId |
+| userGroup  | userId |
+
+4.
 
 
 ### Dependencies
@@ -56,6 +89,7 @@ This is a Flutter mobile app targeting Android and iOS.
   oktoast: ^2.3.1+1
   flutter_datetime_picker: ^1.3.5
 ```
+
 
 
 

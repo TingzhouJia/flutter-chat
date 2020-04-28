@@ -64,7 +64,7 @@ class FriendRepository {
       List<Stranger> list=new List();
       for(DocumentSnapshot a in query.documents){
         list.add(await _firestore.document(FirestorePaths.userPath(a.documentID)).get().then((data){
-          return getStrangerDoc(data);
+          return getStrangerDoc(data).rebuild((c)=>c ..RequestInfo=a['message']);
         }));
       }
       return list;
@@ -217,6 +217,9 @@ class FriendRepository {
            'Id':targetId,'body':'say hello to your new friend','timestamp':DateTime.now(),'messageType':'SYSTEM','pending':true,'userId':"",
            'userImage':a.imgUrl,'userName':a.name
          });
+         await _firestore.collection(FirestorePaths.messagePath(uid, targetId)).add({
+           'authorId':"",'body':'say hello to your new friend','timestamp':DateTime.now(),'messageType':'SYSTEM','pending':true
+         });
          Friend b=Friend((c)=>c ..nickName=a.name ..user=a.toBuilder() ..setTop=false ..strongNotification=false ..background="" ..notification=false);
          return b;
        });
@@ -228,8 +231,9 @@ class FriendRepository {
       await _firestore.collection('request').document(uid).collection('requests').document(targetId).delete();
   }
 
-  Future<void> addFriend(String uid,String target,String remarks,String message) async{
-    await _firestore.collection('request').document(target).collection('requests').document(uid).setData({'remark':remarks,'message':message});
+  Future<void> addFriend(String uid,String target,String remarks,String message,bool notification,bool setTop,bool strongnotif) async{
+    await _firestore.collection('request').document(target).collection('requests').document(uid).setData({'remark':remarks,'message':message,
+    SETTOP:setTop,NOTIFICATION:notification,STRONGNOTIFI:strongnotif});
     await _firestore.collection('message').document(uid).collection('system').add({
       'body':'You have sent your request to uid $target','authorId':'SYSTEM','messageType':'SYSTEM','pending':true,'timestamp':DateTime.now()
     });

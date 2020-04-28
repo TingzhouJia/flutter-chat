@@ -33,7 +33,7 @@ AppState _onMessageSend(AppState state, OnSendMessage action) {
     ..messageType=action.message.messageType ..body=action.message.body ..authorId=action.message.authorId);
   int b=state.recentChatList.indexWhere((c)=>c.id==state.currentTarget.user.uid);
   ListBuilder<Message> newList=state.currentChat.rebuild((c)=>c ..add(action.message) ).toBuilder();
-  BuiltList<recentMessage> rencent=state.recentChatList.rebuild((c)=>c ..replaceRange(b, b+1, [a]));
+  BuiltList<recentMessage> rencent=b>=0?state.recentChatList.rebuild((c)=>c ..replaceRange(b, b+1, [a])):state.recentChatList.rebuild((c)=>c ..add(a));
   return state.rebuild((a) => a ..currentChat=newList ..recentChatList=ListBuilder(rencent)  ..loading=false  );
 }
 AppState _onUpdateGroup(AppState state, UpdateAllGroupChat action) {
@@ -54,6 +54,9 @@ AppState _onSetUnread(AppState state,OnSetUnread action){
 }
 AppState _onUpdateRecent(AppState state,UpdateRecentChat action){
   int a=state.recentChatList.indexWhere((c)=>c.id==state.currentTarget.user.uid);
+  if(a==-1){
+    return state.rebuild((c)=>c ..recentChatList.add(action.data));
+  }
   return state.rebuild((c)=>c ..recentChatList.replaceRange(a, a+1, [action.data]));
 
 }

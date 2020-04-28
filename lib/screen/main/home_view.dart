@@ -34,5 +34,4 @@ abstract class HomeScreenViewModel
     };
   }
 
-//      ..channelType = getSelectedChannel(store.state)?.type);
-  }
+}

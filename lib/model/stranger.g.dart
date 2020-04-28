@@ -21,6 +21,8 @@ class _$Stranger extends Stranger {
   final String address;
   @override
   final DateTime birthday;
+  @override
+  final String RequestInfo;
 
   factory _$Stranger([void Function(StrangerBuilder) updates]) =>
       (new StrangerBuilder()..update(updates)).build();
@@ -32,7 +34,8 @@ class _$Stranger extends Stranger {
       this.description,
       this.gender,
       this.address,
-      this.birthday})
+      this.birthday,
+      this.RequestInfo})
       : super._() {
     if (uid == null) {
       throw new BuiltValueNullFieldError('Stranger', 'uid');
@@ -65,7 +68,8 @@ class _$Stranger extends Stranger {
         description == other.description &&
         gender == other.gender &&
         address == other.address &&
-        birthday == other.birthday;
+        birthday == other.birthday &&
+        RequestInfo == other.RequestInfo;
   }
 
   @override
@@ -74,12 +78,14 @@ class _$Stranger extends Stranger {
         $jc(
             $jc(
                 $jc(
-                    $jc($jc($jc(0, uid.hashCode), name.hashCode),
-                        imgUrl.hashCode),
-                    description.hashCode),
-                gender.hashCode),
-            address.hashCode),
-        birthday.hashCode));
+                    $jc(
+                        $jc($jc($jc(0, uid.hashCode), name.hashCode),
+                            imgUrl.hashCode),
+                        description.hashCode),
+                    gender.hashCode),
+                address.hashCode),
+            birthday.hashCode),
+        RequestInfo.hashCode));
   }
 
   @override
@@ -91,7 +97,8 @@ class _$Stranger extends Stranger {
           ..add('description', description)
           ..add('gender', gender)
           ..add('address', address)
-          ..add('birthday', birthday))
+          ..add('birthday', birthday)
+          ..add('RequestInfo', RequestInfo))
         .toString();
   }
 }
@@ -127,6 +134,10 @@ class StrangerBuilder implements Builder<Stranger, StrangerBuilder> {
   DateTime get birthday => _$this._birthday;
   set birthday(DateTime birthday) => _$this._birthday = birthday;
 
+  String _RequestInfo;
+  String get RequestInfo => _$this._RequestInfo;
+  set RequestInfo(String RequestInfo) => _$this._RequestInfo = RequestInfo;
+
   StrangerBuilder();
 
   StrangerBuilder get _$this {
@@ -138,6 +149,7 @@ class StrangerBuilder implements Builder<Stranger, StrangerBuilder> {
       _gender = _$v.gender;
       _address = _$v.address;
       _birthday = _$v.birthday;
+      _RequestInfo = _$v.RequestInfo;
       _$v = null;
     }
     return this;
@@ -166,7 +178,8 @@ class StrangerBuilder implements Builder<Stranger, StrangerBuilder> {
             description: description,
             gender: gender,
             address: address,
-            birthday: birthday);
+            birthday: birthday,
+            RequestInfo: RequestInfo);
     replace(_$result);
     return _$result;
   }

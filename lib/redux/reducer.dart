@@ -62,5 +62,5 @@ AppState _onLoading(AppState state,StartLoading ac){
    return state.rebuild((a)=>a ..loading=true );
 }
 AppState _endLoading(AppState state,EndLoading ac){
-  return state.rebuild((a)=>a ..loading=false );
+  return state.rebuild((a)=>a ..loading=false);
 }

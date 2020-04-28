@@ -3,7 +3,9 @@
 import 'dart:io';
 
 import 'package:learnflutter/model/friend.dart';
+import 'package:learnflutter/model/message.dart';
 import 'package:learnflutter/model/stranger.dart';
+import 'package:learnflutter/model/user.dart';
 
 class UpdateCurrentTarget{
   final String uid;
@@ -69,14 +71,21 @@ class UpdateStranger{
 class AddFriend{
   String id;
   String remarks;
-  AddFriend(this.id,this.remarks);
+  String message;
+  bool notification;
+  bool strongnotification;
+  bool setTop;
+
+  AddFriend(this.id, this.remarks, this.message, this.notification,
+      this.strongnotification, this.setTop);
+
 
 }
 
 class AgreeAddFriend{
   String uid;
-
-  AgreeAddFriend(this.uid);
+  String imgUrl;
+  AgreeAddFriend(this.uid,this.imgUrl);
 
 }
 class RefuseAddFriend{
@@ -88,8 +97,9 @@ class RefuseAddFriend{
 
 class OnAddFriend{
   Friend a;
+  User user;
 
-  OnAddFriend(this.a);
+  OnAddFriend(this.a,this.user);
 
 }
 class OnchangeRequest{

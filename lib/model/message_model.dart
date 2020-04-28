@@ -16,7 +16,7 @@ final  currentUser= User((b)=>b ..uid='0' ..name="Current" ..imgUrl='assets/fema
 final  james= User((b)=>b ..uid='1' ..name="james" ..imgUrl='assets/female2.jpg' ..lastOnline=DateTime.now() ..description='goof' ..gender=1 ..address="aaa" ..status="aaa");
 final  kevin= User((b)=>b ..uid='2' ..name="kevin" ..imgUrl='assets/female1.jpg' ..lastOnline=DateTime.now() ..description='goof' ..gender=1 ..address="aaa" ..status="aaa");
 final  nacho= User((b)=>b ..uid='3' ..name="nacho" ..imgUrl='assets/male1.jpg' ..lastOnline=DateTime.now() ..description='goof' ..gender=1 ..address="aaa" ..status="aaa");
-final  mila= User((b)=>b ..uid='4' ..name="mila" ..imgUrl='assets/male3.jpgg' ..lastOnline=DateTime.now() ..description='goof' ..gender=1 ..address="aaa" ..status="aaa");
+final  mila= User((b)=>b ..uid='4' ..name="mila" ..imgUrl='assets/male3.jpg' ..lastOnline=DateTime.now() ..description='goof' ..gender=1 ..address="aaa" ..status="aaa");
 final  henry= User((b)=>b ..uid='5' ..name="henry" ..imgUrl='assets/male4.jpg' ..lastOnline=DateTime.now() ..description='goof' ..gender=1 ..address="aaa" ..status="aaa");
 
 

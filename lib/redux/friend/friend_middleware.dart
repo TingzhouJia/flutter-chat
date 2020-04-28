@@ -61,9 +61,12 @@ void Function(
   return (store, action, next) async {
     next(action);
     try {
-      await friendRepository.agreeFriend(store.state.user.uid, action.uid).then((data){
-          store.dispatch(OnAddFriend(data));
+      await friendRepository.agreeFriend(store.state.user.uid, action.uid,action.imgUrl).then((data){
+          User user=data.user;
+          store.dispatch(OnAddFriend(data,user));
           store.dispatch(OnchangeRequest(action.uid));
+      }).then((_){
+        store.dispatch(SelectCurrentChat(action.uid));
       });
 
     } catch (e){
@@ -101,7 +104,7 @@ void Function(
   return (store, action, next) {
     next(action);
     try {
-        friendRepository.addFriend(store.state.user.uid, action.id,action.remarks);
+        friendRepository.addFriend(store.state.user.uid, action.id,action.remarks,action.message,action.notification,action.setTop,action.strongnotification);
     } catch (e){
       print("Failed to listen user");
     }
@@ -140,14 +143,6 @@ void Function(
     try {
       await store.dispatch(DeleteAllMessage());
       await friendRepository.deleteFriend(store.state.user.uid, store.state.currentTarget.user.uid, store.state.currentTarget.nickName);
-//      friendRepository.getFriend(store.state.user.uid,action.uid).listen((user) {
-//
-//        final a=store.state.Friends.firstWhere((c)=>c.uid==action.uid);
-//
-//        final c=user.rebuild((c)=>c ..user=a.toBuilder());
-//
-//        store.dispatch(OnUpdateCurrentTarget(c));
-//      });
     } catch (e){
       print("Failed to listen user");
     }

@@ -58,7 +58,7 @@ class _FriendScreenState extends State<FriendScreen> {
           child: AppBar(
             elevation: 0.0,
             title:
-             Text(!showToTopBtn ?'Firend Profile':vm.friend.user.name,style: TextStyle(color: Colors.white),),
+             Text(!showToTopBtn ?'Friend Profile':vm.friend.user.name,style: TextStyle(color: Colors.white),),
             actions: <Widget>[
               GestureDetector(
                 child: Padding(

@@ -13,12 +13,13 @@ import 'package:learnflutter/service/userInfoService.dart';
 import 'package:learnflutter/utils/bottomUpAnimation.dart';
 
 import 'package:learnflutter/screen/main/mainMessage/RecentChats.dart';
-import 'package:learnflutter/widgets/RequestFriends.dart';
+import 'package:learnflutter/screen/main/mainRequests/RequestFriends.dart';
 import 'package:learnflutter/widgets/SearchBar.dart';
 
 import 'package:learnflutter/screen/main/mainMessage/favoriteContact.dart';
 
 import 'mainMessage/message.dart';
+import 'mainRequests/mainRequests.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key}) : super(key: key);
@@ -29,37 +30,8 @@ class HomeScreen extends StatefulWidget {
 
 
 
-class Requests extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 500.0,
-      decoration: BoxDecoration(
-          color: Theme.of(context).accentColor,
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0))),
-      child: Column(
-        children: <Widget>[SearchBar(), RequestFriends()],
-      ),
-    );
-  }
-}
 
-//class Online extends StatelessWidget {
-//  @override
-//  Widget build(BuildContext context) {
-//    return Container(
-//      height: 500.0,
-//      decoration: BoxDecoration(
-//          color: Theme.of(context).accentColor,
-//          borderRadius: BorderRadius.only(
-//              topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0))),
-//      child: Column(
-//        children: <Widget>[MainFriend()],
-//      ),
-//    );
-//  }
-//}
+
 
 class TabTitle {
   String title;
