@@ -2,7 +2,7 @@
 This is a chat app made by flutter without fancy ui design but most of features for chat app are implemented.
 - This app needs unit test :scream: :scream: :scream:
 
-###Technology Stack
+### Technology Stack
 - [flutter](https://flutter.dev/)
 - [flutter_redux](https://pub.dev/packages/flutter_redux)
 - [Firebase](https://github.com/FirebaseExtended/flutterfire)
@@ -20,7 +20,7 @@ This is a chat app made by flutter without fancy ui design but most of features 
 - [x] React to messages with emoji.
 
 
-![image](http://github.com/TingzhouJia/flutter_chat/raw/master/images/snapshots.png)
+![image](https://raw.githubusercontent.com/TingzhouJia/flutter-chat/master/images/snapshots.png)
 
 
 
