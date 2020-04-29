@@ -108,3 +108,10 @@ class OnchangeRequest{
   OnchangeRequest(this.id);
 
 }
+
+class FilterStranger{
+  String id;
+
+  FilterStranger(this.id);
+
+}

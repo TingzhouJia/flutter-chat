@@ -185,7 +185,7 @@ class ChatList extends StatelessWidget {
 //                      context, MaterialPageRoute(builder: (_) => StrangerScreen()));
 //                }
                 Navigator.push(
-                     context, MaterialPageRoute(builder: (_) => StrangerScreen()));
+                     context, MaterialPageRoute(builder: (_) => StrangerScreen('REQUEST')));
               });
             },
             child: Container(

@@ -127,6 +127,7 @@ class FriendRepository {
         ..description=stranger[DESCRIPTION]
         ..gender=stranger[GENDER]
         ..address=stranger[ADDRESS]
+        ..status=stranger[STATUS]
         ..birthday=DateTime.parse(stranger[BIRTHDAY].toDate().toString())
     );
   }

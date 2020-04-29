@@ -10,6 +10,7 @@ final friendReducer=<AppState Function(AppState,dynamic)>[
   TypedReducer<AppState, OnUpdateCurrentTarget>(_onTargetUpdate),
   TypedReducer<AppState, UpdateStranger>(_onStrangerUpdate),
   TypedReducer<AppState, OnAddFriend>(_onAddFriend),
+  TypedReducer<AppState, FilterStranger>(_changeStranger),
   TypedReducer<AppState, OnchangeRequest>(_onChangeRequest),
 ];
 
@@ -18,6 +19,12 @@ AppState _onTargetUpdate(AppState state,OnUpdateCurrentTarget action){
 
   return state.rebuild((a)=>a
     ..currentTarget=action.user.toBuilder()
+  );
+}
+AppState _changeStranger(AppState state,FilterStranger action){
+  Stranger k=state.requestList.firstWhere((each)=>each.uid==action.id);
+  return state.rebuild((a)=>a
+   ..stranger=k.toBuilder()
   );
 }
 AppState _onStrangerUpdate(AppState state,UpdateStranger action){

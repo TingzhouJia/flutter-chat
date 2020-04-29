@@ -604,10 +604,7 @@ class _FriendScreenState extends State<FriendScreen> {
                         children: <Widget>[
                           GestureDetector(
                             onTap: (){
-          Navigator.push(
-          context, MaterialPageRoute(builder: (_) => ChatScreen()));
-
-                            },
+          Navigator.of(context).pop();},
                             child: Text(
                               "Send Message",
                               style: TextStyle(

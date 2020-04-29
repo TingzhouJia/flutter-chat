@@ -6,6 +6,7 @@ import 'package:learnflutter/redux/friend/friend_action.dart';
 import 'package:learnflutter/redux/messages/message_action.dart';
 import 'package:learnflutter/redux/state.dart';
 import 'package:learnflutter/screen/chat/chat_detail_view.dart';
+import 'package:learnflutter/screen/friends/friend_screen.dart';
 import 'package:learnflutter/screen/friends/friend_select.dart';
 import 'package:learnflutter/utils/bottomUpAnimation.dart';
 import 'package:learnflutter/utils/helper.dart';
@@ -60,9 +61,14 @@ class _ChatDetailState extends State<ChatDetail> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        CircleAvatar(
-                          radius: 25.0,
-                          backgroundImage:  vm.target.user.imgUrl==""?AssetImage('assets/default_img.jpg'):NetworkImage(vm.target.user.imgUrl),
+                        GestureDetector(
+                          onTap:(){
+                            Navigator.push(context, MaterialPageRoute(builder: (_) => FriendScreen()));
+                          },
+                          child: CircleAvatar(
+                            radius: 25.0,
+                            backgroundImage:  vm.target.user.imgUrl==""?AssetImage('assets/default_img.jpg'):NetworkImage(vm.target.user.imgUrl),
+                          ),
                         ),
                         SizedBox(
                           width: 20.0,

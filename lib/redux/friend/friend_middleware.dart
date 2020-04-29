@@ -122,8 +122,6 @@ void Function(
     next(action);
     try {
       friendRepository.getStranger(action.id).listen((stranger) {
-
-
         store.dispatch(UpdateStranger(stranger));
       });
     } catch (e){
@@ -131,6 +129,7 @@ void Function(
     }
   };
 }
+
 void Function(
     Store<AppState> store,
     DeleteFriend action,

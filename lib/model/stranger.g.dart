@@ -22,6 +22,8 @@ class _$Stranger extends Stranger {
   @override
   final DateTime birthday;
   @override
+  final String status;
+  @override
   final String RequestInfo;
 
   factory _$Stranger([void Function(StrangerBuilder) updates]) =>
@@ -35,6 +37,7 @@ class _$Stranger extends Stranger {
       this.gender,
       this.address,
       this.birthday,
+      this.status,
       this.RequestInfo})
       : super._() {
     if (uid == null) {
@@ -69,6 +72,7 @@ class _$Stranger extends Stranger {
         gender == other.gender &&
         address == other.address &&
         birthday == other.birthday &&
+        status == other.status &&
         RequestInfo == other.RequestInfo;
   }
 
@@ -79,12 +83,14 @@ class _$Stranger extends Stranger {
             $jc(
                 $jc(
                     $jc(
-                        $jc($jc($jc(0, uid.hashCode), name.hashCode),
-                            imgUrl.hashCode),
-                        description.hashCode),
-                    gender.hashCode),
-                address.hashCode),
-            birthday.hashCode),
+                        $jc(
+                            $jc($jc($jc(0, uid.hashCode), name.hashCode),
+                                imgUrl.hashCode),
+                            description.hashCode),
+                        gender.hashCode),
+                    address.hashCode),
+                birthday.hashCode),
+            status.hashCode),
         RequestInfo.hashCode));
   }
 
@@ -98,6 +104,7 @@ class _$Stranger extends Stranger {
           ..add('gender', gender)
           ..add('address', address)
           ..add('birthday', birthday)
+          ..add('status', status)
           ..add('RequestInfo', RequestInfo))
         .toString();
   }
@@ -134,6 +141,10 @@ class StrangerBuilder implements Builder<Stranger, StrangerBuilder> {
   DateTime get birthday => _$this._birthday;
   set birthday(DateTime birthday) => _$this._birthday = birthday;
 
+  String _status;
+  String get status => _$this._status;
+  set status(String status) => _$this._status = status;
+
   String _RequestInfo;
   String get RequestInfo => _$this._RequestInfo;
   set RequestInfo(String RequestInfo) => _$this._RequestInfo = RequestInfo;
@@ -149,6 +160,7 @@ class StrangerBuilder implements Builder<Stranger, StrangerBuilder> {
       _gender = _$v.gender;
       _address = _$v.address;
       _birthday = _$v.birthday;
+      _status = _$v.status;
       _RequestInfo = _$v.RequestInfo;
       _$v = null;
     }
@@ -179,6 +191,7 @@ class StrangerBuilder implements Builder<Stranger, StrangerBuilder> {
             gender: gender,
             address: address,
             birthday: birthday,
+            status: status,
             RequestInfo: RequestInfo);
     replace(_$result);
     return _$result;

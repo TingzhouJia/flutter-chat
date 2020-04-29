@@ -5,6 +5,8 @@ import 'package:learnflutter/model/friend.dart';
 import 'package:learnflutter/redux/friend/friend_action.dart';
 import 'package:learnflutter/redux/state.dart';
 import 'package:learnflutter/screen/friends/friend_screen_view.dart';
+import 'package:learnflutter/screen/friends/friend_select.dart';
+import 'package:learnflutter/utils/helper.dart';
 
 class FriendManipulation extends StatefulWidget {
   @override
@@ -106,18 +108,23 @@ class _FriendManipulationState extends State<FriendManipulation> {
                                           color: Color(0xffeeeeee)))),
                               padding: EdgeInsets.symmetric(
                                   vertical: 10.0, horizontal:15.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Text(
-                                    'Recommand To Friend',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 18.0),
-                                  ),
-                                  Icon(Icons.keyboard_arrow_right,size: 30.0,color: Colors.grey,)
-                                ],
+                              child: GestureDetector(
+                                onTap: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (_) => FriendSelect(SYSTEM_DISPATCH.RECOMMEND)));
+                                },
+                                child: Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Text(
+                                      'Recommand To Friend',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 18.0),
+                                    ),
+                                    Icon(Icons.keyboard_arrow_right,size: 30.0,color: Colors.grey,)
+                                  ],
+                                ),
                               ),
                             ),
                             SizedBox(

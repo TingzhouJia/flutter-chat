@@ -19,6 +19,7 @@ import 'package:learnflutter/screen/chat/callRoom.dart';
 import 'package:learnflutter/screen/chat/chatDetail.dart';
 import 'package:learnflutter/screen/chat/chat_view.dart';
 import 'package:learnflutter/screen/friends/friend_screen.dart';
+import 'package:learnflutter/screen/main/home_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -242,6 +243,7 @@ Future<void> onJoin(id) async {
                   fontWeight: FontWeight.bold,
                   color: Color(0xff333333))),
           elevation: 0.0,
+
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.more_horiz),

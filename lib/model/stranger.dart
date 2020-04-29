@@ -27,6 +27,9 @@ abstract class Stranger implements Built<Stranger, StrangerBuilder> {
   DateTime get birthday;
 
   @nullable
+  String get status;
+
+  @nullable
   String get RequestInfo;
 
 
