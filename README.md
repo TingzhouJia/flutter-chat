@@ -58,13 +58,15 @@ $ git clone https://github.com/TingzhouJia/flutter-chat.git
 4. model design
 
 - favorUser
+
 | name | type | value |
 |  :----:  |  :----:  |  :----:  |
 |favorUser| String| a reference like in mongoDB |
 
 - friends
-| name | type | 
-|  :----:  |  :----:  |
+
+| name | type | value |
+|  :----:  |  :----:  | :----:  |
 |Image| String| use firebase storage to get img url |
 |nickname| String| 'kiki'  |
 |notification | bool| false |
@@ -72,17 +74,18 @@ $ git clone https://github.com/TingzhouJia/flutter-chat.git
 |setTop | bool| false |
 
 - group
+
 | name | type | value |
-|  :----:  |  :----:  |
- |authorId | String| wldwklmamcmcmclk39fjfn |
+|  :----:  |  :----:  |  :----:  |
+| authorId | String| wldwklmamcmcmclk39fjfn |
 | description | String | this is a group for learn flutter |
 | hexcolor | String | ffffff |
 | id | String| asklaldd39kk3nd |
 | name | String | flutter study group |
-|newInvitation | List<String> | \[ adauish7hqo3 \] |
-|startDate | DateTime | 2019-03-12 |
+| newInvitation | List<String> | \[ adauish7hqo3 \] |
+| startDate | DateTime | 2019-03-12 |
 | users |  List<String> | wldwklmamcmcmclk39fjfn |
-|visibility | bool  | true |
+| visibility | bool  | true |
 
 
 
