@@ -44,18 +44,46 @@ $ git clone https://github.com/TingzhouJia/flutter-chat.git
 ```
 3. register your [firebase](https://firebase.google.com/) account and setup firestore database
 
-|  collection   |  document  |
-|  :----:  | :----:  |
-| favorUser  | userId |
-| friends  | userId |
-| group  | groupId |
-| message  | userId/ groupId |
-| recentChat  | userId |
-| request  | userId |
-| user  | userId |
-| userGroup  | userId |
+|  collection   |  document  | collection | document |
+|  :----:  | :----:  |  :----:  | :----:  |
+| favorUser  | userId |  favorList
+| friends  | userId |   info | userId
+| group  | groupId |   
+| message  | userId/ groupId | userId/groupMessage | messages|
+| recentChat  | userId | info | userId/SYSTEM |
+| request  | userId |   requests | userId
+| user  | userId |  
+| userGroup  | userId | info | groupId
 
-4. 
+4. model design
+
+- favorUser
+| name | type | value |
+|  :----:  | :----:  |  :----:  |
+|favorUser| String| a reference like in mongoDB |
+
+- friends
+| name | type | 
+|  :----:  | :----:  |
+|Image| String| use firebase storage to get img url |
+|nickname| String| 'kiki'  |
+|notification | bool| false |
+|strongNotif | bool| false |
+|setTop | bool| false |
+
+- group
+| name | type | value |
+|  :----:  | :----:  |
+|authorId | String| wldwklmamcmcmclk39fjfn |
+| description | String | this is a group for learn flutter |
+| hexcolor | String | ffffff |
+| id | String| asklaldd39kk3nd |
+| name | String | flutter study group |
+|newInvitation | List<String> | \[ adauish7hqo3 \] |
+|startDate | DateTime | 2019-03-12 |
+| users |  List<String> | wldwklmamcmcmclk39fjfn |
+|visibility | bool  | true |
+
 
 
 ### Dependencies
