@@ -55,11 +55,11 @@ $ git clone https://github.com/TingzhouJia/flutter-chat.git
 | user  | userId |
 | userGroup  | userId |
 
-4.
+4. 
 
 
 ### Dependencies
-```dart
+``` Dart
   cupertino_icons: ^0.1.2
   flutter_screenutil: ^1.0.2
   agora_rtc_engine: 1.0.5
