@@ -8,6 +8,7 @@ import 'package:image_pickers/UIConfig.dart';
 import 'package:image_pickers/image_pickers.dart';
 import 'package:learnflutter/model/message.dart';
 import 'package:learnflutter/model/user.dart';
+import 'package:learnflutter/redux/channel/channel_action.dart';
 import 'package:learnflutter/redux/friend/friend_action.dart';
 import 'package:learnflutter/redux/messages/message_action.dart';
 import 'package:learnflutter/redux/state.dart';
@@ -103,7 +104,107 @@ class buildMessage extends StatelessWidget {
         }
         break;
       case MessageType.INVITATION:
-      // TODO: Handle this case.
+        final a=message.recommendationInvitation;
+        return GestureDetector(
+          onTap: (){
+            showCupertinoDialog(
+                context: context,builder: (context){
+              return Material(
+                type: MaterialType.transparency,
+                child: Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text('Loading...',style: TextStyle(fontSize: 16.0,color: Colors.white)),
+                      SpinKitFadingCircle(
+                        itemBuilder: (BuildContext context,int index) {
+                          return DecoratedBox(
+                            decoration: BoxDecoration(
+                                color: Colors.white
+                            ),
+                          );
+                        },
+                      )
+                    ],
+                  ),
+                ),
+              );
+            }
+            );
+            String k=message.recommendationInvitation.targetId;
+//              bool a=false;
+//              if(StoreProvider.of<AppState>(context).state.Friends.firstWhere((i)=>i.uid==k)!=null){
+//
+//                StoreProvider.of<AppState>(context).dispatch(UpdateCurrentTarget(k));
+//                a=true;
+//              }else{
+//                StoreProvider.of<AppState>(context).dispatch(GetStranger(k));
+//              }
+            StoreProvider.of<AppState>(context).dispatch(SelectChannel(k));
+
+            Future.delayed(Duration(seconds: 2),(){
+              Navigator.pop(context);
+//                if(a){
+//                  Navigator.push(
+//                      context, MaterialPageRoute(builder: (_) => FriendScreen()));
+//                }else{
+//                  Navigator.push(
+//                      context, MaterialPageRoute(builder: (_) => StrangerScreen()));
+//                }
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (_) => StrangerScreen('REQUEST')));
+            });
+          },
+          child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(15.0))
+              ),
+
+              child:  Column(
+                children: <Widget>[
+                  Container(
+                      padding: EdgeInsets.symmetric(vertical: 5.0,horizontal: 15.0),
+                      decoration: BoxDecoration(
+                          border: Border(bottom: BorderSide(color: Colors.grey))
+                      ),
+                      child:Row(
+                        children: <Widget>[
+                          Text('An Invitation to Group',style: TextStyle(
+                              fontSize: 10.0,fontWeight: FontWeight.bold
+                          ),),
+                        ],
+                      )
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 10.0,horizontal: 7.0),
+                    child:
+                    Row(
+                      children: <Widget>[
+                        ClipOval(
+                          child:a.imgUrl==""?Image.asset('assets/group_default.png',width: 40.0,height: 40.0,):
+                          FadeInImage.assetNetwork(placeholder: 'assets/group_default.png', image: a.imgUrl,width: 40.0,height: 40.0,),
+                        ),
+                       SizedBox(
+                         width: 10,
+                       ),
+                       Column(
+                         crossAxisAlignment: CrossAxisAlignment.start,
+                         children: <Widget>[
+                           Text(a.name,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16.0),),
+                           ConstrainedBox(
+                             constraints: BoxConstraints(maxWidth: 160),
+                             child: Text('You have been invitied to join a new group, you can either comfirm join or reject this inivitation'),
+                           )
+                         ],
+                       )
+                      ],
+                    ),
+                  )
+                ],
+              )
+          ),
+        );
         break;
       case MessageType.RECOMMEND:
         final a=message.recommendationInvitation;

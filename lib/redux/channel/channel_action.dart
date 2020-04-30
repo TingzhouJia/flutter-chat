@@ -12,6 +12,8 @@ class LoadGroups {
 
 }
 
+
+
 @immutable
 class OnGroupsLoaded {
 
@@ -101,13 +103,7 @@ class EditChannelAction {
       );
 }
 
-//@immutable
-//class OnUpdatedChannelAction {
-//  final String groupId;
-//  final Channel selectedChannel;
-//
-//  const OnUpdatedChannelAction(this.groupId, this.selectedChannel);
-//}
+
 
 @immutable
 class SelectChannelIdAction {
@@ -135,41 +131,20 @@ class ApplyToGroup{
   ApplyToGroup(this.channel);
 
 }
-@immutable
+
+
 class SelectChannel {
-  final String previousChannelId;
-  final Channel channel;
-  final String userId;
   final String groupId;
 
-  const SelectChannel({
-    this.previousChannelId,
-    this.channel,
-    this.groupId,
-    this.userId,
-  });
+  SelectChannel(this.groupId);
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-          other is SelectChannel &&
-              runtimeType == other.runtimeType &&
-              previousChannelId == other.previousChannelId &&
-              channel == other.channel &&
-              userId == other.userId &&
-              groupId == other.groupId;
 
-  @override
-  int get hashCode =>
-      previousChannelId.hashCode ^
-      channel.hashCode ^
-      userId.hashCode ^
-      groupId.hashCode;
+}
+class OnSelectChannel{
+  final Channel channel;
 
-  @override
-  String toString() {
-    return "SelectChannel{previousChannelId: $previousChannelId, channel: $channel, userId: $userId, groupId: $groupId}";
-  }
+  OnSelectChannel(this.channel);
+
 }
 
 @immutable

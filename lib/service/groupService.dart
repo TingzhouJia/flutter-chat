@@ -70,6 +70,10 @@ class GroupRepository {
       }).toList();
     });
   }
+  Stream<Channel> getChannel(channelId){
+    return _firestore.collection(FirestorePaths.PATH_GROUPS).document(channelId).snapshots().map((document)=>fromChannelDoc(document));
+  }
+
   Stream<Map> getUserGroup(String groupid,String uid) {
     final channelUsersPath = FirestorePaths.channelUsersPath(uid,groupid);
    return  _firestore.document(channelUsersPath).snapshots().map((each){
@@ -92,9 +96,10 @@ class GroupRepository {
     );
   }
 
+
   Stream<Group> getStreamForChannel(String channelId) {
     return _firestore
-        .document(FirestorePaths.groupPath( channelId))
+        .document(FirestorePaths.groupPath(channelId))
         .snapshots()
         .asyncMap((document) async {
       return  fromDoc( document);
@@ -189,11 +194,7 @@ class GroupRepository {
     return group;
   }
 
-  Future<void> inviteToChannel({
- Group group,
-    List<String> members,
-    User invitingUser,
-  }) async {
+  Future<void> inviteToChannel({Group group, List<String> members, User invitingUser,}) async {
     members.map((user) async{
         final data3={
           'body':'','messageType':MessageType.INVITATION,'pending':false, 'name':group.name,'imgUrl':group.hexColor,
@@ -230,8 +231,7 @@ class GroupRepository {
 
   }
 
-  Future<void> notJoinChannel({Channel group, String uid,
-  }) async{
+  Future<void> notJoinChannel({Channel group, String uid,}) async{
     _firestore.document(FirestorePaths.groupPath(group.id)).snapshots().map((each) {
       return  each[INVITEDMEMBERS];
     }).listen((data) async{
@@ -240,11 +240,8 @@ class GroupRepository {
 
     });
   }
-  Future<void> applyToChannel({
-    Channel group,
-    String uid,
-    String username
-}) async{
+
+  Future<void> applyToChannel({Channel group, String uid, String username}) async{
     _firestore.document(FirestorePaths.groupPath(group.id)).snapshots().map((each) {
       return  each[INVITEDMEMBERS];
     }).listen((data) async{
@@ -294,6 +291,7 @@ class GroupRepository {
     });
 
   }
+
   static Timestamp _formatToTimestamp( DateTime time) {
 
 

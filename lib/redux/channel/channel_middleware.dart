@@ -18,6 +18,9 @@ List<Middleware<AppState>> creategroupMiddleware(
     TypedMiddleware<AppState, LoadGroup>(
       _markGroupReadAndListenToGroupUpdates(groupRepository),
     ),
+    TypedMiddleware<AppState, SelectChannel>(
+      selectChannel(groupRepository),
+    ),
     TypedMiddleware<AppState, JoinChannelAction>(
       _joinGroup(groupRepository),
     ),
@@ -61,6 +64,15 @@ void Function(
         groupRepository.getGroupsStream(action.uid).listen((data){
           store.dispatch(OnGroupsLoaded(data));
         });
+  };
+}
+void Function(
+    Store<AppState> store,
+    SelectChannel action,
+    NextDispatcher next,
+    ) selectChannel(GroupRepository groupRepository) {
+  return (store, action, next) {
+    groupRepository.getChannel(action.groupId).listen((data)=>store.dispatch(action));
   };
 }
 
@@ -119,7 +131,8 @@ _listenToGroupUpdates(
   selectedGroupSubscription = groupRepository
       .getStreamForChannel(action.groupId)
       .listen((updatedGroup) {
-    store.dispatch(OnUpdatedGroupAction(action.groupId,updatedGroup));
+//      store.dispatch(OnUpdatedGroupAction(action.groupId,updatedGroup));
+  store.dispatch(OnLoadGroup(updatedGroup));
   });
 }
 
@@ -138,7 +151,6 @@ void Function(
     next(action);
 
     try {
-
         groupRepository
             .markChannelRead(action.groupId, store.state.user.uid, true)
             .then((_) {

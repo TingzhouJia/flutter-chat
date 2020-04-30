@@ -12,6 +12,8 @@ final channelReducers = <AppState Function(AppState, dynamic)>[
   TypedReducer<AppState, OnUpdatedGroupAction>(_onUpdateSelectedChannel),
   TypedReducer<AppState, JoinedChannelAction>(_onJoinedChannel),
   TypedReducer<AppState, LeftChannelAction>(_onLeftChannel),
+  TypedReducer<AppState, OnLoadGroup>(_onLoadGroup),
+  TypedReducer<AppState, OnSelectChannel>(_onSelectChannel),
 //  TypedReducer<AppState, JoinChannelFailedAction>(_onJoinChannelFailed),
 //  TypedReducer<AppState, ClearFailedJoinAction>(_onClearFailedJoin),
 
@@ -22,13 +24,16 @@ final channelReducers = <AppState Function(AppState, dynamic)>[
 //          (a) => a..channelState.update((s) => s..joinChannelFailed = true));
 //}
 //
-//AppState _onClearFailedJoin(AppState state, ClearFailedJoinAction action) {
-//  return state.rebuild(
-//          (a) => a..channelState.update((s) => s..joinChannelFailed = false));
-//}
+AppState _onSelectChannel(AppState state, OnSelectChannel action) {
+  return state.rebuild(
+          (a) => a ..strangeChannel=action.channel.toBuilder());
+}
 
 AppState _onJoinedChannel(AppState state, JoinedChannelAction action) {
-  return state.rebuild((c)=>c ..selectedGroup=action.group.toBuilder() ..groupList.add(action.channel) );
+  return state.rebuild((c)=>c ..selectedGroup=action.group.toBuilder() ..groupList.add(action.channel) ..strangeChannel=null);
+}
+AppState _onLoadGroup(AppState state, OnLoadGroup action) {
+  return state.rebuild((c)=>c ..selectedGroup=action.group.toBuilder() );
 }
 
 AppState _onLeftChannel(AppState state, LeftChannelAction action) {
