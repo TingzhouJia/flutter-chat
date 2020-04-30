@@ -83,8 +83,7 @@ AppState _onChannelCreated(AppState state, OnChannelCreated action) {
 }
 
 Channel toChannel(Group group){
-  return Channel((c)=>c ..id=group.id ..hexColor=group.hexColor ..name=group.name
-    ..visibility=ChannelVisibilityHelper.valueOf(GroupVisibilityHelper.stringOf(group.visibility)) ..description=group.description);
+  return group.curChannel;
 }
 
 

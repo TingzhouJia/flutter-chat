@@ -15,6 +15,7 @@ import 'package:learnflutter/redux/state.dart';
 import 'package:learnflutter/screen/chat/chat_view.dart';
 import 'package:learnflutter/screen/friends/friend_screen.dart';
 import 'package:learnflutter/screen/friends/strangerScreen.dart';
+import 'package:learnflutter/screen/group/channelScreen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -152,7 +153,7 @@ class buildMessage extends StatelessWidget {
 //                      context, MaterialPageRoute(builder: (_) => StrangerScreen()));
 //                }
               Navigator.push(
-                  context, MaterialPageRoute(builder: (_) => StrangerScreen('REQUEST')));
+                  context, MaterialPageRoute(builder: (_) => ChannelScreen(true)));
             });
           },
           child: Container(

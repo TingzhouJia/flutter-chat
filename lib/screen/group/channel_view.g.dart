@@ -1,84 +1,78 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'group.dart';
+part of 'channel_view.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
 // **************************************************************************
 
-class _$Group extends Group {
+class _$ChannelScreenViewModel extends ChannelScreenViewModel {
   @override
   final Channel curChannel;
   @override
-  final BuiltList<User> users;
-  @override
-  final bool hasUpdates;
+  final BuiltList<User> userList;
   @override
   final BuiltList<User> newInvitation;
 
-  factory _$Group([void Function(GroupBuilder) updates]) =>
-      (new GroupBuilder()..update(updates)).build();
+  factory _$ChannelScreenViewModel(
+          [void Function(ChannelScreenViewModelBuilder) updates]) =>
+      (new ChannelScreenViewModelBuilder()..update(updates)).build();
 
-  _$Group._({this.curChannel, this.users, this.hasUpdates, this.newInvitation})
+  _$ChannelScreenViewModel._(
+      {this.curChannel, this.userList, this.newInvitation})
       : super._() {
     if (curChannel == null) {
-      throw new BuiltValueNullFieldError('Group', 'curChannel');
-    }
-    if (users == null) {
-      throw new BuiltValueNullFieldError('Group', 'users');
+      throw new BuiltValueNullFieldError(
+          'ChannelScreenViewModel', 'curChannel');
     }
   }
 
   @override
-  Group rebuild(void Function(GroupBuilder) updates) =>
+  ChannelScreenViewModel rebuild(
+          void Function(ChannelScreenViewModelBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
-  GroupBuilder toBuilder() => new GroupBuilder()..replace(this);
+  ChannelScreenViewModelBuilder toBuilder() =>
+      new ChannelScreenViewModelBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is Group &&
+    return other is ChannelScreenViewModel &&
         curChannel == other.curChannel &&
-        users == other.users &&
-        hasUpdates == other.hasUpdates &&
+        userList == other.userList &&
         newInvitation == other.newInvitation;
   }
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc($jc($jc(0, curChannel.hashCode), users.hashCode),
-            hasUpdates.hashCode),
+    return $jf($jc($jc($jc(0, curChannel.hashCode), userList.hashCode),
         newInvitation.hashCode));
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('Group')
+    return (newBuiltValueToStringHelper('ChannelScreenViewModel')
           ..add('curChannel', curChannel)
-          ..add('users', users)
-          ..add('hasUpdates', hasUpdates)
+          ..add('userList', userList)
           ..add('newInvitation', newInvitation))
         .toString();
   }
 }
 
-class GroupBuilder implements Builder<Group, GroupBuilder> {
-  _$Group _$v;
+class ChannelScreenViewModelBuilder
+    implements Builder<ChannelScreenViewModel, ChannelScreenViewModelBuilder> {
+  _$ChannelScreenViewModel _$v;
 
   ChannelBuilder _curChannel;
   ChannelBuilder get curChannel => _$this._curChannel ??= new ChannelBuilder();
   set curChannel(ChannelBuilder curChannel) => _$this._curChannel = curChannel;
 
-  ListBuilder<User> _users;
-  ListBuilder<User> get users => _$this._users ??= new ListBuilder<User>();
-  set users(ListBuilder<User> users) => _$this._users = users;
-
-  bool _hasUpdates;
-  bool get hasUpdates => _$this._hasUpdates;
-  set hasUpdates(bool hasUpdates) => _$this._hasUpdates = hasUpdates;
+  ListBuilder<User> _userList;
+  ListBuilder<User> get userList =>
+      _$this._userList ??= new ListBuilder<User>();
+  set userList(ListBuilder<User> userList) => _$this._userList = userList;
 
   ListBuilder<User> _newInvitation;
   ListBuilder<User> get newInvitation =>
@@ -86,13 +80,12 @@ class GroupBuilder implements Builder<Group, GroupBuilder> {
   set newInvitation(ListBuilder<User> newInvitation) =>
       _$this._newInvitation = newInvitation;
 
-  GroupBuilder();
+  ChannelScreenViewModelBuilder();
 
-  GroupBuilder get _$this {
+  ChannelScreenViewModelBuilder get _$this {
     if (_$v != null) {
       _curChannel = _$v.curChannel?.toBuilder();
-      _users = _$v.users?.toBuilder();
-      _hasUpdates = _$v.hasUpdates;
+      _userList = _$v.userList?.toBuilder();
       _newInvitation = _$v.newInvitation?.toBuilder();
       _$v = null;
     }
@@ -100,41 +93,39 @@ class GroupBuilder implements Builder<Group, GroupBuilder> {
   }
 
   @override
-  void replace(Group other) {
+  void replace(ChannelScreenViewModel other) {
     if (other == null) {
       throw new ArgumentError.notNull('other');
     }
-    _$v = other as _$Group;
+    _$v = other as _$ChannelScreenViewModel;
   }
 
   @override
-  void update(void Function(GroupBuilder) updates) {
+  void update(void Function(ChannelScreenViewModelBuilder) updates) {
     if (updates != null) updates(this);
   }
 
   @override
-  _$Group build() {
-    _$Group _$result;
+  _$ChannelScreenViewModel build() {
+    _$ChannelScreenViewModel _$result;
     try {
       _$result = _$v ??
-          new _$Group._(
+          new _$ChannelScreenViewModel._(
               curChannel: curChannel.build(),
-              users: users.build(),
-              hasUpdates: hasUpdates,
+              userList: _userList?.build(),
               newInvitation: _newInvitation?.build());
     } catch (_) {
       String _$failedField;
       try {
         _$failedField = 'curChannel';
         curChannel.build();
-        _$failedField = 'users';
-        users.build();
-
+        _$failedField = 'userList';
+        _userList?.build();
         _$failedField = 'newInvitation';
         _newInvitation?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'Group', _$failedField, e.toString());
+            'ChannelScreenViewModel', _$failedField, e.toString());
       }
       rethrow;
     }

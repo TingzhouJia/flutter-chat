@@ -98,13 +98,13 @@ class MessageRepository {
 
   Future<void> sendGroupMessage(String sender,Message message,Group group) async{
       final data=toMap(message, true);
-     String docuId= await _firestore.collection(FirestorePaths.groupMessagePath(group.id)).add(data).then((data){
+     String docuId= await _firestore.collection(FirestorePaths.groupMessagePath(group.curChannel.id)).add(data).then((data){
         return data.documentID;
       });
      final target=  _firestore.collection(FirestorePaths.Path_RECENT).document(sender).collection('info').document(docuId);
      final test=await target.get();
      if(test.data==null||test.data.length==0){
-       await target.setData(toRecetGroupMap(message, group, true, group.id));
+       await target.setData(toRecetGroupMap(message, group, true, group.curChannel.id));
      }else{
        await target.updateData({BODY:message,TIMESTAMP:message.timestamp,PENDING:true});
      }
@@ -352,8 +352,8 @@ class MessageRepository {
       USER_ID:message.authorId,
       PENDING:send==true?false:true,
       TYPE:message.messageType,
-      USERNAME:group.name,
-      IMG:group.hexColor,
+      USERNAME:group.curChannel.name,
+      IMG:group.curChannel.hexColor,
       ID:targetID
     };
   }

@@ -1,37 +1,26 @@
 import "package:built_collection/built_collection.dart";
 import "package:built_value/built_value.dart";
+import 'package:learnflutter/model/channel.dart';
 import 'package:learnflutter/model/user.dart';
 
 // ignore: prefer_double_quotes
 part 'group.g.dart';
 
 abstract class Group implements Built<Group, GroupBuilder> {
-  @nullable
-  String get id;
 
-  String get name;
+  Channel get curChannel;
 
-  @nullable
-  String get description;
-
-  GroupVisibility get visibility;
 
   BuiltList<User> get users;
 
-
-  @nullable
-  String get authorId;
 
   @nullable
   bool get hasUpdates;
 
   @nullable
   BuiltList<User> get newInvitation;
-  String get hexColor;
 
 
-  @nullable
-  DateTime get startDate;
 
 
 

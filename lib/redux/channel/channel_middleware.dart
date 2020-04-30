@@ -72,7 +72,7 @@ void Function(
     NextDispatcher next,
     ) selectChannel(GroupRepository groupRepository) {
   return (store, action, next) {
-    groupRepository.getChannel(action.groupId).listen((data)=>store.dispatch(action));
+    groupRepository.getChannel(action.groupId).listen((data)=>store.dispatch(OnSelectChannel(data)));
   };
 }
 
@@ -102,8 +102,7 @@ void Function(
     GroupRepository groupRepository,
     ) {
   return (store, action, next) async {
-    next(action);
-    await groupRepository.notJoinChannel(group: action.group,uid: store.state.user.uid);
+    next(action);await groupRepository.notJoinChannel(group: action.group,uid: store.state.user.uid);
   };
 }
 
@@ -178,8 +177,9 @@ void Function(
         action.group,
         store.state.user.uid,
       );
-      final channel=Channel((c)=>c ..authorId=group.authorId ..name=group.name ..id=group.id ..description=group.description ..visibility=ChannelVisibilityHelper.valueOf(GroupVisibilityHelper.stringOf(group.visibility))
-      ..hexColor=group.hexColor ..marked=false ..received=true);
+      final channel=Channel((c)=>c ..authorId=group.curChannel.authorId ..name=group.curChannel.name
+        ..id=group.curChannel.id ..description=group.curChannel.description ..visibility=group.curChannel.visibility
+      ..hexColor=group.curChannel.hexColor ..marked=false ..received=true);
      await store.dispatch(JoinedChannelAction(
         group,channel
       ));
@@ -262,11 +262,11 @@ void Function(
 
     try {
       await groupRepository.updateChannel(
-        store.state.selectedGroup.id,
+        store.state.selectedGroup.curChannel.id,
         action.group,
       );
       store.dispatch(
-          OnUpdatedGroupAction(store.state.selectedGroup.id, action.group));
+          OnUpdatedGroupAction(store.state.selectedGroup.curChannel.id, action.group));
 
     } catch (error) {
       print(error);

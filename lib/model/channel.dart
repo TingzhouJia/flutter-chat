@@ -1,6 +1,6 @@
 import "package:built_collection/built_collection.dart";
 import "package:built_value/built_value.dart";
-import 'package:learnflutter/model/user.dart';
+
 
 // ignore: prefer_double_quotes
 part 'channel.g.dart';
@@ -12,6 +12,8 @@ abstract class Channel implements Built<Channel, ChannelBuilder> {
   String get authorId;
 
   String get name;
+  @nullable
+  String get backgroudImg;
 
   @nullable
   String get description;
@@ -19,12 +21,17 @@ abstract class Channel implements Built<Channel, ChannelBuilder> {
   ChannelVisibility get visibility;
 
   String get hexColor;
+  @nullable
+  List<String> get tags;
 
+  @nullable
   bool get marked;
-
+  @nullable
   bool get received;
 
-  
+
+  @nullable
+  DateTime get startDate;
 
 
 

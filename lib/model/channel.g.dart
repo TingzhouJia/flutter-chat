@@ -14,15 +14,21 @@ class _$Channel extends Channel {
   @override
   final String name;
   @override
+  final String backgroudImg;
+  @override
   final String description;
   @override
   final ChannelVisibility visibility;
   @override
   final String hexColor;
   @override
+  final List<String> tags;
+  @override
   final bool marked;
   @override
   final bool received;
+  @override
+  final DateTime startDate;
 
   factory _$Channel([void Function(ChannelBuilder) updates]) =>
       (new ChannelBuilder()..update(updates)).build();
@@ -31,11 +37,14 @@ class _$Channel extends Channel {
       {this.id,
       this.authorId,
       this.name,
+      this.backgroudImg,
       this.description,
       this.visibility,
       this.hexColor,
+      this.tags,
       this.marked,
-      this.received})
+      this.received,
+      this.startDate})
       : super._() {
     if (authorId == null) {
       throw new BuiltValueNullFieldError('Channel', 'authorId');
@@ -48,12 +57,6 @@ class _$Channel extends Channel {
     }
     if (hexColor == null) {
       throw new BuiltValueNullFieldError('Channel', 'hexColor');
-    }
-    if (marked == null) {
-      throw new BuiltValueNullFieldError('Channel', 'marked');
-    }
-    if (received == null) {
-      throw new BuiltValueNullFieldError('Channel', 'received');
     }
   }
 
@@ -71,11 +74,14 @@ class _$Channel extends Channel {
         id == other.id &&
         authorId == other.authorId &&
         name == other.name &&
+        backgroudImg == other.backgroudImg &&
         description == other.description &&
         visibility == other.visibility &&
         hexColor == other.hexColor &&
+        tags == other.tags &&
         marked == other.marked &&
-        received == other.received;
+        received == other.received &&
+        startDate == other.startDate;
   }
 
   @override
@@ -85,13 +91,21 @@ class _$Channel extends Channel {
             $jc(
                 $jc(
                     $jc(
-                        $jc($jc($jc(0, id.hashCode), authorId.hashCode),
-                            name.hashCode),
-                        description.hashCode),
-                    visibility.hashCode),
-                hexColor.hashCode),
-            marked.hashCode),
-        received.hashCode));
+                        $jc(
+                            $jc(
+                                $jc(
+                                    $jc(
+                                        $jc($jc(0, id.hashCode),
+                                            authorId.hashCode),
+                                        name.hashCode),
+                                    backgroudImg.hashCode),
+                                description.hashCode),
+                            visibility.hashCode),
+                        hexColor.hashCode),
+                    tags.hashCode),
+                marked.hashCode),
+            received.hashCode),
+        startDate.hashCode));
   }
 
   @override
@@ -100,11 +114,14 @@ class _$Channel extends Channel {
           ..add('id', id)
           ..add('authorId', authorId)
           ..add('name', name)
+          ..add('backgroudImg', backgroudImg)
           ..add('description', description)
           ..add('visibility', visibility)
           ..add('hexColor', hexColor)
+          ..add('tags', tags)
           ..add('marked', marked)
-          ..add('received', received))
+          ..add('received', received)
+          ..add('startDate', startDate))
         .toString();
   }
 }
@@ -124,6 +141,10 @@ class ChannelBuilder implements Builder<Channel, ChannelBuilder> {
   String get name => _$this._name;
   set name(String name) => _$this._name = name;
 
+  String _backgroudImg;
+  String get backgroudImg => _$this._backgroudImg;
+  set backgroudImg(String backgroudImg) => _$this._backgroudImg = backgroudImg;
+
   String _description;
   String get description => _$this._description;
   set description(String description) => _$this._description = description;
@@ -137,6 +158,10 @@ class ChannelBuilder implements Builder<Channel, ChannelBuilder> {
   String get hexColor => _$this._hexColor;
   set hexColor(String hexColor) => _$this._hexColor = hexColor;
 
+  List<String> _tags;
+  List<String> get tags => _$this._tags;
+  set tags(List<String> tags) => _$this._tags = tags;
+
   bool _marked;
   bool get marked => _$this._marked;
   set marked(bool marked) => _$this._marked = marked;
@@ -145,6 +170,10 @@ class ChannelBuilder implements Builder<Channel, ChannelBuilder> {
   bool get received => _$this._received;
   set received(bool received) => _$this._received = received;
 
+  DateTime _startDate;
+  DateTime get startDate => _$this._startDate;
+  set startDate(DateTime startDate) => _$this._startDate = startDate;
+
   ChannelBuilder();
 
   ChannelBuilder get _$this {
@@ -152,11 +181,14 @@ class ChannelBuilder implements Builder<Channel, ChannelBuilder> {
       _id = _$v.id;
       _authorId = _$v.authorId;
       _name = _$v.name;
+      _backgroudImg = _$v.backgroudImg;
       _description = _$v.description;
       _visibility = _$v.visibility;
       _hexColor = _$v.hexColor;
+      _tags = _$v.tags;
       _marked = _$v.marked;
       _received = _$v.received;
+      _startDate = _$v.startDate;
       _$v = null;
     }
     return this;
@@ -182,11 +214,14 @@ class ChannelBuilder implements Builder<Channel, ChannelBuilder> {
             id: id,
             authorId: authorId,
             name: name,
+            backgroudImg: backgroudImg,
             description: description,
             visibility: visibility,
             hexColor: hexColor,
+            tags: tags,
             marked: marked,
-            received: received);
+            received: received,
+            startDate: startDate);
     replace(_$result);
     return _$result;
   }
