@@ -14,6 +14,8 @@ class _$ChatScreenViewModel extends ChatScreenViewModel {
   @override
   final Friend target;
   @override
+  final Group group;
+  @override
   final bool loading;
 
   factory _$ChatScreenViewModel(
@@ -21,13 +23,10 @@ class _$ChatScreenViewModel extends ChatScreenViewModel {
       (new ChatScreenViewModelBuilder()..update(updates)).build();
 
   _$ChatScreenViewModel._(
-      {this.messageList, this.me, this.target, this.loading})
+      {this.messageList, this.me, this.target, this.group, this.loading})
       : super._() {
     if (me == null) {
       throw new BuiltValueNullFieldError('ChatScreenViewModel', 'me');
-    }
-    if (target == null) {
-      throw new BuiltValueNullFieldError('ChatScreenViewModel', 'target');
     }
     if (loading == null) {
       throw new BuiltValueNullFieldError('ChatScreenViewModel', 'loading');
@@ -50,13 +49,17 @@ class _$ChatScreenViewModel extends ChatScreenViewModel {
         messageList == other.messageList &&
         me == other.me &&
         target == other.target &&
+        group == other.group &&
         loading == other.loading;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc($jc(0, messageList.hashCode), me.hashCode), target.hashCode),
+        $jc(
+            $jc($jc($jc(0, messageList.hashCode), me.hashCode),
+                target.hashCode),
+            group.hashCode),
         loading.hashCode));
   }
 
@@ -66,6 +69,7 @@ class _$ChatScreenViewModel extends ChatScreenViewModel {
           ..add('messageList', messageList)
           ..add('me', me)
           ..add('target', target)
+          ..add('group', group)
           ..add('loading', loading))
         .toString();
   }
@@ -89,6 +93,10 @@ class ChatScreenViewModelBuilder
   FriendBuilder get target => _$this._target ??= new FriendBuilder();
   set target(FriendBuilder target) => _$this._target = target;
 
+  GroupBuilder _group;
+  GroupBuilder get group => _$this._group ??= new GroupBuilder();
+  set group(GroupBuilder group) => _$this._group = group;
+
   bool _loading;
   bool get loading => _$this._loading;
   set loading(bool loading) => _$this._loading = loading;
@@ -100,6 +108,7 @@ class ChatScreenViewModelBuilder
       _messageList = _$v.messageList?.toBuilder();
       _me = _$v.me?.toBuilder();
       _target = _$v.target?.toBuilder();
+      _group = _$v.group?.toBuilder();
       _loading = _$v.loading;
       _$v = null;
     }
@@ -127,7 +136,8 @@ class ChatScreenViewModelBuilder
           new _$ChatScreenViewModel._(
               messageList: _messageList?.build(),
               me: me.build(),
-              target: target.build(),
+              target: _target?.build(),
+              group: _group?.build(),
               loading: loading);
     } catch (_) {
       String _$failedField;
@@ -137,7 +147,9 @@ class ChatScreenViewModelBuilder
         _$failedField = 'me';
         me.build();
         _$failedField = 'target';
-        target.build();
+        _target?.build();
+        _$failedField = 'group';
+        _group?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'ChatScreenViewModel', _$failedField, e.toString());

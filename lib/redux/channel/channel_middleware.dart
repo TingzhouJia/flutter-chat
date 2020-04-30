@@ -281,7 +281,7 @@ void Function(
 //          members: action.members,
 //          invitingUsername: store.state.user.name,
 //          groupName: store.state.selectedGroup.name).then(store.dispatch(SystemMessageDispatch(action.members)));
-    await groupRepository.inviteToChannel(group: store.state.selectedGroup,members: action.members,invitingUsername: store.state.user.uid);
+    await groupRepository.inviteToChannel(group: store.state.selectedGroup,members: action.members,invitingUser: store.state.user);
     } catch (error) {
      print(error);
     }

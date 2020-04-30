@@ -5,6 +5,7 @@ import 'dart:core';
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:learnflutter/model/friend.dart';
+import 'package:learnflutter/model/group.dart';
 import 'package:learnflutter/model/message.dart';
 import 'package:learnflutter/model/recentMessage.dart';
 import 'package:learnflutter/model/user.dart';
@@ -22,7 +23,11 @@ abstract class ChatScreenViewModel
 
   User get me;
   //target we are chat with
+  @nullable
   Friend get target;
+  @nullable
+  Group get group;
+
   bool get loading;
   ChatScreenViewModel._();
 
@@ -32,13 +37,18 @@ abstract class ChatScreenViewModel
 
 
 
-  static fromStore() {
+  static fromStore(isGroup) {
 
     return (Store<AppState> store)  {
 
-      return ChatScreenViewModel((u) => u
+      return isGroup?ChatScreenViewModel((u) => u
         ..loading=store.state.loading
-          ..messageList=store.state.currentChat==null?ListBuilder():ListBuilder(store.state.currentChat)
+        ..messageList=ListBuilder(store.state.selectedGroupChat)
+        ..group=store.state.selectedGroup.toBuilder()
+        ..me=store.state.user.toBuilder()
+      ):ChatScreenViewModel((u) => u
+        ..loading=store.state.loading
+          ..messageList=ListBuilder(store.state.currentChat)
           ..me=store.state.user.toBuilder()
           ..target=store.state.currentTarget.toBuilder()
       );

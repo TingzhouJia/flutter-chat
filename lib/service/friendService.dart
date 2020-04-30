@@ -135,7 +135,7 @@ class FriendRepository {
   Future<void> recommendToFriends(List<String> toList,Friend target,User sender) async{
     toList.map((user) async{
       final data3={
-        'imgUrl':target.user.imgUrl,'messageType':MessageType.RECOMMEND,'pending':false,'targetId':target.user.uid,
+        'imgUrl':target.user.imgUrl,'messageType':MessageType.RECOMMEND,'pending':false,'targetId':target.user.uid,'body':'',
         'authorId':sender.uid,'timestamp':DateTime.now(),'targetName':target.user.name,
       };
       final recentpath=_firestore.collection(FirestorePaths.Path_RECENT).document(sender.uid).collection("info").document(user);
