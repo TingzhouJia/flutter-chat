@@ -239,19 +239,23 @@ class GroupRepository {
     });
   }
 
-  Future<void> applyToChannel({Channel group, String uid, String username}) async{
+  Future<void> applyToChannel({Channel group, String uid, String requestInfo,String username}) async{
     _firestore.document(FirestorePaths.groupPath(group.id)).snapshots().map((each) {
       return  each[INVITEDMEMBERS];
     }).listen((data) async{
       await  _firestore.document(FirestorePaths.groupPath(group.id)).updateData({INVITEDMEMBERS:data.add(uid)});
-      final data1 = {'body':'$username is expecting to join ${group.name}','messageType':MessageType.SYSTEM,'pending':true,
-        'userId':uid,'userName':'SYSTEM','timestamp':DateTime.now()
+      final data1 = {'body':requestInfo,'messageType':MessageType.APPLY_GROUP,'pending':true,
+        'userId':uid,'userName':username,'timestamp':DateTime.now()
       };
       await _firestore.collection(FirestorePaths.messagePath(group.authorId, 'system')).add(data1);
       await _firestore
           .document(FirestorePaths.RecentPath(group.authorId))
           .collection('info').document('system').updateData(data);
     });
+  }
+
+  Future<void> allowJoin({Channel group,String uid}){
+
   }
 
 

@@ -11,6 +11,10 @@ import 'package:learnflutter/screen/chat/chat_view.dart';
 
 
 class ChatScreen extends StatefulWidget {
+  bool isGroup;
+
+  ChatScreen(this.isGroup);
+
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
@@ -42,8 +46,14 @@ class _ChatScreenState extends State<ChatScreen> {
               iconSize: 30.0,
               color: Colors.black,
               onPressed: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (_) => ChatDetail()));
+                if(widget.isGroup){
+                  Navigator.push(
+                      context, MaterialPageRoute(builder: (_) => ChatDetail()));//GroupDetail
+                }else{
+                  Navigator.push(
+                      context, MaterialPageRoute(builder: (_) => ChatDetail()));
+                }
+
               },
             ),
           ],
@@ -82,7 +92,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ChatScreenViewModel>(
-      converter: ChatScreenViewModel.fromStore(false),
+      converter: ChatScreenViewModel.fromStore(widget.isGroup),
       builder: (context, vm) => _built(context, vm),
       distinct: true,
     );

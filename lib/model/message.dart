@@ -85,7 +85,7 @@ abstract class MessageBuilder implements Builder<Message, MessageBuilder> {
   MessageBuilder._();
 }
 //RSVP means card to recommend
-enum MessageType { SYSTEM, VIDEO, USER, MEDIA,GROUP,INVITATION,RECOMMEND}
+enum MessageType { SYSTEM, VIDEO, USER, MEDIA,GROUP,INVITATION,RECOMMEND,APPLY_GROUP}
 
 class MessageTypeHelper {
   static String stringOf(MessageType messageType) {
@@ -102,6 +102,8 @@ class MessageTypeHelper {
 
       case MessageType.RECOMMEND:
         return "RECOMMEND";
+      case MessageType.APPLY_GROUP:
+        return "APPLY_GROUP";
       default:
         return "USER";
     }
@@ -119,6 +121,8 @@ class MessageTypeHelper {
         return MessageType.INVITATION;
       case "RECOMMEND":
         return MessageType.RECOMMEND;
+      case "APPLY_GROUP":
+        return MessageType.APPLY_GROUP;
       default:
         return MessageType.USER;
     }

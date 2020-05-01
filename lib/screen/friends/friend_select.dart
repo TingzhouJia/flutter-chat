@@ -186,11 +186,12 @@ class _FriendSelectState extends State<FriendSelect> {
                    );
                    Future.delayed(Duration(seconds: 2),(){
                      Navigator.pop(context);
-                     Navigator.push(
-                         context,
-                         MaterialPageRoute(
-                             builder: (_) => GroupScreen(
-                             )));
+                     Navigator.of(context).pop();
+//                     Navigator.push(
+//                         context,
+//                         MaterialPageRoute(
+//                             builder: (_) => GroupScreen(
+//                             )));
                    });
                  }
                },

@@ -5,8 +5,10 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:learnflutter/model/channel.dart';
+import 'package:learnflutter/redux/channel/channel_action.dart';
 import 'package:learnflutter/redux/state.dart';
 import 'package:learnflutter/screen/chat/chat_screen.dart';
+import 'package:learnflutter/screen/group/channelScreen.dart';
 import 'package:learnflutter/screen/main/mainGroup/main_group_view.dart';
 import 'package:learnflutter/widgets/SearchBar.dart';
 
@@ -38,11 +40,11 @@ class _GroupPageState extends State<GroupPage> {
                   //String lasttime=DateFormat("dd-MM-yyyy").format(each.lastOnline);
                   return GestureDetector(
                     onTap: (){
-
+                      StoreProvider.of<AppState>(context).dispatch(LoadGroup(each.id));
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (_) => ChatScreen(
+                              builder: (_) => ChannelScreen(false
                               )));
                     },
                     child: Container(

@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:learnflutter/model/user.dart';
 import 'package:learnflutter/redux/friend/friend_action.dart';
+import 'package:learnflutter/redux/messages/message_action.dart';
 import 'package:learnflutter/redux/state.dart';
+import 'package:learnflutter/screen/chat/chat_screen.dart';
 import 'package:learnflutter/screen/friends/friend_screen.dart';
 import 'package:learnflutter/screen/main/mainFriend/mainFriend_view.dart';
 
@@ -154,10 +156,11 @@ class _MainFriendState extends State<MainFriend> {
                                   GestureDetector(
                                     onTap: (){
                                       StoreProvider.of<AppState>(context).dispatch(UpdateCurrentTarget(each.uid));
+                                      StoreProvider.of<AppState>(context).dispatch(SelectCurrentChat(each.uid));
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (_) => FriendScreen(
+                                              builder: (_) => ChatScreen(false
                                               )));
                                     },
                                     child: Container(

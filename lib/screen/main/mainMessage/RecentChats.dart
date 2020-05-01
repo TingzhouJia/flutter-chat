@@ -174,7 +174,7 @@ class _RecentChatState extends State<RecentChat> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (_) => ChatScreen(
+                                builder: (_) => ChatScreen(false
                                 )));
 
 

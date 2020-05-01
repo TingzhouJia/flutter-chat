@@ -2,11 +2,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:intl/intl.dart';
+import 'package:learnflutter/redux/channel/channel_action.dart';
 import 'package:learnflutter/redux/friend/friend_action.dart';
+import 'package:learnflutter/redux/messages/message_action.dart';
 import 'package:learnflutter/redux/state.dart';
+import 'package:learnflutter/screen/chat/chat_screen.dart';
+import 'package:learnflutter/screen/friends/friend_select.dart';
 import 'package:learnflutter/screen/friends/strangerScreen.dart';
 import 'package:learnflutter/screen/group/channel_view.dart';
+import 'package:learnflutter/utils/bottomUpAnimation.dart';
+import 'package:learnflutter/utils/helper.dart';
 import 'package:learnflutter/widgets/loading.dart';
+import 'package:oktoast/oktoast.dart';
 
 class ChannelScreen extends StatefulWidget {
   final bool isNew;
@@ -117,10 +124,12 @@ class _ChannelScreenState extends State<ChannelScreen> {
                               fontSize: 18.0, fontWeight: FontWeight.w700),
                         ),
                         Container(
+                          padding: EdgeInsets.zero,
                           child: GridView.builder(
                             gridDelegate:
                                 SliverGridDelegateWithMaxCrossAxisExtent(
                               maxCrossAxisExtent: 70.0,
+                              mainAxisSpacing: 0.0,
                               crossAxisSpacing: 25.0,
                               childAspectRatio: 2.0,
                             ),
@@ -139,6 +148,7 @@ class _ChannelScreenState extends State<ChannelScreen> {
                                     children: <Widget>[
                                       Text(
                                         vm.curChannel.tags[inddex],
+                                        overflow: TextOverflow.ellipsis,
                                         style: TextStyle(color: Colors.white),
                                       ),
                                     ],
@@ -228,24 +238,31 @@ class _ChannelScreenState extends State<ChannelScreen> {
                 ],
               ),
             ),
-            widget.isNew
+            !widget.isNew
                 ? Positioned(
                     bottom: 15.0,
-                    left: 20.0,
-                    right: 20.0,
-                    child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 10.0),
-                      decoration: BoxDecoration(
-                          color: Color(0xff10aeff),
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(10.0))),
-                      child: Text(
-                        'Request To Join Group',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 17.0),
+                    left: 10.0,
+                    right: 10.0,
+                    child: GestureDetector(
+                      onTap: () {
+                        //StoreProvider.of<AppState>(context).dispatch(ApplyToGroup(vm.curChannel));
+
+                        //Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(vertical: 10.0),
+                        decoration: BoxDecoration(
+                            color: Color(0xff10aeff),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0))),
+                        child: Text(
+                          'Request To Join Group',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17.0),
+                        ),
                       ),
                     ),
                   )
@@ -253,12 +270,57 @@ class _ChannelScreenState extends State<ChannelScreen> {
                     bottom: 15.0,
                     left: 20.0,
                     right: 20.0,
-              child: Row(
-                children: <Widget>[
-                  Container(),
-                  Container()
-                ],
-              ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        GestureDetector(
+                          onTap: (){
+                            jumpToProfile(
+                                    (BuildContext context, Animation animation,
+                                    Animation secondaryAnimation) =>
+                                    FriendSelect(SYSTEM_DISPATCH.GROUP),
+                                context);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(vertical: 10.0,horizontal: 10.0),
+                            decoration: BoxDecoration(
+                                color: Color(0xff10aeff),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10.0))),
+                            child: Text(
+                              'Share with Group',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 17.0),
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: (){
+                            StoreProvider.of<AppState>(context).dispatch(LoadGroup(vm.curChannel.id));
+                            StoreProvider.of<AppState>(context).dispatch(SelectGroupChat(vm.curChannel.id));
+                            Navigator.push(context, MaterialPageRoute(builder: (_)=>ChatScreen(true)));
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(vertical: 10.0,horizontal: 10.0),
+                            decoration: BoxDecoration(
+                                color: Color(0xff10aeff),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10.0))),
+                            child: Text(
+                              'Send Message',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 17.0),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
             Positioned(
               top: 0.0,
@@ -268,6 +330,9 @@ class _ChannelScreenState extends State<ChannelScreen> {
                 backgroundColor: Colors.transparent,
                 elevation: 0.0,
                 leading: IconButton(
+                  highlightColor: Colors.transparent,
+                  focusColor: Colors.transparent,
+                  splashColor: Colors.transparent,
                   icon: Icon(
                     Icons.arrow_back_ios,
                     color: Colors.white,
@@ -279,6 +344,9 @@ class _ChannelScreenState extends State<ChannelScreen> {
                 ),
                 actions: <Widget>[
                   IconButton(
+                    highlightColor: Colors.transparent,
+                    focusColor: Colors.transparent,
+                    splashColor: Colors.transparent,
                     icon: Icon(
                       Icons.more_horiz,
                       color: Colors.white,

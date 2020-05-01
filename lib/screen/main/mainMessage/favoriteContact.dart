@@ -48,7 +48,7 @@ class FavoriteContact extends StatelessWidget {
                       onTap:(){
                         StoreProvider.of<AppState>(context).dispatch(UpdateCurrentTarget(favorOne.uid));
                         StoreProvider.of<AppState>(context).dispatch(SelectChat(favorOne.uid));
-                        Navigator.push(context,MaterialPageRoute(builder: (_)=>ChatScreen()));
+                        Navigator.push(context,MaterialPageRoute(builder: (_)=>ChatScreen(false)));
                       },
                       onLongPress: ()=>{
 
