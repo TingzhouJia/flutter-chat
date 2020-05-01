@@ -29,9 +29,8 @@ abstract class ChannelScreenViewModel
   static fromStore(isNew) {
 
     return (Store<AppState> store)  {
-
     return ChannelScreenViewModel((c)=>c
-        ..curChannel=isNew?store.state.strangeChannel.toBuilder():store.state.selectedGroup.curChannel
+        ..curChannel=isNew?store.state.strangeChannel.toBuilder():store.state.selectedGroup.curChannel.toBuilder()
         ..userList=isNew?ListBuilder():ListBuilder(store.state.selectedGroup.users)
         ..newInvitation=isNew?ListBuilder():ListBuilder(store.state.selectedGroup.newInvitation)
     );
@@ -39,5 +38,5 @@ abstract class ChannelScreenViewModel
     };
   }
 
-//      ..channelType = getSelectedChannel(store.state)?.type);
+
 }

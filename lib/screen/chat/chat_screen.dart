@@ -8,6 +8,7 @@ import 'package:learnflutter/screen/chat/ChatList.dart';
 import 'package:learnflutter/screen/chat/chatDetail.dart';
 import 'package:learnflutter/screen/chat/chatUtils.dart';
 import 'package:learnflutter/screen/chat/chat_view.dart';
+import 'package:learnflutter/screen/group/groupDetails.dart';
 
 
 class ChatScreen extends StatefulWidget {
@@ -33,7 +34,11 @@ class _ChatScreenState extends State<ChatScreen> {
         preferredSize: Size.fromHeight(40.0),
         child: AppBar(
           centerTitle: true,
-          title: Text(vm.target.user.name,
+          title: widget.isGroup? Text(vm.group.curChannel.name,
+              style: TextStyle(
+                  fontSize: 25.0,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xff333333))): Text(vm.target.user.name,
               style: TextStyle(
                   fontSize: 25.0,
                   fontWeight: FontWeight.bold,
@@ -48,7 +53,7 @@ class _ChatScreenState extends State<ChatScreen> {
               onPressed: () {
                 if(widget.isGroup){
                   Navigator.push(
-                      context, MaterialPageRoute(builder: (_) => ChatDetail()));//GroupDetail
+                      context, MaterialPageRoute(builder: (_) => GroupDetail()));//GroupDetail
                 }else{
                   Navigator.push(
                       context, MaterialPageRoute(builder: (_) => ChatDetail()));
@@ -79,7 +84,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(30.0),
                         topRight: Radius.circular(30.0))),
-                child: ChatList(false),
+                child: ChatList(widget.isGroup),
               ),
             ),
             BuildKeyboard(vm,onUse)

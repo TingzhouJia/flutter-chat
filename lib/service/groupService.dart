@@ -82,7 +82,7 @@ class GroupRepository {
   }
 
 
-  static Channel fromChannelDoc(DocumentSnapshot document,  ){
+  static Channel fromChannelDoc(DocumentSnapshot document ){
     List<dynamic> a=document[TAGS];
     List<String>b =a.map((i)=>i.toString()).toList();
     return Channel((c)=>c
@@ -106,33 +106,45 @@ class GroupRepository {
         .document(FirestorePaths.groupPath(channelId))
         .snapshots()
         .asyncMap((document) async {
-      return  fromDoc( document);
+      List<dynamic> a=document[MEMBERS];
+      List<dynamic> b=  document[INVITEDMEMBERS];
+      List<User> userList=new List();
+      List<User> inList=new List();
+      for (var groceryPath in a) {
+
+        userList.add(await _firestore.collection('user').document(groceryPath)
+            .get()
+            .then((value) {
+
+          return UserRepository.fromDoc(value);
+        }));
+      }
+      for (var groceryPath in b) {
+        if(groceryPath!=""){
+          inList.add(await _firestore.collection('user').document(groceryPath)
+              .get()
+              .then((value) {
+            return UserRepository.fromDoc(value);
+          }));
+        }
+
+      }
+
+      return  fromDoc(document,userList,inList);
     });
   }
 
 
-   Group fromDoc( DocumentSnapshot document) {
-      List<User> userList=  getGroupUsers(document[MEMBERS]);
-      List<User> iniList=  getGroupUsers(document[INVITEDMEMBERS]);
+   Group fromDoc( DocumentSnapshot document,List<User> userList,List<User> inList) {
       return Group((c)=>c
 
           ..users=ListBuilder(userList)
           ..curChannel=fromChannelDoc(document).toBuilder()
-          ..newInvitation=ListBuilder(iniList)
+          ..newInvitation=ListBuilder(inList)
       );
   }
 
-  List<User> getGroupUsers(List<String> documentString) {
-    List<User> a;
-     documentString.map((item) {
-        _firestore.collection(FirestorePaths.PATH_USERS).document(item).snapshots().map((repo) {
-        return  UserRepository.fromDoc(repo);
-      }).listen((User data){
-        a.add(data);
-      });
-    });
-     return a;
-  }
+
 
 
   Future<void> markChannelRead(String groupId, String userId,bool choice) async {
@@ -275,8 +287,23 @@ class GroupRepository {
         'authorId':'SYSTEM','body':"$each is joined in group chat",'messageType':MessageType.SYSTEM,'pending':true,'timestamp':DateTime.now()
       });
     });
+
+    List<User> userList=new List();
+    List<User> inList=new List();
+    userList.add( await _firestore.collection('user').document(authorUid)
+        .get()
+        .then((value) {
+      return UserRepository.fromDoc(value);
+    }));
+    for (var groceryPath in members) {
+      inList.add(await _firestore.collection('user').document(groceryPath)
+          .get()
+          .then((value) {
+        return UserRepository.fromDoc(value);
+      }));
+    }
    return  _firestore.collection(FirestorePaths.PATH_GROUPS).document(docuId).snapshots().asyncMap((data){
-     return fromDoc(data);
+     return fromDoc(data,userList,inList);
    });
 
 

@@ -11,6 +11,7 @@ import 'package:learnflutter/screen/chat/chat_screen.dart';
 import 'package:learnflutter/screen/group/channelScreen.dart';
 import 'package:learnflutter/screen/main/mainGroup/main_group_view.dart';
 import 'package:learnflutter/widgets/SearchBar.dart';
+import 'package:learnflutter/widgets/loading.dart';
 
 class GroupPage extends StatefulWidget {
   @override
@@ -41,11 +42,14 @@ class _GroupPageState extends State<GroupPage> {
                   return GestureDetector(
                     onTap: (){
                       StoreProvider.of<AppState>(context).dispatch(LoadGroup(each.id));
-                      Navigator.push(
+                      circularLoading(context, 'Loading');
+                      Future.delayed(Duration(seconds: 2),(){
+                        Navigator.pop(context);
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (_) => ChannelScreen(false
-                              )));
+                              )));});
                     },
                     child: Container(
 

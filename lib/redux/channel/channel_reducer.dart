@@ -33,6 +33,7 @@ AppState _onJoinedChannel(AppState state, JoinedChannelAction action) {
   return state.rebuild((c)=>c ..selectedGroup=action.group.toBuilder() ..groupList.add(action.channel) ..strangeChannel=null);
 }
 AppState _onLoadGroup(AppState state, OnLoadGroup action) {
+
   return state.rebuild((c)=>c ..selectedGroup=action.group.toBuilder() );
 }
 

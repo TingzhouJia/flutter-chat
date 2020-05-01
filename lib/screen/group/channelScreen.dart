@@ -167,7 +167,7 @@ class _ChannelScreenState extends State<ChannelScreen> {
                     color: Colors.white,
                     padding:
                         EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
-                    child: !widget.isNew
+                    child: widget.isNew
                         ? GestureDetector(
                             onTap: () {
                               StoreProvider.of<AppState>(context).dispatch(
@@ -210,10 +210,11 @@ class _ChannelScreenState extends State<ChannelScreen> {
                                       child: FadeInImage(
                                         width: 35.0,
                                         height: 35.0,
+                                        fit: BoxFit.fill,
                                         placeholder: AssetImage(
                                             'assets/default_img.jpg'),
-                                        image: AssetImage(
-                                            'assets/default_img.jpg'),
+                                        image: NetworkImage(
+                                            vm.userList[0].imgUrl),
                                         //image: NetworkImage(vm.userList[0].imgUrl),
                                       ),
                                     ),
@@ -238,7 +239,7 @@ class _ChannelScreenState extends State<ChannelScreen> {
                 ],
               ),
             ),
-            !widget.isNew
+            widget.isNew
                 ? Positioned(
                     bottom: 15.0,
                     left: 10.0,
@@ -365,6 +366,7 @@ class _ChannelScreenState extends State<ChannelScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return StoreConnector<AppState, ChannelScreenViewModel>(
       converter: ChannelScreenViewModel.fromStore(widget.isNew),
       builder: (context, vm) => _buildView(context, vm),

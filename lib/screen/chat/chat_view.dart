@@ -43,7 +43,7 @@ abstract class ChatScreenViewModel
 
       return isGroup?ChatScreenViewModel((u) => u
         ..loading=store.state.loading
-        ..messageList=ListBuilder(store.state.selectedGroupChat)
+        ..messageList=store.state.selectedGroupChat.length==0?ListBuilder():ListBuilder(store.state.selectedGroupChat)
         ..group=store.state.selectedGroup.toBuilder()
         ..me=store.state.user.toBuilder()
       ):ChatScreenViewModel((u) => u
